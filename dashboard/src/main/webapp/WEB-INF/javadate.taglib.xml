@@ -1,0 +1,25 @@
+<facelet-taglib xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                version="2.2"
+                xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+                xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd">
+
+    <namespace>http://uhk.cz/java-converter</namespace>
+    <tag>
+        <tag-name>convertJavaDate</tag-name>
+        <converter>
+            <converter-id>cz.uhk.chemdb.converter.JavaDateConverter</converter-id>
+        </converter>
+    </tag>
+
+    <tag>
+        <tag-name>convertJavaDynamicDate</tag-name>
+        <converter>
+            <converter-id>cz.uhk.chemdb.converter.JavaDateDynamicConverter</converter-id>
+        </converter>
+        <attribute>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+</facelet-taglib>

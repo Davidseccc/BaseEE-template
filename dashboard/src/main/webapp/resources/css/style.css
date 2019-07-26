@@ -1,0 +1,19 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+}
+
+#pb1 {
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+    position: relative;
+    text-align: center;
+}
+
+#main-login {
+    background-image: url(/resources/img/logo.svg);
+    background-position: 50% 15px;
+    background-repeat: no-repeat;
+    background-size: 40%;
+}

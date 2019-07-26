@@ -1,0 +1,5 @@
+rootProject.name = 'chemoteka_main'
+include 'core'
+include 'dashboard'
+include 'common'
+

@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+compileJava { options.encoding = "UTF-8" }
+
+task explodedWar(type: Sync) {
+    into "${buildDir}/libs/exploded/dashboard.war"
+    with war
+}
+
+dependencies {
+    compileOnly 'javax:javaee-api:8.0.1'
+    compile project(':common')
+
+    compile group: 'org.primefaces', name: 'primefaces', version: '6.2'
+    compile group: 'org.primefaces.extensions', name: 'primefaces-extensions', version: '6.2.4'
+}
