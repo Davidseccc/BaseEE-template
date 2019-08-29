@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <ui:insert name="scripts"/>
+
+    <h:outputScript library="js" name="scripts.js" target="head"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/img/favicon.png?v=2"/>
+    <link rel="stylesheet" href="../resources/css/style.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.9"/>
+
+    <ui:insert name="title">
+        <title>Defaultní nadpis</title>
+    </ui:insert>
+
+    <script type="text/javascript">
+        setTimeout(function () {
+            logout();
+        }, 1800000); // 30 minutes
+
+        window.onerror = function (msg, url, linenumber) {
+            alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
+            return true;
+        };
+    </script>
+</h:head>
+
+<h:body>
+    <div class="topbar">
+        <h:form>
+            <p:remoteCommand name="logout" action="#{userManager.logout()}"/>
+
+            <div id="headerlink">
+                <a href="${request.contextPath}/secured/home.xhtml">
+                    <img src="${request.contextPath}/resources/img/logo.svg" alt="Logo"
+                         onmouseover="this.src='../resources/img/logo.svg'"
+                         onmouseout="this.src='../resources/img/logo.svg'"/>
+                    ChemDB
+                </a>
+            </div>
+
+            <div id="logout-section">
+
+                <p:commandLink id="username" value="#{userManager.userEmail}"/>
+                <p:menu overlay="true" trigger="username" my="right bottom">
+                    <p:menuitem value="Změnit heslo"
+                                action="#{editUserDialog.openDialog(userManager.currentUser)}"
+                                icon="fa fa-pencil text-icon"/>
+                    <p:menuitem value="Odhlásit"
+                                action="#{userManager.logout()}"
+                                icon="fa fa-sign-out text-icon"/>
+                </p:menu>
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li>
+                        <h:link outcome="home"
+                                styleClass="#{request.requestURI.endsWith('/home.xhtml') ? 'menuitem_active' : 'menuitem'}"
+                                value="Home"/>
+                        <h:link outcome="compounds"
+                                styleClass="#{request.requestURI.endsWith('/compounds.xhtml') ? 'menuitem_active' : 'menuitem'}"
+                                value="Compounds"/>
+                        <h:link outcome="home"
+                                rendered="#{userManager.currentUser.superAdmin}"
+                                styleClass="#{request.requestURI.endsWith('/search.xhtml') ? 'menuitem_active' : 'menuitem'}"
+                                value="Vyhledávání"/>
+                    </li>
+                </ul>
+            </div>
+        </h:form>
+    </div>
+
+    <div id="content">
+        <ui:insert name="content">
+            <h1>Prázdný content</h1>
+        </ui:insert>
+        <h:form>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Ano" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="Ne" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </div>
+
+
+</h:body>
+</html>

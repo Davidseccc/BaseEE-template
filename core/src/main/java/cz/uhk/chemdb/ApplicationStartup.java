@@ -38,6 +38,7 @@ public class ApplicationStartup {
     @PostConstruct
     @TransactionAttribute(TransactionAttributeType.NEVER)
     private void onStartup() {
+        //ObprpService.ObPropResult res = obprpService.call("c1cc(cc[n+]1CC=CC[n+]1ccc(cc1)C(=O)OCC)C=NO");
         migrateDatabase();
         insertDummyData();
 

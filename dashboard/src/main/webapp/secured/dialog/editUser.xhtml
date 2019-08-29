@@ -1,0 +1,111 @@
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+<h:head>
+    <title>
+        <h:outputText value="#{editResearcherDialog.isNewResearcher() ? 'Nový výzkumník' : 'Editace výzkumníka'}"/>
+    </title>
+    <link rel="stylesheet" href="../../resources/css/style.css"/>
+</h:head>
+
+<h:form id="form">
+    <div class="input-container-2">
+
+        <div class="label">Email</div>
+        <div class="input">
+            <p:inputText id="email"
+                         required="true"
+                         requiredMessage="Email je povinný"
+                         validator="#{researcherValidator.validate}"
+                         value="#{editResearcherDialog.researcher.email}">
+                <f:attribute name="oldEmail" value="#{editResearcherDialog.researcher.email}"/>
+            </p:inputText>
+            <p:message for="email"/>
+        </div>
+
+        <h:panelGroup rendered="#{!editResearcherDialog.isNewResearcher()}">
+            <div class="label">Současné heslo</div>
+            <div class="input">
+                <p:password id="oldpassword"
+                            required="true"
+                            requiredMessage="Zadejte současné heslo"
+                            value="#{editResearcherDialog.oldPassword}"/>
+                <p:message for="oldpassword"/>
+            </div>
+        </h:panelGroup>
+
+        <div class="label">Nové heslo</div>
+        <div class="input">
+            <p:password id="newpassword"
+                        value="#{editResearcherDialog.newPassword}"
+                        feedback="true"
+                        required="false"
+                        promptLabel="Začnete psát heslo" weakLabel="Slabé"
+                        goodLabel="Průměrné" strongLabel="Silné">
+            </p:password>
+        </div>
+
+        <div class="label">Znovu nové heslo</div>
+        <div class="input">
+            <p:password id="newpasswordagain"
+                        value="#{editResearcherDialog.newPasswordAgain}"
+                        feedback="true"
+                        required="false"
+                        promptLabel="Začnete psát heslo" weakLabel="Slabé"
+                        goodLabel="Průměrné" strongLabel="Silné">
+            </p:password>
+        </div>
+    </div>
+
+    <h:panelGroup styleClass="input-container-2 max-width" rendered="#{userManager.currentUser.superAdmin}">
+        <div class="label">Editor
+            <h:outputText id="superUserLabel" styleClass="fa fa-info-circle"/>
+            <p:tooltip for="superUserLabel" position="right" trackMouse="true"
+                       value="Editor může mazat a editovat entity."/>
+        </div>
+        <div class="input">
+            <p:selectBooleanCheckbox id="superUser"
+                                     value="#{editResearcherDialog.researcher.superUser}"
+                                     disabled="#{editResearcherDialog.researcher.admin}"/>
+        </div>
+
+        <div class="label">Admin
+            <h:outputText id="adminLabel" styleClass="fa fa-info-circle"/>
+            <p:tooltip for="adminLabel" position="right" trackMouse="true"
+                       value="Admin má plná práva kromě přidávání a editace výzkumníků."/>
+        </div>
+        <div class="input">
+            <p:selectBooleanCheckbox id="admin"
+                                     value="#{editResearcherDialog.researcher.admin}"
+                                     disabled="#{editResearcherDialog.researcher.superAdmin}">
+                <p:ajax update="superUser"/>
+            </p:selectBooleanCheckbox>
+        </div>
+
+        <div class="label">Superadmin
+            <h:outputText id="superAdminLabel" styleClass="fa fa-info-circle"/>
+            <p:tooltip for="superAdminLabel" position="right" trackMouse="true"
+                       value="Superadmin má plná práva a může přidávat a editovat výzkumníky."/>
+        </div>
+        <div class="input">
+            <p:selectBooleanCheckbox id="superadmin"
+                                     value="#{editResearcherDialog.researcher.superAdmin}">
+                <p:ajax update="admin, superUser"/>
+            </p:selectBooleanCheckbox>
+        </div>
+
+    </h:panelGroup>
+
+    <p:commandButton value="Uložit a zavřít"
+                     action="#{editResearcherDialog.saveResearcherAndClose()}"
+                     styleClass="topmargin-20"
+                     validateClient="true"
+                     icon="fa fa-save"
+                     update="form"/>
+
+    <p:commandButton value="Zavřít"
+                     immediate="true"
+                     action="#{editResearcherDialog.close()}"/>
+</h:form>
+</html>

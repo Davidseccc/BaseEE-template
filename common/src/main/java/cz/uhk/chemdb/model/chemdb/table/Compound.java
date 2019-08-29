@@ -9,8 +9,6 @@ import java.util.Set;
 @Entity
 @Table(name = "compound")
 public class Compound extends BaseModel implements Serializable {
-    @ManyToOne
-    Invitro invitro;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +23,15 @@ public class Compound extends BaseModel implements Serializable {
     @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
     @OrderBy("name ASC")
     private Set<Synonymum> synonyms = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    Set<Invitro> invitro = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
+    @OrderBy("order ASC")
+    private Set<Attribute> attributes = new LinkedHashSet<>();
+
 
     public Compound() {
     }
@@ -91,5 +98,18 @@ public class Compound extends BaseModel implements Serializable {
 
     public void setSynonyms(Set<Synonymum> synonyms) {
         this.synonyms = synonyms;
+    }
+
+    public Set<Invitro> getInvitro() {
+        return invitro;
+    }
+
+    public void setInvitro(Set<Invitro> invitro) {
+        this.invitro = invitro;
+    }
+
+    @Override
+    public String toString() {
+        return id + " - " + smiles;
     }
 }

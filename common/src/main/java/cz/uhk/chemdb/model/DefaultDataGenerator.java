@@ -25,7 +25,7 @@ public class DefaultDataGenerator {
 
     @Transactional
     private void generateTestUsers() {
-        User admin = UserBuilder.createUserBuilder("admin@email.cz", passwordHash.getPasswordHash(
+        User admin = UserBuilder.createUserBuilder("admin", passwordHash.getPasswordHash(
                 "admin", "admin")).setName("Administrator").setAdmin(true)
                 .setSuperAdmin(true).setToken("demo").build();
         userRepository.saveAndFlush(admin);

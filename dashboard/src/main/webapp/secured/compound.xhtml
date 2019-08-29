@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="template.xhtml">
+
+    <ui:define name="scripts">
+    </ui:define>
+
+    <ui:define name="title">
+        <title>Home</title>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g-12">
+            <div class="card filterable" style="">
+                <p:outputPanel deferred="true" id="main" name="main">
+                    <h2>#{compoundDetail.compound.smiles}</h2>
+                    <img src="#{request.contextPath}/core/rest/smile/#{compoundDetail.compound.smiles}"></img>
+                </p:outputPanel>
+            </div>
+
+            <p:commandButton value="Tisk" type="button" icon="fa fa-print" style="display:block;margin-bottom: 20px">
+                <p:printer target="main"/>
+            </p:commandButton>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -20,6 +20,8 @@ public interface UserRepository extends EntityRepository<User, String> {
 
     User findOptionalByEmail(String email);
 
+    User findOptionalById(Long id);
+
     @Query(value = "select r from User r where r.deletedAt = null and r.token = ?1", max = 1, singleResult = SingleResultType.OPTIONAL)
     User findResearcherWithToken(String token);
 }

@@ -12,9 +12,8 @@ public class Invitro implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "invitro", cascade = CascadeType.ALL)
-    @OrderBy("id ASC")
-    private Set<Compound> compounds;
+    @ManyToOne
+    private Compound compound;
 
     private float value;
 
@@ -46,12 +45,12 @@ public class Invitro implements Serializable {
         this.id = id;
     }
 
-    public Set<Compound> getCompounds() {
-        return compounds;
+    public Compound getCompound() {
+        return compound;
     }
 
-    public void setCompounds(Set<Compound> compounds) {
-        this.compounds = compounds;
+    public void setCompound(Compound compound) {
+        this.compound = compound;
     }
 
     public float getValue() {

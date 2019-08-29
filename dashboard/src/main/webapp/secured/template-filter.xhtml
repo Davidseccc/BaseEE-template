@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="template.xhtml">
+
+    <ui:define name="content">
+        <h:form>
+            <div id="container" class="card-container">
+
+                <p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg">
+                    <p:panelGrid columns="2" layout="grid" columnClasses="label,value">
+
+                    </p:panelGrid>
+                </p:dialog>
+
+                <div class="card filter" style="width: 10%">
+                    <h3>Vyhledávání</h3>
+                    <div class="input-container-1 max-width">
+                        <div class="label">Název</div>
+                        <span class="ui-float-label">
+                            <p:inputText id="float-input" style="width: 100%;"/>
+                        </span>
+
+                    </div>
+
+                    <div class="topmargin-20 max-width">
+                        <ui:insert name="refreshButton">
+                            button
+                        </ui:insert>
+                    </div>
+                </div>
+
+                <ui:insert name="filterableContent">
+                    Place for filterable content
+                </ui:insert>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

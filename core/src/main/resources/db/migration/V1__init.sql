@@ -8,22 +8,11 @@ CREATE TABLE IF NOT EXISTS chemUser
   deletedat        TIMESTAMP,
   admin            BOOLEAN,
   superadmin       BOOLEAN,
-  contributor      BOOLEAN
+  contributor      BOOLEAN,
+  uuid             VARCHAR(255)
 );
 
-
-CREATE TABLE IF NOT EXISTS invitro
-(
-  id               SERIAL PRIMARY KEY,
-  value            DOUBLE PRECISION,
-  value_text       VARCHAR(1024),
-  conditions       VARCHAR(255),
-  citation         DOUBLE PRECISION,
-  doi              VARCHAR(1024),
-  note             VARCHAR(1024)
-);
-
-CREATE TABLE IF NOT EXISTS compound
+CREATE TABLE IF NOT EXISTS selectedCompound
 (
   id               SERIAL PRIMARY KEY,
   k                INTEGER,
@@ -31,9 +20,9 @@ CREATE TABLE IF NOT EXISTS compound
   ion              VARCHAR(255),
   mw               DOUBLE PRECISION,
   notes            VARCHAR(1024),
-  invitro_id       INTEGER references invitro NOT NULL
+  uuid             VARCHAR(255)
+
 );
-CREATE INDEX ON compound (invitro_id);
 
 
 CREATE TABLE IF NOT EXISTS synonymum
@@ -41,10 +30,9 @@ CREATE TABLE IF NOT EXISTS synonymum
   id            SERIAL PRIMARY KEY,
   name          VARCHAR(255),
   note          VARCHAR(1024),
-  compound_id   INTEGER references compound NOT NULL
+  compound_id   INTEGER references selectedCompound
 );
 CREATE INDEX ON synonymum (compound_id);
-
 
 CREATE TABLE IF NOT EXISTS descriptor
 (
@@ -57,7 +45,7 @@ CREATE TABLE IF NOT EXISTS descriptor
   tpsa          DOUBLE PRECISION,
   atoms         INTEGER,
   clogp         DOUBLE PRECISION ,
-  compound_id   INTEGER references compound NOT NULL
+  compound_id   INTEGER references selectedCompound NOT NULL
 );
 CREATE INDEX ON descriptor (compound_id);
 
@@ -67,10 +55,8 @@ CREATE TABLE IF NOT EXISTS quantity
   name          VARCHAR(1024),
   abbreviation  VARCHAR(1024),
   unit          VARCHAR(1024),
-  note          VARCHAR(1024),
-  invitro_id    INTEGER  references invitro NOT NULL
+  note          VARCHAR(1024)
 );
-CREATE INDEX ON quantity (invitro_id);
 
 
 CREATE TABLE IF NOT EXISTS target
@@ -78,7 +64,31 @@ CREATE TABLE IF NOT EXISTS target
   id            BIGSERIAL PRIMARY KEY,
   name          VARCHAR(1024),
   abbreviation  VARCHAR(1024),
-  note          VARCHAR(1024),
-  invitro_id    INTEGER  references invitro NOT NULL
+  note          VARCHAR(1024)
 );
-CREATE INDEX ON target (invitro_id);
+
+CREATE TABLE IF NOT EXISTS invitro
+(
+  id               SERIAL PRIMARY KEY,
+  compound_id      INTEGER REFERENCES selectedCompound NOT NULL,
+  value            DOUBLE PRECISION,
+  value_text       VARCHAR(1024),
+  quantity_id      INTEGER REFERENCES quantity NOT NULL,
+  target_id        INTEGER REFERENCES target NOT NULL,
+  conditions       VARCHAR(255),
+  citation         VARCHAR(2048),
+  doi              VARCHAR(1024),
+  note             VARCHAR(1024)
+);
+CREATE INDEX ON invitro (compound_id);
+CREATE INDEX ON invitro (quantity_id);
+CREATE INDEX ON invitro (target_id);
+
+CREATE TABLE IF NOT EXISTS attribute
+(
+  id            SERIAL PRIMARY KEY,
+  key           VARCHAR(255),
+  value         VARCHAR(1024),
+  compound_id   INTEGER references selectedCompound
+);
+CREATE INDEX ON attribute (compound_id);
