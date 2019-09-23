@@ -48,13 +48,12 @@
             </div>
 
             <div id="logout-section">
-
                 <p:commandLink id="username" value="#{userManager.userEmail}"/>
                 <p:menu overlay="true" trigger="username" my="right bottom">
-                    <p:menuitem value="Změnit heslo"
+                    <p:menuitem value="Change password"
                                 action="#{editUserDialog.openDialog(userManager.currentUser)}"
                                 icon="fa fa-pencil text-icon"/>
-                    <p:menuitem value="Odhlásit"
+                    <p:menuitem value="Logout"
                                 action="#{userManager.logout()}"
                                 icon="fa fa-sign-out text-icon"/>
                 </p:menu>
@@ -72,7 +71,7 @@
                         <h:link outcome="home"
                                 rendered="#{userManager.currentUser.superAdmin}"
                                 styleClass="#{request.requestURI.endsWith('/search.xhtml') ? 'menuitem_active' : 'menuitem'}"
-                                value="Vyhledávání"/>
+                                value="Search"/>
                     </li>
                 </ul>
             </div>

@@ -3,6 +3,7 @@ package cz.uhk.chemdb.model.chemdb.table;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class Compound extends BaseModel implements Serializable {
     Set<Invitro> invitro = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
-    @OrderBy("order ASC")
+    @OrderBy("ord ASC")
     private Set<Attribute> attributes = new LinkedHashSet<>();
 
 
@@ -106,6 +107,17 @@ public class Compound extends BaseModel implements Serializable {
 
     public void setInvitro(Set<Invitro> invitro) {
         this.invitro = invitro;
+    }
+
+    public Set<Attribute> getAttributes() {
+        if (attributes == null) {
+            return new HashSet<>();
+        }
+        return attributes;
+    }
+
+    public void setAttributes(Set<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     @Override

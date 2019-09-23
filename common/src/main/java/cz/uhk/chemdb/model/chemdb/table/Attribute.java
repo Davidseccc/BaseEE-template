@@ -57,4 +57,12 @@ public class Attribute extends BaseModel implements Serializable {
     public void setCompound(Compound compound) {
         this.compound = compound;
     }
+
+    @Override
+    public String toString() {
+        return "Attribute{" +
+                "key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

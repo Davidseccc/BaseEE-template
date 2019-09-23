@@ -4,7 +4,7 @@
 
 <h:head>
     <title>
-        <h:outputText value="#{editResearcherDialog.isNewResearcher() ? 'Nový výzkumník' : 'Editace výzkumníka'}"/>
+        <h:outputText value="#{editUserDialog.isNewResearcher() ? 'Nový výzkumník' : 'Editace výzkumníka'}"/>
     </title>
     <link rel="stylesheet" href="../../resources/css/style.css"/>
 </h:head>
@@ -18,19 +18,19 @@
                          required="true"
                          requiredMessage="Email je povinný"
                          validator="#{researcherValidator.validate}"
-                         value="#{editResearcherDialog.researcher.email}">
-                <f:attribute name="oldEmail" value="#{editResearcherDialog.researcher.email}"/>
+                         value="#{editUserDialog.researcher.email}">
+                <f:attribute name="oldEmail" value="#{editUserDialog.researcher.email}"/>
             </p:inputText>
             <p:message for="email"/>
         </div>
 
-        <h:panelGroup rendered="#{!editResearcherDialog.isNewResearcher()}">
+        <h:panelGroup rendered="#{!editUserDialog.isNewResearcher()}">
             <div class="label">Současné heslo</div>
             <div class="input">
                 <p:password id="oldpassword"
                             required="true"
                             requiredMessage="Zadejte současné heslo"
-                            value="#{editResearcherDialog.oldPassword}"/>
+                            value="#{editUserDialog.oldPassword}"/>
                 <p:message for="oldpassword"/>
             </div>
         </h:panelGroup>
@@ -38,7 +38,7 @@
         <div class="label">Nové heslo</div>
         <div class="input">
             <p:password id="newpassword"
-                        value="#{editResearcherDialog.newPassword}"
+                        value="#{editUserDialog.newPassword}"
                         feedback="true"
                         required="false"
                         promptLabel="Začnete psát heslo" weakLabel="Slabé"
@@ -49,7 +49,7 @@
         <div class="label">Znovu nové heslo</div>
         <div class="input">
             <p:password id="newpasswordagain"
-                        value="#{editResearcherDialog.newPasswordAgain}"
+                        value="#{editUserDialog.newPasswordAgain}"
                         feedback="true"
                         required="false"
                         promptLabel="Začnete psát heslo" weakLabel="Slabé"
@@ -66,8 +66,8 @@
         </div>
         <div class="input">
             <p:selectBooleanCheckbox id="superUser"
-                                     value="#{editResearcherDialog.researcher.superUser}"
-                                     disabled="#{editResearcherDialog.researcher.admin}"/>
+                                     value="#{editUserDialog.researcher.contributor}"
+                                     disabled="#{editUserDialog.researcher.admin}"/>
         </div>
 
         <div class="label">Admin
@@ -77,8 +77,8 @@
         </div>
         <div class="input">
             <p:selectBooleanCheckbox id="admin"
-                                     value="#{editResearcherDialog.researcher.admin}"
-                                     disabled="#{editResearcherDialog.researcher.superAdmin}">
+                                     value="#{editUserDialog.researcher.admin}"
+                                     disabled="#{editUserDialog.researcher.superAdmin}">
                 <p:ajax update="superUser"/>
             </p:selectBooleanCheckbox>
         </div>
@@ -90,7 +90,7 @@
         </div>
         <div class="input">
             <p:selectBooleanCheckbox id="superadmin"
-                                     value="#{editResearcherDialog.researcher.superAdmin}">
+                                     value="#{editUserDialog.researcher.superAdmin}">
                 <p:ajax update="admin, superUser"/>
             </p:selectBooleanCheckbox>
         </div>
@@ -98,7 +98,7 @@
     </h:panelGroup>
 
     <p:commandButton value="Uložit a zavřít"
-                     action="#{editResearcherDialog.saveResearcherAndClose()}"
+                     action="#{editUserDialog.saveResearcherAndClose()}"
                      styleClass="topmargin-20"
                      validateClient="true"
                      icon="fa fa-save"
@@ -106,6 +106,6 @@
 
     <p:commandButton value="Zavřít"
                      immediate="true"
-                     action="#{editResearcherDialog.close()}"/>
+                     action="#{editUserDialog.close()}"/>
 </h:form>
 </html>

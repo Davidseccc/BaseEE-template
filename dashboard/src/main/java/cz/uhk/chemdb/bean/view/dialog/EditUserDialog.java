@@ -1,4 +1,4 @@
-package cz.uhk.chemdb.bean.view;
+package cz.uhk.chemdb.bean.view.dialog;
 
 import cz.uhk.chemdb.bean.PasswordHasher;
 import cz.uhk.chemdb.bean.UserManager;

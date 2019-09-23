@@ -14,6 +14,12 @@ public class FileUploadView {
 
     private UploadedFile file;
 
+    //@Inject
+    //ObprpService obprpService;
+    //@Inject
+    //ExcelParser excelParser;
+
+
     public UploadedFile getFile() {
         return file;
     }

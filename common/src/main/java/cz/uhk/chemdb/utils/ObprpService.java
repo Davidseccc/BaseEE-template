@@ -1,4 +1,4 @@
-package cz.uhk.chemdb.task;
+package cz.uhk.chemdb.utils;
 
 import javax.ejb.Singleton;
 import java.io.BufferedReader;

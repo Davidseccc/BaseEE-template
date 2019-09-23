@@ -10,6 +10,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Stateless
 @Path("/smile")
@@ -54,7 +56,9 @@ public class SmileToImageResource {
             targetStream = new FileInputStream(file);
         } catch (
                 FileNotFoundException e) {
-            e.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
+            return Response.serverError().entity(e.getMessage()).build();
+            //e.printStackTrace();
         }
         return Response
                 .ok(targetStream, MediaType.APPLICATION_OCTET_STREAM)

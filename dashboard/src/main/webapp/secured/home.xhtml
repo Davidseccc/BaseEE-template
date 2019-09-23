@@ -20,9 +20,11 @@
                                  widgetVar="leftTable"
                                  emptyMessage="No compounds found with given criteria"
                                  filteredValue="#{leftMenuView.filteredCompounds}" rowStyleClass="row-white">>
-                        <p:column filterBy="#{selectedCompound.descriptor.formula}" headerText="Vyhledat"
+                        <p:column filterBy="#{selectedCompound.k}" headerText="Search"
                                   filterMatchMode="contains">
-                            <h:outputText value="#{selectedCompound.descriptor.formula}"/>
+                            <p:commandLink styleClass="btn-link" value="K #{selectedCompound.k}"
+                                           action="#{compoundView.redirect(selectedCompound)}"
+                                           style="margin-right:20px;"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>
@@ -40,7 +42,7 @@
 
             <div class="ui-g-4">
                 <h:form>
-                    <h3>Importovat data</h3>
+                    <h3>Import new data</h3>
                     <p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}" mode="advanced"
                                   dragDropSupport="true"
                                   update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"/>

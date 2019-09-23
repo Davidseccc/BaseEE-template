@@ -7,6 +7,18 @@ body {
     background: #fff !important;
 }
 
+.ui-button, button.ui-button.ui-state-default, .ui-button.ui-state-default {
+    border: 1px solid #f5a006 !important;
+    color: #fff;
+    background: #ffa300 !important;
+}
+
+.ui-paginator .ui-paginator-page.ui-state-active {
+    background: #d19c04;
+    color: #fff;
+    border-color: #dea604;
+}
+
 #content {
     padding: 10px 10px 30px;
     min-height: calc(100vh - 200px);
@@ -182,7 +194,7 @@ body {
 }
 
 #logout-section a {
-    color: #039be5;
+    color: #ffbf05;
 }
 
 .menu {
@@ -202,16 +214,19 @@ body {
     display: inline-block;
     color: white;
     padding: 12px 20px;
-    border-bottom: 6px solid #039be5;
+    border-bottom: 6px solid #ffa300;
 }
 
 a {
     text-decoration: none;
-    color: #006db3;
+    color: #ffbf05;
+<!-- #b97600;
+-->
 }
 
 .link:hover, .menuitem:hover, .menuitem_active:hover {
-    border-bottom: 6px solid #5eb8ff;
+    border-bottom: 6px solid #b97600;
+<!-- #ffbf05 -->
 }
 
 .toggler {

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS chemUser
   uuid             VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS selectedCompound
+CREATE TABLE IF NOT EXISTS Compound
 (
   id               SERIAL PRIMARY KEY,
   k                INTEGER,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS synonymum
   id            SERIAL PRIMARY KEY,
   name          VARCHAR(255),
   note          VARCHAR(1024),
-  compound_id   INTEGER references selectedCompound
+  compound_id   INTEGER references compound
 );
 CREATE INDEX ON synonymum (compound_id);
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS descriptor
   tpsa          DOUBLE PRECISION,
   atoms         INTEGER,
   clogp         DOUBLE PRECISION ,
-  compound_id   INTEGER references selectedCompound NOT NULL
+  compound_id   INTEGER references compound NOT NULL
 );
 CREATE INDEX ON descriptor (compound_id);
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS target
 CREATE TABLE IF NOT EXISTS invitro
 (
   id               SERIAL PRIMARY KEY,
-  compound_id      INTEGER REFERENCES selectedCompound NOT NULL,
+  compound_id      INTEGER REFERENCES compound NOT NULL,
   value            DOUBLE PRECISION,
   value_text       VARCHAR(1024),
   quantity_id      INTEGER REFERENCES quantity NOT NULL,
@@ -89,6 +89,6 @@ CREATE TABLE IF NOT EXISTS attribute
   id            SERIAL PRIMARY KEY,
   key           VARCHAR(255),
   value         VARCHAR(1024),
-  compound_id   INTEGER references selectedCompound
+  compound_id   INTEGER references compound
 );
 CREATE INDEX ON attribute (compound_id);
