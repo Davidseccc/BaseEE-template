@@ -16,19 +16,22 @@
                 <p:outputPanel deferred="true" id="main" name="main">
                     <h2>#{compoundDetail.compound.smiles}</h2>
                     <img src="#{request.contextPath}/core/rest/smile/#{compoundDetail.compound.smiles}"></img>
-
                     <p:dataList value="#{compoundDetail.compound.attributes}" var="atr" type="definition">
-                        Attribute: #{atr.key}, #{atr.value}
+                        <h3> #{atr.key}</h3>
+                        <p>#{atr.value}</p>
                     </p:dataList>
+
+                    <div style="display: block;">
+                        <p:commandButton value="Tisk" type="button" icon="fa fa-print"
+                                         style="display:block;margin-bottom: 20px">
+                            <p:printer target="main"/>
+                        </p:commandButton>
+
+                        <p:commandButton value="Přidat Atribut" icon="fa fa-plus-circle"
+                                         action="#{addCompoundAttributeDialog.openDialog(compoundDetail.compound.id)}"/>
+                    </div>
                 </p:outputPanel>
             </div>
-
-            <p:commandButton value="Tisk" type="button" icon="fa fa-print" style="display:block;margin-bottom: 20px">
-                <p:printer target="main"/>
-            </p:commandButton>
-
-            <p:commandButton value="Přidat Atribut" icon="fa fa-plus-circle"
-                             action="#{addCompoundAttributeDialog.openDialog(compoundDetail.compound)}"/>
         </div>
     </ui:define>
 </ui:composition>

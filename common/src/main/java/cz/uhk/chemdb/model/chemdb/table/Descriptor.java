@@ -19,6 +19,12 @@ public class Descriptor implements Serializable {
     private float tpsa;
     private int atoms;
     private float clogp;
+    private String NMR;
+    private String HRMS;
+    private Integer purity;
+    private Character purityOperator;
+    private String solubility;
+
     @OneToOne
     private Compound compound;
 
@@ -103,5 +109,49 @@ public class Descriptor implements Serializable {
 
     public void setCompound(Compound compound) {
         this.compound = compound;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNMR() {
+        return NMR;
+    }
+
+    public void setNMR(String NMR) {
+        this.NMR = NMR;
+    }
+
+    public String getHRMS() {
+        return HRMS;
+    }
+
+    public void setHRMS(String HRMS) {
+        this.HRMS = HRMS;
+    }
+
+    public Integer getPurity() {
+        return purity;
+    }
+
+    public void setPurity(Integer purity) {
+        this.purity = purity;
+    }
+
+    public char getPurityOperator() {
+        return purityOperator;
+    }
+
+    public void setPurityOperator(char purityOperator) {
+        this.purityOperator = purityOperator;
+    }
+
+    public String getSolubility() {
+        return solubility;
+    }
+
+    public void setSolubility(String solubility) {
+        this.solubility = solubility;
     }
 }

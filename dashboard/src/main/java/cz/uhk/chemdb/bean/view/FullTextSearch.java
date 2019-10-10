@@ -1,6 +1,6 @@
 package cz.uhk.chemdb.bean.view;
 
-import cz.uhk.chemdb.model.chemdb.repositories.*;
+import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
 import cz.uhk.chemdb.model.chemdb.table.Compound;
 
 import javax.enterprise.context.RequestScoped;
@@ -14,14 +14,6 @@ import java.util.List;
 public class FullTextSearch {
     @Inject
     CompoundRepository compoundRepository;
-    @Inject
-    DescriptorRepository descriptorRepository;
-    @Inject
-    InvitroRepository invitroRepository;
-    @Inject
-    SynonymumRepository synonymumRepository;
-    @Inject
-    TargetRepository targetRepository;
 
     String searchString;
 

@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="template.xhtml">
+
+    <ui:define name="content">
+        <div class="card filterable">
+            <h:form>
+                <p:dataTable id="tbl" var="log" value="#{logView.logs}" widgetVar="compsTable"
+                             emptyMessage="No logs found with given criteria"
+                             filteredValue="#{compoundView.filteredCompounds}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             paginator="true" rowsPerPageTemplate="10,15,20,50" style="margin-bottom:20px">>
+
+                    <f:facet name="{Exporters}">
+                        <div style="float:right;padding-top: 5px;">
+                            <h:commandLink>
+                                <h:outputText value="CSV "/>
+                                <!--img src="../resources/img/csv.png"/>-->
+                                <p:dataExporter type="csv" target="tbl" fileName="compounds" pageOnly="false"/>
+                            </h:commandLink>
+                            <h:commandLink ajax="false">
+                                <h:outputText value="PDF "/>
+                                <p:dataExporter type="pdf" target="tbl" fileName="compounds"/>
+                            </h:commandLink>
+                            <p:commandLink ajax="false" immediate="true">
+                                <h:outputText value="XLS"/>
+                                <p:dataExporter type="xls" target="tbl" fileName="compounds"/>
+                            </p:commandLink>
+                        </div>
+                    </f:facet>
+
+                    <p:column filterBy="#{log.user.name}" headerText="User" filterMatchMode="contains">
+                        <f:facet name="filter">
+                            <h:outputText value="#{log.user.name}"/>
+                        </f:facet>
+                        <h:outputText value="#{log.user.name}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{log.eventType}" headerText="Event" footerText="in" filterMatchMode="in">
+                        <f:facet name="eventTypeFilter">
+                            <p:selectCheckboxMenu label="Events" onchange="PF('tbl').filter()" scrollHeight="150"
+                                                  styleClass="custom-filter">
+                                <f:selectItems value="#{logView.getEventTypeList()}"/>
+                            </p:selectCheckboxMenu>
+                        </f:facet>
+                        <h:outputText value="#{log.eventType.name()}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{log.logSection}" headerText="Section" footerText="in" filterMatchMode="in">
+                        <f:facet name="logSectionFilter">
+                            <p:selectCheckboxMenu label="Events" onchange="PF('tbl').filter()" scrollHeight="150"
+                                                  styleClass="custom-filter">
+                                <f:selectItems value="#{logView.getEventLogSectionList()}"/>
+                            </p:selectCheckboxMenu>
+                        </f:facet>
+                        <h:outputText value="#{log.logSection.name()}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{log.description}" headerText="Description">
+                        <h:outputText value="#{log.description}"/>
+                    </p:column>
+
+                    <p:column headerText="Action" exportable="false">
+                        <p:commandButton rendered="#{log.eventType.name() == 'DELETE'}" value="Revert"
+                                         action="#{logView.revert(log)}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS chemUser
+CREATE TABLE IF NOT EXISTS chemuser
 (
   id               SERIAL PRIMARY KEY,
   email            VARCHAR(255),
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS chemUser
   uuid             VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS Compound
+CREATE TABLE IF NOT EXISTS compound
 (
   id               SERIAL PRIMARY KEY,
   k                INTEGER,

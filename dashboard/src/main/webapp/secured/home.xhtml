@@ -2,6 +2,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="template.xhtml">
 
     <ui:define name="scripts">
@@ -43,10 +44,24 @@
             <div class="ui-g-4">
                 <h:form>
                     <h3>Import new data</h3>
-                    <p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}" mode="advanced"
-                                  dragDropSupport="true"
+                    <p:outputLabel for="uploadTypes" value="Type:"/>
+                    <p:selectOneMenu id="uploadTypes" update="form" immediate="true" rendered="true" required="true"
+                                     value="#{fileUploadView.selectedUploadType}">
+                        <f:selectItem itemLabel="Vyberte typ" itemValue="#{null}"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{fileUploadView.getUploadTypes()}"/>
+                        <p:ajax update="upload"/>
+                    </p:selectOneMenu>
+                    <p:fileUpload id="upload" immediate="true" fileUploadListener="#{fileUploadView.handleFileUpload}"
+                                  mode="advanced"
+                                  dragDropSupport="true" oncomplete="rc()" v
                                   update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"/>
+                    <p:remoteCommand name="rc" immediate="true"
+                                     action="#{fileUploadView.openDialog()}"
+                                     process="@this"/>
+
                     <p:growl id="messages" showDetail="true"/>
+                    <p:commandButton immediate="true" value="OPEN" action="#{fileUploadView.openDialog()}"/>
                 </h:form>
             </div>
         </div>

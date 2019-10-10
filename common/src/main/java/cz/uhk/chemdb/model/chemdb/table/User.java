@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chemUser")
+@Table(name = "chemuser")
 public class User extends BaseModel {
 
     @Id

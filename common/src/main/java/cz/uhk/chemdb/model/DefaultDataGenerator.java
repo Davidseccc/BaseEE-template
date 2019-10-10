@@ -1,7 +1,9 @@
 package cz.uhk.chemdb.model;
 
 import cz.uhk.chemdb.model.chemdb.builder.UserBuilder;
+import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
 import cz.uhk.chemdb.model.chemdb.repositories.UserRepository;
+import cz.uhk.chemdb.model.chemdb.table.Owner;
 import cz.uhk.chemdb.model.chemdb.table.User;
 import cz.uhk.chemdb.model.security.PasswordHash;
 
@@ -15,12 +17,15 @@ public class DefaultDataGenerator {
     @Inject
     UserRepository userRepository;
     @Inject
+    OwnerRepositiry ownerRepositiry;
+    @Inject
     PasswordHash passwordHash;
 
 
     public void generateDummyData() {
         System.out.println("GENERATING DATA ....");
         generateTestUsers();
+        generateOwners();
     }
 
     @Transactional
@@ -29,7 +34,12 @@ public class DefaultDataGenerator {
                 "admin", "admin")).setName("Administrator").setAdmin(true)
                 .setSuperAdmin(true).setToken("demo").build();
         userRepository.saveAndFlush(admin);
+    }
 
+    private void generateOwners() {
+        Owner owner = new Owner();
+        owner.setName("UHK");
+        ownerRepositiry.save(owner);
     }
 
 

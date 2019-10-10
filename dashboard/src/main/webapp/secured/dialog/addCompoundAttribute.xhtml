@@ -1,6 +1,7 @@
-<html xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
->
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
     <title>
@@ -9,24 +10,74 @@
     <link rel="stylesheet" href="../../resources/css/style.css"/>
 </h:head>
 
-<h:form id="form">
+<h:form id="form" name="form">
     <div class="input-container-2">
+        <p:dataTable id="table" var="attribute" ajax="true" value="#{addCompoundAttributeDialog.attributes}"
+                     draggableRows="true"
+                     style="width: 100%;">
+            <p:ajax event="rowReorder" listener="#{addCompoundAttributeDialog.onRowReorder}"/>
+            <f:facet name="header">
+                Attributy
+            </f:facet>
+            <p:column headerText="Název">
+                <h:outputText value="#{attribute.key}"/>
+            </p:column>
+            <p:column headerText="Hodnota">
+                <h:outputText value="#{attribute.value}"/>
+            </p:column>
+            <p:column headerText="Typ dat">
+                <h:outputText value="#{attribute.attributeType}"/>
+            </p:column>
+            <p:column headerText="Order">
+                <h:outputText value="#{attribute.ord}"/>
+            </p:column>
+            <p:column headerText="Akce">
+                <p:commandButton value="Smazat" ajax="true" update="table" immediate="true"
+                                 action="#{addCompoundAttributeDialog.removeAttribute(attribute)}"/>
+            </p:column>
+        </p:dataTable>
+        <div class="label">Typ dat</div>
+        <div class="input">
+            <p:selectOneMenu id="datatype" update="form" immediate="true"
+                             value="#{addCompoundAttributeDialog.selectedAttributeType}">
+                <f:selectItem itemLabel="Vyberte typ" itemValue="#{null}"
+                              noSelectionOption="true"/>
+                <f:selectItems value="#{addCompoundAttributeDialog.attributeTypeList}"/>
+                <p:ajax update="attachement, value, form"/>
+            </p:selectOneMenu>
+        </div>
         <div class="label">Název</div>
         <div class="input">
             <p:inputText id="name"
                          required="true"
                          requiredMessage="Název atributu je povinný"
-                         value="#{addCompoundAttributeDialog.attribute.key}">
-                <f:attribute name="oldName" value="#{addCompoundAttributeDialog.attribute.key}"/>
+                         value="#{addCompoundAttributeDialog.attributeName}">
+                <f:attribute name="oldName" value="#{addCompoundAttributeDialog.attributeValue}"/>
             </p:inputText>
-            <p:message for="name"/>
         </div>
         <div class="label">Text</div>
         <div class="input">
-            <p:inputTextarea rows="6" cols="60"/>
+            <p:inputTextarea id="value"
+                             rendered="#{!addCompoundAttributeDialog.selectedAttributeType.name.equalsIgnoreCase('PŘÍLOHA')}"
+                             rows="6" cols="60" value="#{addCompoundAttributeDialog.attributeValue}"/>
+            <p:fileUpload id="attachement" fileUploadListener="#{addCompoundAttributeDialog.handleFileUpload}"
+                          mode="advanced"
+                          rendered="#{addCompoundAttributeDialog.selectedAttributeType.name.equalsIgnoreCase('PŘÍLOHA')}"
+                          dragDropSupport="true"
+                          update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"
+            />
+            <p:growl id="messages" showDetail="true"/>
         </div>
+        <p:commandButton value="Přidat" style="float: right"
+                         action="#{addCompoundAttributeDialog.addToAtributes()}"
+                         styleClass="topmargin-20"
+                         validateClient="true"
+                         icon="fa fa-save"
+                         update="form"/>
     </div>
+</h:form>
 
+<h:form id="submitForm">
     <p:commandButton value="Uložit a zavřít"
                      action="#{addCompoundAttributeDialog.saveAndClose()}"
                      styleClass="topmargin-20"

@@ -25,14 +25,14 @@ public class CompoundView {
 
     @PostConstruct
     public void init() {
-        compounds = compoundRepository.findAll();
+        compounds = compoundRepository.findByDeletedAtIsNullOrderByIdAsc();
     }
 
     public void search() {
         System.out.println("Search");
     }
 
-    public boolean filterByPrice(Object value, Object filter, Locale locale) {
+    public boolean filterByMw(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if (filterText == null || filterText.equals("")) {
             return true;
@@ -46,7 +46,6 @@ public class CompoundView {
     }
 
     public void redirect(Compound compound) {
-        System.out.println(compound.toString());
         compoundSelector.setSelectedCompound(compound);
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("compound.xhtml");

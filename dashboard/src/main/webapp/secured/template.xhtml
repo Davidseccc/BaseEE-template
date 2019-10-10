@@ -69,9 +69,12 @@
                                 styleClass="#{request.requestURI.endsWith('/compounds.xhtml') ? 'menuitem_active' : 'menuitem'}"
                                 value="Compounds"/>
                         <h:link outcome="home"
-                                rendered="#{userManager.currentUser.superAdmin}"
                                 styleClass="#{request.requestURI.endsWith('/search.xhtml') ? 'menuitem_active' : 'menuitem'}"
                                 value="Search"/>
+                        <h:link outcome="log"
+                                rendered="#{userManager.currentUser.superAdmin}"
+                                styleClass="#{request.requestURI.endsWith('/log.xhtml') ? 'menuitem_active' : 'menuitem'}"
+                                value="Log"/>
                     </li>
                 </ul>
             </div>

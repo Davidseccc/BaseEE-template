@@ -3,9 +3,11 @@ package cz.uhk.chemdb.model.chemdb.table;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "compound")
@@ -16,9 +18,14 @@ public class Compound extends BaseModel implements Serializable {
     private int k;
     @NotNull
     private String smiles;
+    private String originalCodename;
     private String ion;
     private float mw;
     private String notes;
+    @ManyToOne
+    private Owner owner;
+    @OneToOne(mappedBy = "compound", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MeltingPoint meltingPoint;
     @OneToOne(mappedBy = "compound", cascade = CascadeType.ALL, orphanRemoval = true)
     private Descriptor descriptor;
     @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
@@ -32,6 +39,8 @@ public class Compound extends BaseModel implements Serializable {
     @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
     @OrderBy("ord ASC")
     private Set<Attribute> attributes = new LinkedHashSet<>();
+
+    private LocalDateTime deletedAt;
 
 
     public Compound() {
@@ -113,7 +122,39 @@ public class Compound extends BaseModel implements Serializable {
         if (attributes == null) {
             return new HashSet<>();
         }
-        return attributes;
+        return attributes.stream().filter(attribute -> attribute.getDeletedAt() == null).collect(Collectors.toSet());
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public MeltingPoint getMeltingPoint() {
+        return meltingPoint;
+    }
+
+    public void setMeltingPoint(MeltingPoint meltingPoint) {
+        this.meltingPoint = meltingPoint;
+    }
+
+    public String getOriginalCodename() {
+        return originalCodename;
+    }
+
+    public void setOriginalCodename(String originalCodename) {
+        this.originalCodename = originalCodename;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public void setAttributes(Set<Attribute> attributes) {

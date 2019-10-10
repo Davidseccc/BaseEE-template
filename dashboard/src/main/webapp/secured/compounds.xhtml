@@ -76,7 +76,7 @@
                     </p:column>
 
                     <p:column filterBy="#{comp.descriptor.mw}" headerText="mw" footerText="custom (min)"
-                              filterFunction="#{compoundView.filterByPrice}">
+                              filterFunction="#{compoundView.filterByMw}">
                         <h:outputText value="#{comp.descriptor.mw}">
                             <f:convertNumber currencySymbol="=" type="currency"/>
                         </h:outputText>
