@@ -36,6 +36,7 @@ public class DefaultDataGenerator {
         userRepository.saveAndFlush(admin);
     }
 
+    @Transactional
     private void generateOwners() {
         Owner owner = new Owner();
         owner.setName("UHK");

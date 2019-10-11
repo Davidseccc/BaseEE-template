@@ -54,16 +54,27 @@
                     </p:selectOneMenu>
                     <p:fileUpload id="upload" immediate="true" fileUploadListener="#{fileUploadView.handleFileUpload}"
                                   mode="advanced"
-                                  dragDropSupport="true" oncomplete="rc()" v
-                                  update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"/>
-                    <p:remoteCommand name="rc" immediate="true"
-                                     action="#{fileUploadView.openDialog()}"
-                                     process="@this"/>
-
+                                  dragDropSupport="true" oncomplete="rc()"
+                                  update="messages detail" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"/>
                     <p:growl id="messages" showDetail="true"/>
-                    <p:commandButton immediate="true" value="OPEN" action="#{fileUploadView.openDialog()}"/>
+                    <p:remoteCommand name="rc" immediate="false"
+                                     action="#{importDataDialogView.openDialog(fileUploadView.filePath, fileUploadView.selectedUploadType)}"
+                                     process="@this"/>
                 </h:form>
             </div>
         </div>
+
+        <p:dialog id="detail"
+                  widgetVar="detail"
+                  header="DETAIL"
+                  resizable="true">
+
+            <h:form>
+                <h:outputText>UUID:</h:outputText>
+                <h:outputText>#{fileUploadView.content}</h:outputText>
+            </h:form>
+
+        </p:dialog>
+
     </ui:define>
 </ui:composition>

@@ -75,8 +75,6 @@ public class AddCompoundAttributeDialog implements Serializable {
 
     @Transactional
     private void updateAndSaveAttributes() {
-
-
         for (Attribute attribute : attributes) {
             attribute.setCompound(compound);
             compound.getAttributes().add(attribute);

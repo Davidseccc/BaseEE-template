@@ -1,20 +1,20 @@
 package cz.uhk.chemdb.bean.view;
 
-import cz.uhk.chemdb.util.DialogUtils;
 import cz.uhk.chemdb.util.FileUploadUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 @Named
-@RequestScoped
+@ApplicationScoped
 public class FileUploadView {
 
     private UploadedFile file;
@@ -22,6 +22,9 @@ public class FileUploadView {
     FileUploadUtils fileUploadUtils;
 
     String selectedUploadType;
+
+    String filePath;
+
 
 
     public UploadedFile getFile() {
@@ -42,15 +45,9 @@ public class FileUploadView {
     public void handleFileUpload(FileUploadEvent event) {
         System.out.println("handleFileUpload()");
         file = event.getFile();
-        fileUploadUtils.saveUploadedFile(event.getFile(), event.getFile().getFileName());
-        openDialog();
-        //FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-        //FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void openDialog() {
-        System.out.println("openDialog()");
-        DialogUtils.openPageAsDialog("dialog/importDataDialog");
+        filePath = event.getFile().getFileName();
+        fileUploadUtils.saveUploadedFile(event.getFile(), filePath);
+        filePath = new File("/Users/davidsec/Downloads/test/" + filePath).getAbsolutePath();
     }
 
     public List<String> getUploadTypes() {
@@ -69,5 +66,21 @@ public class FileUploadView {
 
     public void setSelectedUploadType(String selectedUploadType) {
         this.selectedUploadType = selectedUploadType;
+    }
+
+    public FileUploadUtils getFileUploadUtils() {
+        return fileUploadUtils;
+    }
+
+    public void setFileUploadUtils(FileUploadUtils fileUploadUtils) {
+        this.fileUploadUtils = fileUploadUtils;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
