@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "compoundOwner")
+@Table(name = "compoundowner")
 public class Owner implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

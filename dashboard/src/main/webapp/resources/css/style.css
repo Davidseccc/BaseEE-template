@@ -406,3 +406,7 @@ a {
 .row-white {
     background-color: #fafafb !important;
 }
+
+.notValid {
+    background-color: #fc5552 !important;
+}

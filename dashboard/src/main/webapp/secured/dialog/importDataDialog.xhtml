@@ -11,40 +11,50 @@
     <link rel="stylesheet" href="../../resources/css/style.css"/>
 </h:head>
 
-<h:form id="form" name="form">
+<h:form id="submitForm">
+
     <div class="input-container">
         <p:growl id="msgs" showDetail="true"/>
-        <p:dataTable id="k-Data" var="car" value="#{importDataDialogView.kDatabaseDTOS}" editable="true" editMode="cell"
+
+        <p:dataTable id="k-Data" var="kDatabseDAO" value="#{importDataDialogView.kDatabaseDTOS}" editable="true"
+                     editMode="cell"
                      resizableColumns="true" widgetVar="k-Data">
-            <p:ajax event="cellEdit" listener="#{importDataDialogView.onCellEdit}" update=":form:msgs"/>
+            <p:ajax event="cellEdit" listener="#{importDataDialogView.onCellEdit}" update=":submitForm:msgs"/>
 
             <p:column headerText="Id">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.id}"/></f:facet>
-                    <f:facet name="input"><p:inputText id="modelInput" value="#{car.id}" style="width:96%"/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.id}"
+                                                         styleClass="#{idValidator.isValid(kDatabseDAO.id)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText id="modelInput" value="#{kDatabseDAO.id}"
+                                                       validator="#{idValidator.validate}"
+                                                       style="width:96%"/></f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="Smile">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.smiles}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{car.smiles}" style="width:96%" label="smile"/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.smiles}"
+                                                         styleClass="#{smileValidator.isValid(kDatabseDAO.smiles)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.smiles}" style="width:96%"
+                                                       label="smile"/></f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="Original codename">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.originalCodename}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{car.originalCodename}" style="width:96%"
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.originalCodename}"
+                                                         styleClass="#{codenameValidator.isValid(kDatabseDAO.originalCodename)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.originalCodename}" style="width:96%"
                                                        label="original codename"/></f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="Owner">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.owner}"/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.owner}"
+                                                         styleClass="#{ownerValidator.isValid(kDatabseDAO.owner)? '' : 'notValid'}"/></f:facet>
                     <f:facet name="input">
-                        <h:selectOneMenu value="#{car.owner}" style="width:100%">
+                        <h:selectOneMenu value="#{kDatabseDAO.owner}" style="width:100%">
                             <f:selectItems value="#{importDataDialogView.owners}" var="owner" itemLabel="#{owner}"
                                            itemValue="#{owner}"/>
                         </h:selectOneMenu>
@@ -54,51 +64,58 @@
 
             <p:column headerText="Melting point">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.meltingPoint}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{car.meltingPoint}" style="width:96%"
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.meltingPoint}"
+                                                         styleClass="#{meltingPointValidator.isValid(kDatabseDAO.meltingPoint)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.meltingPoint}"
+                                                       validator="#{meltingPointValidator.validate}" style="width:96%"
                                                        label="melting point"/></f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="NMR" style="width:96%">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.NMR}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{car.NMR}" style="width:96%" label="NMR"/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.NMR}"
+                                                         styleClass="#{nmrValidator.isValid(kDatabseDAO.NMR)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.NMR}" style="width:96%"
+                                                       label="NMR"/></f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="HRMS">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.HRMS}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{car.HRMS}" style="width:96%" label="HRMS"/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.HRMS}"
+                                                         styleClass="#{hrmsValidator.isValid(kDatabseDAO.HRMS)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.HRMS}" style="width:96%"
+                                                       label="HRMS"/></f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="Purity">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.purity}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{car.purity}" style="width:96%"
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.purity}"
+                                                         styleClass="#{purityValidator.isValid(kDatabseDAO.purity)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.purity}" style="width:96%"
+                                                       validator="#{purityValidator.validate}"
                                                        label="purity"/></f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="Solubility">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{car.solubility}"/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{car.solubility}" style="width:96%" label="solubility"/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.solubility}"
+                                                         styleClass="#{solubilityValidator.isValid(kDatabseDAO.solubility)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.solubility}" style="width:96%"
+                                                       label="solubility"/></f:facet>
                 </p:cellEditor>
             </p:column>
         </p:dataTable>
     </div>
-</h:form>
-
-<h:form id="submitForm">
     <p:commandButton value="Uložit a zavřít"
                      action="#{importDataDialogView.saveAndClose()}"
                      styleClass="topmargin-20"
                      validateClient="true"
                      icon="fa fa-save"
-                     update="form"/>
+                     update="submitForm"/>
 
     <p:commandButton value="Zavřít"
                      immediate="true"

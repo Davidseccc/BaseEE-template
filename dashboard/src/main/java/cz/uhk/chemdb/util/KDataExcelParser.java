@@ -1,7 +1,6 @@
 package cz.uhk.chemdb.util;
 
 import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
-import cz.uhk.chemdb.model.chemdb.table.Owner;
 import org.apache.poi.ss.usermodel.*;
 
 import javax.inject.Inject;
@@ -14,6 +13,7 @@ import java.util.stream.Collectors;
 public class KDataExcelParser {
     @Inject
     OwnerRepositiry ownerRepositiry;
+
     private String SAMPLE_XLSX_FILE_PATH = "";
 
 
@@ -151,37 +151,7 @@ public class KDataExcelParser {
         }
 
         public boolean isValidOwner() {
-            for (Owner owner : ownerRepositiry.findAll()) {
-                if (this.owner.equals(owner))
-                    return true;
-            }
-            return false;
-        }
-
-        public boolean isValidMeltingPoint() {
-            if (this.meltingPoint.equalsIgnoreCase("oil")) {
-                return true;
-            } else if (this.meltingPoint.matches("\\d{1,4}(?>\\.|\\,)?\\d?(?>-{1}\\d{1,4}(?>\\.|\\,)?\\d?)?")) {
-                return true;
-            } else return this.meltingPoint.matches("(?>\\>|\\<)?\\d{1,4}");
-        }
-
-        public boolean isValidNMR() {
             return true;
         }
-
-        public boolean isValidHRMS() {
-            return true;
-        }
-
-        public boolean isValidPurity() {
-            return this.purity.matches("(?>\\>|\\<)?\\d{1,4}(?>\\.|\\,)?\\d{1,2}");
-        }
-
-        public boolean isValidSoluboility() {
-            return true;
-        }
-
-
     }
 }
