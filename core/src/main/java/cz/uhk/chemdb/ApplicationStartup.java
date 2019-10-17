@@ -1,6 +1,7 @@
 package cz.uhk.chemdb;
 
 import cz.uhk.chemdb.model.DefaultDataGenerator;
+import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
 import cz.uhk.chemdb.model.chemdb.repositories.UserRepository;
 import org.flywaydb.core.Flyway;
 
@@ -26,6 +27,9 @@ public class ApplicationStartup {
 
     @Inject
     private DefaultDataGenerator defaultDataGenerator;
+
+    @Inject
+    OwnerRepositiry ownerRepositiry;
 
     @Inject
     private UserRepository userRepository;

@@ -24,7 +24,7 @@
                         <p:column filterBy="#{selectedCompound.k}" headerText="Search"
                                   filterMatchMode="contains">
                             <p:commandLink styleClass="btn-link" value="K #{selectedCompound.k}"
-                                           action="#{compoundView.redirect(selectedCompound)}"
+                                           action="#{compoundView.redirect(selectedCompound.id)}"
                                            style="margin-right:20px;"/>
                         </p:column>
                     </p:dataTable>

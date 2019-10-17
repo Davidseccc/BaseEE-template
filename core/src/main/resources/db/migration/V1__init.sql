@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS compound
   mw               DOUBLE PRECISION,
   notes            VARCHAR(1024),
   uuid             VARCHAR(255)
-
 );
 
 
@@ -88,7 +87,9 @@ CREATE TABLE IF NOT EXISTS attribute
 (
   id            SERIAL PRIMARY KEY,
   key           VARCHAR(255),
+  ord           INTEGER,
   value         VARCHAR(1024),
-  compound_id   INTEGER references compound
+  compound_id   INTEGER references compound NOT NULL,
+  uuid   VARCHAR(255)
 );
 CREATE INDEX ON attribute (compound_id);

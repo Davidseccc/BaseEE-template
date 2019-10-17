@@ -26,6 +26,15 @@ public class DialogUtils {
         PrimeFaces.current().dialog().openDynamic(path, getDialogOptions(), params);
     }
 
+    public static void openPageAsDialog(String path, String key, String value) {
+        HashMap<String, List<String>> params = new HashMap<>();
+        List<String> vals = new ArrayList<>();
+        vals.add(value);
+        params.put(key, vals);
+
+        PrimeFaces.current().dialog().openDynamic(path, getDialogOptions(), params);
+    }
+
     public static void openPageAsDialog(String path, List<String> idList) {
         HashMap<String, List<String>> params = new HashMap<>();
         params.put("idList", idList);

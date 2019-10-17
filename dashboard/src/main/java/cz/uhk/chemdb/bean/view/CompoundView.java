@@ -54,6 +54,16 @@ public class CompoundView {
         }
     }
 
+    public void redirect(long id) {
+        Compound compound = compoundRepository.findBy(id);
+        compoundSelector.setSelectedCompound(compound);
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("compound.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Compound> getCompounds() {
         return compounds;
     }

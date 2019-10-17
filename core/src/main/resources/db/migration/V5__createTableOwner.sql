@@ -3,9 +3,9 @@ create table meltingPoint
 	id BIGSERIAL
 		constraint meltingPoint_pk primary key,
 	compound_id INTEGER references compound,
-	temperatureFrom decimal not null,
-	temperatureTo decimal not null,
-	oil boolean not null
+	temperatureFrom decimal,
+	temperatureTo decimal,
+	oil boolean
 );
 
 create table compoundOwner
@@ -39,5 +39,5 @@ alter table descriptor
 	add purityOperator char;
 
 alter table descriptor
-	add solubility char;
+	add solubility varchar(100);
 

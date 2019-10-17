@@ -1,5 +1,6 @@
 package cz.uhk.chemdb.bean.view;
 
+import cz.uhk.chemdb.model.chemdb.table.FileUploadType;
 import cz.uhk.chemdb.util.FileUploadUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -10,8 +11,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Named
 @ApplicationScoped
@@ -21,11 +23,9 @@ public class FileUploadView {
     @Inject
     FileUploadUtils fileUploadUtils;
 
-    String selectedUploadType;
+    FileUploadType selectedUploadType;
 
     String filePath;
-
-
 
     public UploadedFile getFile() {
         return file;
@@ -43,28 +43,21 @@ public class FileUploadView {
     }
 
     public void handleFileUpload(FileUploadEvent event) {
-        System.out.println("handleFileUpload()");
         file = event.getFile();
         filePath = event.getFile().getFileName();
         fileUploadUtils.saveUploadedFile(event.getFile(), filePath);
         filePath = new File("/Users/davidsec/Downloads/test/" + filePath).getAbsolutePath();
     }
 
-    public List<String> getUploadTypes() {
-        List<String> uplaodTypes = new ArrayList<>();
-        uplaodTypes.add("Invitro data");
-        uplaodTypes.add("K databáze");
-        uplaodTypes.add("Typ3");
-        uplaodTypes.add("Typ4");
-        uplaodTypes.add("Typ5");
-        return uplaodTypes;
+    public List<FileUploadType> getUploadTypes() {
+        return Arrays.stream(FileUploadType.values()).collect(Collectors.toList());
     }
 
-    public String getSelectedUploadType() {
+    public FileUploadType getSelectedUploadType() {
         return selectedUploadType;
     }
 
-    public void setSelectedUploadType(String selectedUploadType) {
+    public void setSelectedUploadType(FileUploadType selectedUploadType) {
         this.selectedUploadType = selectedUploadType;
     }
 

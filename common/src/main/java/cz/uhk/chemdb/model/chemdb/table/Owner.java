@@ -15,6 +15,12 @@ public class Owner implements Serializable {
     @OrderBy("id ASC")
     List<Compound> compounds;
 
+    public Owner() {
+    }
+
+    public Owner(String name) {
+        this.name = name;
+    }
     public long getId() {
         return id;
     }

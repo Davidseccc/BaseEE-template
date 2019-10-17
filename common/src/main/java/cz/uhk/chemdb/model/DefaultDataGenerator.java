@@ -38,9 +38,11 @@ public class DefaultDataGenerator {
 
     @Transactional
     private void generateOwners() {
-        Owner owner = new Owner();
-        owner.setName("UHK");
-        ownerRepositiry.save(owner);
+        ownerRepositiry.save(new Owner("UHK"));
+        ownerRepositiry.save(new Owner("FVZ"));
+        ownerRepositiry.save(new Owner("FAF"));
+        ownerRepositiry.save(new Owner("FNHK"));
+        ownerRepositiry.save(new Owner("NUDZ"));
     }
 
 

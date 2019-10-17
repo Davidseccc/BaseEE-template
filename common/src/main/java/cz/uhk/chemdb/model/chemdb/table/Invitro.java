@@ -15,7 +15,7 @@ public class Invitro implements Serializable {
     @ManyToOne
     private Compound compound;
 
-    private float value;
+    private double value;
 
     private String value_text;
     @OneToMany(mappedBy = "invitro", cascade = CascadeType.ALL)
@@ -53,11 +53,11 @@ public class Invitro implements Serializable {
         this.compound = compound;
     }
 
-    public float getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(float value) {
+    public void setValue(double value) {
         this.value = value;
     }
 

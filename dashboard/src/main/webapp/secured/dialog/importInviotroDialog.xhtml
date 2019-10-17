@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>
+        <h:outputText value="Importovat target #{importInvitroDialogView.invitro.targetEnum}"/>
+    </title>
+    <link rel="stylesheet" href="../../resources/css/style.css"/>
+</h:head>
+
+<h:form id="submitForm">
+
+    <div class="input-container">
+        <p:growl id="msgs" showDetail="true"/>
+
+        <p:dataTable id="invotro-data" var="invitro" value="#{importInvitroDialogView.invitro.invitoroData}"
+                     editable="true"
+                     editMode="cell"
+                     resizableColumns="true" widgetVar="invitro-data">
+            <p:ajax event="cellEdit" listener="#{importInvitroDialogView.onCellEdit}" update=":submitForm:msgs"/>
+
+            <p:column headerText="Id">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{invitro.id}"
+                                                         styleClass="#{idValidator.isValid(invitro.id)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText id="modelInput" value="#{invitro.id}"
+                                                       validator="#{idValidator.validate}"
+                                                       style="width:96%"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="#{importInvitroDialogView.invitro.valueEnum}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{invitro.value}"
+                                                         styleClass=""/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{invitro.value}" style="width:96%"
+                                                       label="value"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Error">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{invitro.error}"
+                                                         styleClass=""/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{invitro.error}" style="width:96%"
+                                                       label="error"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="#{importInvitroDialogView.invitro.valueErrorEnum}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{invitro.valueError}" styleClass=""/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{invitro.valueError}" style="width:96%"
+                                                       label="value error"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+        </p:dataTable>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this"
+                                 action="#{importInvitroDialogView.onAddNew()}" oncomplete="PF('k-Data').addRow();"/>
+            </div>
+        </div>
+    </div>
+
+    <p:commandButton value="Uložit a zavřít"
+                     action="#{importInvitroDialogView.saveAndClose()}"
+                     styleClass="topmargin-20"
+                     validateClient="true"
+                     icon="fa fa-save"
+                     update="submitForm"/>
+
+    <p:commandButton value="Zavřít"
+                     immediate="true"
+                     action="#{editUserDialog.close()}"/>
+</h:form>
+</html>

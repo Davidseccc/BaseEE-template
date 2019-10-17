@@ -16,10 +16,10 @@
     <div class="input-container">
         <p:growl id="msgs" showDetail="true"/>
 
-        <p:dataTable id="k-Data" var="kDatabseDAO" value="#{importDataDialogView.kDatabaseDTOS}" editable="true"
+        <p:dataTable id="k-Data" var="kDatabseDAO" value="#{importKDataDialogView.kDatabaseDTOS}" editable="true"
                      editMode="cell"
                      resizableColumns="true" widgetVar="k-Data">
-            <p:ajax event="cellEdit" listener="#{importDataDialogView.onCellEdit}" update=":submitForm:msgs"/>
+            <p:ajax event="cellEdit" listener="#{importKDataDialogView.onCellEdit}" update=":submitForm:msgs"/>
 
             <p:column headerText="Id">
                 <p:cellEditor>
@@ -55,7 +55,7 @@
                                                          styleClass="#{ownerValidator.isValid(kDatabseDAO.owner)? '' : 'notValid'}"/></f:facet>
                     <f:facet name="input">
                         <h:selectOneMenu value="#{kDatabseDAO.owner}" style="width:100%">
-                            <f:selectItems value="#{importDataDialogView.owners}" var="owner" itemLabel="#{owner}"
+                            <f:selectItems value="#{importKDataDialogView.owners}" var="owner" itemLabel="#{owner}"
                                            itemValue="#{owner}"/>
                         </h:selectOneMenu>
                     </f:facet>
@@ -108,10 +108,23 @@
                                                        label="solubility"/></f:facet>
                 </p:cellEditor>
             </p:column>
+            <p:column style="width:35px">
+                <p:commandButton value="" styleClass="ui-priority-link" process="@this"
+                                 update="k-Data" icon="fa fa-trash"
+                                 action="#{importKDataDialogView.onRowRemove(kDatabseDAO)}"/>
+            </p:column>
         </p:dataTable>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this"
+                                 icon="fa fa-plus-circle" action="#{importKDataDialogView.onAddNew()}"
+                                 oncomplete="PF('k-Data').addRow();"/>
+            </div>
+        </div>
     </div>
     <p:commandButton value="Uložit a zavřít"
-                     action="#{importDataDialogView.saveAndClose()}"
+                     action="#{importKDataDialogView.saveAndClose()}"
                      styleClass="topmargin-20"
                      validateClient="true"
                      icon="fa fa-save"

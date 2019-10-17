@@ -1,9 +1,7 @@
-package cz.uhk.chemdb.util;
+package cz.uhk.chemdb.model.chemdb.parser;
 
-import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
 import org.apache.poi.ss.usermodel.*;
 
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,19 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class KDataExcelParser {
-    @Inject
-    OwnerRepositiry ownerRepositiry;
 
-    private String SAMPLE_XLSX_FILE_PATH = "";
-
-
-    public List<KDatabaseDTO> parse() throws IOException {
-        Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
-
-        System.out.println("Retrieving Sheets using Java 8 forEach with lambda");
-        workbook.forEach(sheet -> {
-            System.out.println("=> " + sheet.getSheetName());
-        });
+    public List<KDatabaseDTO> parse(String filePath) throws IOException {
+        Workbook workbook = WorkbookFactory.create(new File(filePath));
 
         Sheet sheet = workbook.getSheet("List1");
         DataFormatter dataFormatter = new DataFormatter();
@@ -47,15 +35,7 @@ public class KDataExcelParser {
         return kDatabaseDTOList.stream().skip(1).collect(Collectors.toList());
     }
 
-    public String getSAMPLE_XLSX_FILE_PATH() {
-        return SAMPLE_XLSX_FILE_PATH;
-    }
-
-    public void setSAMPLE_XLSX_FILE_PATH(String SAMPLE_XLSX_FILE_PATH) {
-        this.SAMPLE_XLSX_FILE_PATH = SAMPLE_XLSX_FILE_PATH;
-    }
-
-    public class KDatabaseDTO {
+    public static class KDatabaseDTO {
         private String id;
         private String smiles;
         private String originalCodename;
@@ -65,6 +45,9 @@ public class KDataExcelParser {
         private String HRMS;
         private String purity;
         private String solubility;
+
+        public KDatabaseDTO() {
+        }
 
         public String getId() {
             return id;
@@ -136,22 +119,6 @@ public class KDataExcelParser {
 
         public void setSolubility(String solubility) {
             this.solubility = solubility;
-        }
-
-        public boolean isValidId() {
-            return this.id.matches("K\\d{1,4}");
-        }
-
-        public boolean isValidsmiles() {
-            return true;
-        }
-
-        public boolean isValidOriginalCodename() {
-            return true;
-        }
-
-        public boolean isValidOwner() {
-            return true;
         }
     }
 }

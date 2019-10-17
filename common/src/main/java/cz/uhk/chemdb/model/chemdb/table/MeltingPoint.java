@@ -10,11 +10,25 @@ public class MeltingPoint implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private float temperatureFrom;
-    private float temperatureTo;
+    private Float temperatureFrom;
+    private Float temperatureTo;
     private boolean oil;
     @OneToOne
     private Compound compound;
+
+
+    public MeltingPoint(String meltingPoint) {
+        if (meltingPoint.equalsIgnoreCase("oil")) {
+            oil = true;
+        } else if (meltingPoint.startsWith(">")) {
+            this.temperatureFrom = Float.parseFloat(meltingPoint.substring(meltingPoint.indexOf(">") + 1));
+        } else if (meltingPoint.startsWith("<")) {
+            this.temperatureTo = Float.parseFloat(meltingPoint.substring(meltingPoint.indexOf("<") + 1));
+        } else if (meltingPoint.matches("\\d{1,4}(?>\\.|\\,)?\\d?(?>-{1}\\d{1,4}(?>\\.|\\,)?\\d?)?")) {
+            this.temperatureFrom = Float.parseFloat(meltingPoint.substring(0, meltingPoint.indexOf("-") - 1));
+            this.temperatureTo = Float.parseFloat(meltingPoint.substring(meltingPoint.indexOf("-") + 1));
+        }
+    }
 
     public long getId() {
         return id;
