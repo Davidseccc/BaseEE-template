@@ -2,6 +2,8 @@ package cz.uhk.chemdb.model.chemdb.table;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "target")
@@ -12,10 +14,14 @@ public class Target implements Serializable {
     private String name;
     private String abbreviation;
     private String note;
-    @ManyToOne
-    private Invitro invitro;
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
+    private Set<Invitro> invitros = new HashSet<>();
 
     public Target() {
+    }
+
+    public Target(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -50,12 +56,12 @@ public class Target implements Serializable {
         this.note = note;
     }
 
-    public Invitro getInvitro() {
-        return invitro;
+    public Set<Invitro> getInvitros() {
+        return invitros;
     }
 
-    public void setInvitro(Invitro invitro) {
-        this.invitro = invitro;
+    public void setInvitros(Set<Invitro> invitros) {
+        this.invitros = invitros;
     }
 }
 

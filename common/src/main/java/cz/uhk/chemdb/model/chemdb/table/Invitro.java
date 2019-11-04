@@ -1,6 +1,5 @@
 package cz.uhk.chemdb.model.chemdb.table;
 
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -22,9 +21,13 @@ public class Invitro implements Serializable {
     @OrderBy("name ASC")
     private Set<Quantity> quantities;
 
-    @OneToMany(mappedBy = "invitro", cascade = CascadeType.ALL)
+    @ManyToOne
     @OrderBy("name ASC")
-    private Set<Target> targets;
+    private Target target;
+
+    @ManyToOne
+    @OrderBy("name ASC")
+    private Organism organism;
 
     private String conditions;
 
@@ -33,6 +36,9 @@ public class Invitro implements Serializable {
     private String doi;
 
     private String note;
+
+    @Enumerated(EnumType.ORDINAL)
+    private ErrorType errorType;
 
     public Invitro() {
     }
@@ -77,12 +83,12 @@ public class Invitro implements Serializable {
         this.quantities = quantities;
     }
 
-    public Set<Target> getTargets() {
-        return targets;
+    public Target getTarget() {
+        return target;
     }
 
-    public void setTargets(Set<Target> targets) {
-        this.targets = targets;
+    public void setTarget(Target target) {
+        this.target = target;
     }
 
     public String getConditions() {
@@ -115,5 +121,21 @@ public class Invitro implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Organism getOrganism() {
+        return organism;
+    }
+
+    public void setOrganism(Organism organism) {
+        this.organism = organism;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(ErrorType errorTypeId) {
+        this.errorType = errorTypeId;
     }
 }

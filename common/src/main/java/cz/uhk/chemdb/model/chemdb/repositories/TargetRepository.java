@@ -7,4 +7,6 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface TargetRepository extends EntityRepository<Target, Long> {
 
+    Target findOptionalByName(String name);
+
 }

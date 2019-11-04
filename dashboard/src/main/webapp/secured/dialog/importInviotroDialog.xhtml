@@ -45,19 +45,25 @@
                 <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{invitro.error}"
                                                          styleClass=""/></f:facet>
-                    <f:facet name="input"><p:inputText value="#{invitro.error}" style="width:96%"
-                                                       label="error"/></f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value="#{importInvitroDialogView.errors}" style="width:100%">
+                            <f:selectItems value="#{importInvitroDialogView.errors}" var="error" itemLabel="#{error}"
+                                           itemValue="#{error}"/>
+                        </h:selectOneMenu>
+                    </f:facet>
                 </p:cellEditor>
             </p:column>
 
             <p:column headerText="#{importInvitroDialogView.invitro.valueErrorEnum}">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{invitro.valueError}" styleClass=""/></f:facet>
+                    <f:facet name="output">
+                        <h:outputText value="#{invitro.valueError}"
+                                      styleClass="#{dummyValidator.isValid(invitro.valueError,errorType.findByName(invitro.valueError).regex)}"/>
+                    </f:facet>
                     <f:facet name="input"><p:inputText value="#{invitro.valueError}" style="width:96%"
                                                        label="value error"/></f:facet>
                 </p:cellEditor>
             </p:column>
-
         </p:dataTable>
 
         <div class="ui-g">

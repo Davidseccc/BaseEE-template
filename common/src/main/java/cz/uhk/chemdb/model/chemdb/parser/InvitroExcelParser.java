@@ -17,16 +17,19 @@ public class InvitroExcelParser {
         Invitro invitro = new Invitro();
         invitro.setTargetEnum(dataFormatter.formatCellValue(sheet.getRow(0).getCell(1)));
         invitro.setValueEnum(dataFormatter.formatCellValue(sheet.getRow(1).getCell(1)));
-        invitro.setValueErrorEnum(dataFormatter.formatCellValue(sheet.getRow(1).getCell(3)));
-        for (int i = 2; i <= sheet.getLastRowNum(); i++) {
+        invitro.setValueEnum(dataFormatter.formatCellValue(sheet.getRow(2).getCell(1)));
+        invitro.setValueErrorEnum(dataFormatter.formatCellValue(sheet.getRow(2).getCell(3)));
+        for (int i = 3; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
-            if (row.getFirstCellNum() == 0) {
-                Data data = new Data();
-                data.setId(dataFormatter.formatCellValue(row.getCell(0)));
-                data.setValue(dataFormatter.formatCellValue(row.getCell(1)));
-                data.setError(dataFormatter.formatCellValue(row.getCell(2)));
-                data.setValueError(dataFormatter.formatCellValue(row.getCell(3)));
-                dataList.add(data);
+            if (row != null) {
+                if (row.getFirstCellNum() == 0) {
+                    Data data = new Data();
+                    data.setId(dataFormatter.formatCellValue(row.getCell(0)));
+                    data.setValue(dataFormatter.formatCellValue(row.getCell(1)));
+                    data.setError(dataFormatter.formatCellValue(row.getCell(2)));
+                    data.setValueError(dataFormatter.formatCellValue(row.getCell(3)));
+                    dataList.add(data);
+                }
             }
         }
         invitro.setInvitoroData(dataList);
@@ -34,56 +37,7 @@ public class InvitroExcelParser {
         return invitro;
     }
 
-    public class Invitro {
-        String targetEnum;
-        String valueEnum;
-        String valueErrorEnum;
-        List<Data> invitoroData;
-
-        public String getTargetEnum() {
-            return targetEnum;
-        }
-
-        public void setTargetEnum(String targetEnum) {
-            this.targetEnum = targetEnum;
-        }
-
-        public String getValueEnum() {
-            return valueEnum;
-        }
-
-        public void setValueEnum(String valueEnum) {
-            this.valueEnum = valueEnum;
-        }
-
-        public String getValueErrorEnum() {
-            return valueErrorEnum;
-        }
-
-        public void setValueErrorEnum(String valueErrorEnum) {
-            this.valueErrorEnum = valueErrorEnum;
-        }
-
-        public List<Data> getInvitoroData() {
-            return invitoroData;
-        }
-
-        public void setInvitoroData(List<Data> invitoroData) {
-            this.invitoroData = invitoroData;
-        }
-
-        @Override
-        public String toString() {
-            return "Invitro{" +
-                    "targetEnum='" + targetEnum + '\'' +
-                    ", valueEnum='" + valueEnum + '\'' +
-                    ", valueErrorEnum='" + valueErrorEnum + '\'' +
-                    ", invitroData'" + invitoroData.toString() + '\'' +
-                    '}';
-        }
-    }
-
-    public class Data {
+    public static class Data {
         String id;
         String value;
         String error;
@@ -129,6 +83,61 @@ public class InvitroExcelParser {
                     ", value='" + value + '\'' +
                     ", error='" + error + '\'' +
                     ", valueError='" + valueError + '\'' +
+                    '}';
+        }
+    }
+
+    public class Invitro {
+        String targetEnum;
+        String valueEnum;
+        String valueErrorEnum;
+        String organism;
+        List<Data> invitoroData;
+
+        public String getTargetEnum() {
+            return targetEnum;
+        }
+
+        public void setTargetEnum(String targetEnum) {
+            this.targetEnum = targetEnum;
+        }
+
+        public String getValueEnum() {
+            return valueEnum;
+        }
+
+        public void setValueEnum(String valueEnum) {
+            this.valueEnum = valueEnum;
+        }
+
+        public String getValueErrorEnum() {
+            return valueErrorEnum;
+        }
+
+        public void setValueErrorEnum(String valueErrorEnum) {
+            this.valueErrorEnum = valueErrorEnum;
+        }
+
+        public List<Data> getInvitoroData() {
+            return invitoroData;
+        }
+
+        public void setInvitoroData(List<Data> invitoroData) {
+            this.invitoroData = invitoroData;
+        }
+
+        public String getOrganism() {
+            return organism;
+        }
+
+        public void setOrganism(String organism) {
+            this.organism = organism;
+        }
+
+        @Override
+        public String toString() {
+            return "Invitro{" +
+                    "targetEnum='" + targetEnum + '\'' +
                     '}';
         }
     }
