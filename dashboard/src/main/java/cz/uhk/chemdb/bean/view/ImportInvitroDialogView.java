@@ -10,9 +10,9 @@ import cz.uhk.chemdb.util.LogUtils;
 import org.primefaces.event.CellEditEvent;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named
-@ViewScoped
+@ApplicationScoped
 public class ImportInvitroDialogView implements Serializable {
 
     List<String> errors;
@@ -83,7 +83,6 @@ public class ImportInvitroDialogView implements Serializable {
         close();
     }
 
-    @Transactional
     public void saveInvitro() {
 
         for (InvitroExcelParser.Data data : invitro.getInvitoroData()) {
@@ -92,10 +91,6 @@ public class ImportInvitroDialogView implements Serializable {
             invitro.setCompound(compoundRepository.findByK(k));
             invitro.setOrganism(organismRepository.findOptionalByName(this.invitro.getOrganism()));
             Target target = targetRepository.findOptionalByName(this.invitro.getTargetEnum());
-            if (target == null) {
-                target = new Target(this.invitro.getTargetEnum());
-            }
-            target.getInvitros().add(invitro);
             invitro.setTarget(target);
             invitro.setValue_text(data.getValue());
             invitro.setErrorType(ErrorType.findByName(data.getError()));
