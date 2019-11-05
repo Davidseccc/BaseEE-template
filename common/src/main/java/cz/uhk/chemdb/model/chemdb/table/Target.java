@@ -14,7 +14,7 @@ public class Target implements Serializable {
     private String name;
     private String abbreviation;
     private String note;
-    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "target", cascade = CascadeType.MERGE)
     private Set<Invitro> invitros = new HashSet<>();
 
     public Target() {

@@ -26,7 +26,7 @@ import java.util.List;
 public class ImportInvitroDialogView implements Serializable {
 
     List<String> errors;
-    ErrorType selectedError;
+    String selectedError;
     @Inject
     private OwnerRepositiry ownerRepositiry;
     @Inject
@@ -45,12 +45,18 @@ public class ImportInvitroDialogView implements Serializable {
     private OrganismRepository organismRepository;
     @Inject
     private TargetRepository targetRepository;
+    @Inject
+    private UploadedFileRepository uploadedFileRepository;
 
     @PostConstruct
     public void init() {
-        String filePath = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("filePath");
         kDatabaseDTOS = new ArrayList<>();
-        invitro = processInvitroDatabase(filePath);
+        String fileHash = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fileHash");
+        UploadedFile uploadedFile = uploadedFileRepository.findOptionalByUuid(fileHash);
+
+        if (uploadedFile != null) {
+            invitro = processInvitroDatabase(uploadedFile.getPathWithFileName());
+        }
     }
 
     private InvitroExcelParser.Invitro processInvitroDatabase(String filePath) {
@@ -78,10 +84,14 @@ public class ImportInvitroDialogView implements Serializable {
 
     @Transactional
     public void saveAndClose() {
-        System.out.println("saveAndClose()");
         saveInvitro();
         close();
     }
+
+    public void close() {
+        DialogUtils.closeDialog();
+    }
+
 
     public void saveInvitro() {
 
@@ -110,9 +120,6 @@ public class ImportInvitroDialogView implements Serializable {
         invitro.getInvitoroData().remove(invitroData);
     }
 
-    public void close() {
-        DialogUtils.closeDialog();
-    }
 
     public InvitroExcelParser.Invitro getInvitro() {
         return invitro;
@@ -134,11 +141,11 @@ public class ImportInvitroDialogView implements Serializable {
         this.errors = errors;
     }
 
-    public ErrorType getSelectedError() {
+    public String getSelectedError() {
         return selectedError;
     }
 
-    public void setSelectedError(ErrorType selectedError) {
+    public void setSelectedError(String selectedError) {
         this.selectedError = selectedError;
     }
 }

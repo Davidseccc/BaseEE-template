@@ -8,5 +8,6 @@ public enum LogSection {
     INVITRO,
     QUANTITY,
     SYNONYM,
-    TARGET
+    TARGET,
+    DATA_IMPORT
 }

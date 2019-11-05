@@ -15,6 +15,8 @@ public interface CompoundRepository extends EntityRepository<Compound, Long> {
     @Query("SELECT c from Compound c where c.k =?1")
     Compound findByK(int k);
 
+    Compound findOptionalByK(int k);
+
 
     List<Compound> findByDeletedAtIsNullOrderByIdAsc();
 

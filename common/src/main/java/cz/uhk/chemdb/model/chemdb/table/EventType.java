@@ -10,6 +10,6 @@ public enum EventType implements Serializable {
     EDIT,
     DELETE,
     DOWNLOAD_ATTACHMENT,
-    UPLOAD_DOCUMENT
+    UPLOAD_DOCUMENT,
 
 }

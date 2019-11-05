@@ -4,6 +4,7 @@ import cz.uhk.chemdb.bean.UserManager;
 import cz.uhk.chemdb.model.chemdb.parser.KDataExcelParser;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
+import cz.uhk.chemdb.model.chemdb.repositories.UploadedFileRepository;
 import cz.uhk.chemdb.model.chemdb.table.*;
 import cz.uhk.chemdb.util.DialogUtils;
 import cz.uhk.chemdb.util.LogUtils;
@@ -39,6 +40,8 @@ public class ImportKDataDialogView implements Serializable {
 
     @Inject
     CompoundRepository compoundRepository;
+    @Inject
+    private UploadedFileRepository uploadedFileRepository;
 
     List<KDataExcelParser.KDatabaseDTO> kDatabaseDTOS;
 
@@ -46,12 +49,15 @@ public class ImportKDataDialogView implements Serializable {
 
     @PostConstruct
     public void init() {
-        String filePath = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("filePath");
+        String fileHash = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("fileHash");
         owners = new ArrayList<>();
         for (Owner owner : ownerRepositiry.findAll()) {
             owners.add(owner.getName());
         }
-        kDatabaseDTOS = processKDatabase(filePath);
+        UploadedFile uploadedFile = uploadedFileRepository.findOptionalByUuid(fileHash);
+        if (uploadedFile != null) {
+            kDatabaseDTOS = processKDatabase(uploadedFile.getPathWithFileName());
+        }
 
     }
 

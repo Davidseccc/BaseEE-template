@@ -90,6 +90,6 @@ CREATE TABLE IF NOT EXISTS attribute
   ord           INTEGER,
   value         VARCHAR(1024),
   compound_id   INTEGER references compound NOT NULL,
-  uuid   VARCHAR(255)
+  uuid          VARCHAR(255)
 );
 CREATE INDEX ON attribute (compound_id);

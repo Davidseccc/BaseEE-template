@@ -11,7 +11,7 @@ public class Organism implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "organism", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organism", cascade = CascadeType.MERGE)
     private Set<Invitro> invitros;
 
     public Organism() {

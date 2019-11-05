@@ -58,7 +58,7 @@
                                   update="messages detail" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"/>
                     <p:growl id="messages" showDetail="true"/>
                     <p:remoteCommand name="rc" immediate="false"
-                                     action="#{importDataDialogView.openDialog(fileUploadView.filePath, fileUploadView.selectedUploadType)}"
+                                     action="#{importDataDialogView.openDialog(fileUploadView.fileHash, fileUploadView.selectedUploadType)}"
                                      process="@this"/>
                 </h:form>
             </div>

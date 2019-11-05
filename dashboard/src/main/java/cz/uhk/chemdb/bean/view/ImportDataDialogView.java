@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Named
@@ -51,19 +50,16 @@ public class ImportDataDialogView implements Serializable {
         }
     }
 
-    public void openDialog(String filePath, FileUploadType uploadType) {
-        System.out.println("filePath" + filePath);
+    public void openDialog(String fileHash, FileUploadType uploadType) {
         String dialogName;
-        HashMap<String, List<String>> params = new HashMap<>();
 
         if (uploadType == FileUploadType.K_DATA) {
-            //kDatabaseDTOS = processKDatabase(filePath);
             dialogName = "dialog/importKDataDialog";
         } else if (uploadType == FileUploadType.INVITRO_DATA) {
             dialogName = "dialog/importInviotroDialog";
         } else {
             dialogName = "dialog/error";
         }
-        DialogUtils.openPageAsDialog(dialogName, "filePath", filePath);
+        DialogUtils.openPageAsDialog(dialogName, "fileHash", fileHash);
     }
 }

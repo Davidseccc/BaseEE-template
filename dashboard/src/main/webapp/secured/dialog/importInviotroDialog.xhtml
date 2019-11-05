@@ -16,7 +16,7 @@
     <div class="input-container">
         <p:growl id="msgs" showDetail="true"/>
 
-        <p:dataTable id="invotro-data" var="invitro" value="#{importInvitroDialogView.invitro.invitoroData}"
+        <p:dataTable id="invitro-data" var="invitro" value="#{importInvitroDialogView.invitro.invitoroData}"
                      editable="true"
                      editMode="cell"
                      resizableColumns="true" widgetVar="invitro-data">
@@ -43,12 +43,12 @@
 
             <p:column headerText="Error">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{invitro.error}"
-                                                         styleClass=""/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{invitro.error}" styleClass=""/>
+                    </f:facet>
                     <f:facet name="input">
-                        <h:selectOneMenu value="#{importInvitroDialogView.errors}" style="width:100%">
-                            <f:selectItems value="#{importInvitroDialogView.errors}" var="error" itemLabel="#{error}"
-                                           itemValue="#{error}"/>
+                        <h:selectOneMenu value="#{invitro.error}" style="width:100%">
+                            <f:selectItems value="#{importInvitroDialogView.errors}" var="owner" itemLabel="#{owner}"
+                                           itemValue="#{owner}"/>
                         </h:selectOneMenu>
                     </f:facet>
                 </p:cellEditor>
@@ -64,12 +64,18 @@
                                                        label="value error"/></f:facet>
                 </p:cellEditor>
             </p:column>
+            <p:column style="width:35px">
+                <p:commandButton value="Delete" styleClass="ui-priority-primary" process="@this"
+                                 update="invitro-data" icon="fa fa-trash"
+                                 action="#{importInvitroDialogView.onRowRemove(invitro)}"/>
+            </p:column>
         </p:dataTable>
 
         <div class="ui-g">
             <div class="ui-g-12">
                 <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this"
-                                 action="#{importInvitroDialogView.onAddNew()}" oncomplete="PF('k-Data').addRow();"/>
+                                 action="#{importInvitroDialogView.onAddNew()}"
+                                 oncomplete="PF('invitro-data').addRow();"/>
             </div>
         </div>
     </div>

@@ -10,7 +10,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class FileUploadView {
 
     FileUploadType selectedUploadType;
 
-    String filePath;
+    String fileHash;
 
     public UploadedFile getFile() {
         return file;
@@ -44,9 +43,7 @@ public class FileUploadView {
 
     public void handleFileUpload(FileUploadEvent event) {
         file = event.getFile();
-        filePath = event.getFile().getFileName();
-        fileUploadUtils.saveUploadedFile(event.getFile(), filePath);
-        filePath = new File("/Users/davidsec/Downloads/test/" + filePath).getAbsolutePath();
+        fileHash = fileUploadUtils.saveUploadedFile(event.getFile());
     }
 
     public List<FileUploadType> getUploadTypes() {
@@ -69,11 +66,11 @@ public class FileUploadView {
         this.fileUploadUtils = fileUploadUtils;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getFileHash() {
+        return fileHash;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFileHash(String fileHash) {
+        this.fileHash = fileHash;
     }
 }

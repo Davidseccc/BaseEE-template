@@ -22,4 +22,8 @@ public abstract class BaseModel implements Serializable {
     public int hashCode() {
         return Objects.hash(uuid);
     }
+
+    public String getUuid() {
+        return uuid;
+    }
 }
