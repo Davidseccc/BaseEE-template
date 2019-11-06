@@ -1,0 +1,1 @@
+alter table invitro alter column errortype type VARCHAR(255) using errortype::VARCHAR(255);

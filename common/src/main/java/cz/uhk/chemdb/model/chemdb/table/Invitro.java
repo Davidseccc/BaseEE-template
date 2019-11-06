@@ -37,7 +37,7 @@ public class Invitro implements Serializable {
 
     private String note;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private ErrorType errorType;
 
     public Invitro() {

@@ -43,7 +43,7 @@ public class EditUserDialog implements Serializable {
         DialogUtils.openPageAsDialog("dialog/editUser", researcher.getEmail());
     }
 
-    public static void openDialog() {
+    public void openDialog() {
         DialogUtils.openPageAsDialog("dialog/editUser");
     }
 
@@ -61,18 +61,6 @@ public class EditUserDialog implements Serializable {
 
     public boolean isNewResearcher() {
         return newResearcher;
-    }
-
-    public boolean isCurrentResearcher() {
-        return !newResearcher && oldEmail.equals(userManager.getUserEmail());
-    }
-
-    @Transactional
-    public void generateTokenAndShow() {
-        if (!newResearcher) {
-            User unchangedResearcher = researcherRepository.findOptionalByEmail(oldEmail);
-            researcherRepository.save(researcher);
-        }
     }
 
     @Transactional
@@ -136,5 +124,9 @@ public class EditUserDialog implements Serializable {
 
     public void setNewPasswordAgain(String newPasswordAgain) {
         this.newPasswordAgain = newPasswordAgain;
+    }
+
+    public void setNewResearcher(boolean newResearcher) {
+        this.newResearcher = newResearcher;
     }
 }

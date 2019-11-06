@@ -1,15 +1,20 @@
 package cz.uhk.chemdb.bean.view;
 
+import cz.uhk.chemdb.model.chemdb.repositories.UploadedFileRepository;
 import cz.uhk.chemdb.model.chemdb.table.FileUploadType;
 import cz.uhk.chemdb.util.FileUploadUtils;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,11 +25,16 @@ public class FileUploadView {
 
     private UploadedFile file;
     @Inject
-    FileUploadUtils fileUploadUtils;
+    private FileUploadUtils fileUploadUtils;
+    @Inject
+    private UploadedFileRepository uploadedFileRepository;
 
-    FileUploadType selectedUploadType;
+    private FileUploadType selectedUploadType;
 
-    String fileHash;
+    private String fileHash;
+
+    private StreamedContent fileToDownload;
+
 
     public UploadedFile getFile() {
         return file;
@@ -36,10 +46,33 @@ public class FileUploadView {
 
     public void upload() {
         if (file != null) {
-            FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            fileHash = fileUploadUtils.saveUploadedFile(file);
         }
     }
+
+    public StreamedContent downloadFile(String fileHash) {
+        cz.uhk.chemdb.model.chemdb.table.UploadedFile fileToView = uploadedFileRepository.findOptionalByUuid(fileHash);
+        if (fileToView != null) {
+            InputStream stream = null;
+            try {
+                stream = new FileInputStream(new File(fileToView.getPathWithFileName()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            fileToDownload = new DefaultStreamedContent(stream, fileToView.getContentType(), fileToView.getFileName());
+        }
+        return fileToDownload;
+    }
+
+    public String getUploadedFileStringInfo(String fileHash) {
+        cz.uhk.chemdb.model.chemdb.table.UploadedFile fileToView = uploadedFileRepository.findOptionalByUuid(fileHash);
+        if (fileToView != null) {
+            return fileToView.toString();
+        }
+        return "No information available";
+
+    }
+
 
     public void handleFileUpload(FileUploadEvent event) {
         file = event.getFile();
@@ -56,14 +89,6 @@ public class FileUploadView {
 
     public void setSelectedUploadType(FileUploadType selectedUploadType) {
         this.selectedUploadType = selectedUploadType;
-    }
-
-    public FileUploadUtils getFileUploadUtils() {
-        return fileUploadUtils;
-    }
-
-    public void setFileUploadUtils(FileUploadUtils fileUploadUtils) {
-        this.fileUploadUtils = fileUploadUtils;
     }
 
     public String getFileHash() {

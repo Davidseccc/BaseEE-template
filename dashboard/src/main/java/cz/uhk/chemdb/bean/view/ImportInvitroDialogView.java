@@ -104,7 +104,7 @@ public class ImportInvitroDialogView implements Serializable {
             invitro.setTarget(target);
             invitro.setValue_text(data.getValue());
             invitro.setErrorType(ErrorType.findByName(data.getError()));
-            //invitro.setValue(Double.parseDouble(data.getValueError())); todo: dodělat rozpětí u SEM
+            //invitro.setValue(Double.parseDouble(data.getValueError())); //todo: dodělat rozpětí u SEM
             invitroRepository.save(invitro);
         }
     }

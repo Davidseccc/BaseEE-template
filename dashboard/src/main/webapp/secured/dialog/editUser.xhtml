@@ -17,7 +17,7 @@
             <p:inputText id="email"
                          required="true"
                          requiredMessage="Email je povinný"
-                         validator="#{researcherValidator.validate}"
+                         validator="#{userValidator.validate}"
                          value="#{editUserDialog.researcher.email}">
                 <f:attribute name="oldEmail" value="#{editUserDialog.researcher.email}"/>
             </p:inputText>

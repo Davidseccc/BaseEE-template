@@ -5,14 +5,30 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="template.xhtml">
 
+    <ui:define name="title">
+        <title>Logs</title>
+    </ui:define>
+
     <ui:define name="content">
+        <script type="text/javascript">
+            //<![CDATA[
+            function start() {
+                PF('downloadStatusDialog').show();
+            }
+
+            function stop() {
+                PF('downloadStatusDialog').hide();
+            }
+
+            //]]>
+        </script>
         <div class="card filterable">
             <h:form>
                 <p:dataTable id="tbl" var="log" value="#{logView.logs}" widgetVar="compsTable"
                              emptyMessage="No logs found with given criteria"
                              filteredValue="#{compoundView.filteredCompounds}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                             paginator="true" rowsPerPageTemplate="10,15,20,50" style="margin-bottom:20px">>
+                             paginator="true" rows="20" rowsPerPageTemplate="10,15,20,50" style="margin-bottom:20px">>
 
                     <f:facet name="{Exporters}">
                         <div style="float:right;padding-top: 5px;">
@@ -60,15 +76,28 @@
                     </p:column>
 
                     <p:column filterBy="#{log.description}" headerText="Description">
-                        <h:outputText value="#{log.description}"/>
+                        <h:outputText rendered="#{!log.eventType.name().equals('UPLOAD_DOCUMENT')}"
+                                      value="#{log.description}"/>
+                        <h:outputText rendered="#{log.eventType.name().equals('UPLOAD_DOCUMENT')}"
+                                      value="#{fileUploadView.getUploadedFileStringInfo(log.description)}"/>
                     </p:column>
 
                     <p:column headerText="Action" exportable="false">
-                        <p:commandButton rendered="#{log.eventType.name() == 'DELETE'}" value="Revert"
+                        <p:commandButton rendered="#{log.eventType.name().equals('DELETE')}" value="Revert"
                                          action="#{logView.revert(log)}"/>
+                        <p:commandButton value="View" ajax="false" immediate="true"
+                                         rendered="#{log.eventType.name().equals('UPLOAD_DOCUMENT')}"
+                                         onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-search">
+                            <p:fileDownload value="#{fileUploadView.downloadFile(log.description)}"/>
+                        </p:commandButton>
                     </p:column>
-
                 </p:dataTable>
+
+                <p:dialog modal="true" widgetVar="downloadStatusDialog" header="Status" draggable="false"
+                          closable="false" resizable="false">
+                    <p:graphicImage name="/demo/images/ajaxloadingbar.gif"/>
+                </p:dialog>
+
             </h:form>
         </div>
     </ui:define>

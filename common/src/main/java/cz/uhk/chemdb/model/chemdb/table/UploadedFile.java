@@ -13,6 +13,7 @@ public class UploadedFile extends BaseModel {
     long id;
     String fileName;
     String path;
+    String contentType;
     long fileSize;
     @ManyToOne
     private User user;
@@ -54,7 +55,7 @@ public class UploadedFile extends BaseModel {
     }
 
     public String getPathWithFileName() {
-        return path + File.separator + fileName;
+        return path + File.separator + uuid;
     }
 
     public long getFileSize() {
@@ -73,8 +74,29 @@ public class UploadedFile extends BaseModel {
         this.timestamp = timestamp;
     }
 
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    /**
+     * THX https://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java/3758880#3758880
+     *
+     * @return
+     */
+    public String getFormatedFileSize(boolean si) {
+        int unit = si ? 1000 : 1024;
+        if (fileSize < unit) return fileSize + " B";
+        int exp = (int) (Math.log(fileSize) / Math.log(unit));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+        return String.format("%.1f %sB", fileSize / Math.pow(unit, exp), pre);
+    }
+
     @Override
     public String toString() {
-        return id + " - " + fileName + "(" + path + ")";
+        return id + " - " + fileName + " (" + getFormatedFileSize(true) + ")";
     }
 }

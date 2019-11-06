@@ -53,6 +53,10 @@
                     <p:menuitem value="Change password"
                                 action="#{editUserDialog.openDialog(userManager.currentUser)}"
                                 icon="fa fa-pencil text-icon"/>
+                    <p:menuitem value="Create new user"
+                                action="#{editUserDialog.openDialog()}"
+                                icon="fa fa-user-plus text-icon"
+                                rendered="#{userManager.currentUser.admin}"/>
                     <p:menuitem value="Logout"
                                 action="#{userManager.logout()}"
                                 icon="fa fa-sign-out text-icon"/>

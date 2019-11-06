@@ -39,4 +39,5 @@ public class CompoundDetail {
     public void setCompound(Compound compound) {
         this.compound = compound;
     }
+
 }

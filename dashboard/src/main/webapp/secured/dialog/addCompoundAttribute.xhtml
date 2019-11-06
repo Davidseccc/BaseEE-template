@@ -3,18 +3,33 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+
 <h:head>
+    <script type="text/javascript">
+        //<![CDATA[
+        function start() {
+            PF('downloadStatusDialog').show();
+        }
+
+        function stop() {
+            PF('downloadStatusDialog').hide();
+        }
+
+        //]]>
+    </script>
+
     <title>
         <h:outputText value="Nový atribut"/>
     </title>
     <link rel="stylesheet" href="../../resources/css/style.css"/>
 </h:head>
 
+
 <h:form id="form" name="form">
     <div class="input-container-2">
         <p:dataTable id="table" var="attribute" ajax="true" value="#{addCompoundAttributeDialog.attributes}"
                      draggableRows="true"
-                     style="width: 100%;">
+                     style="width: 100%;" widgetVar="table">
             <p:ajax event="rowReorder" listener="#{addCompoundAttributeDialog.onRowReorder}"/>
             <f:facet name="header">
                 Attributy
@@ -23,7 +38,13 @@
                 <h:outputText value="#{attribute.key}"/>
             </p:column>
             <p:column headerText="Hodnota">
-                <h:outputText value="#{attribute.value}"/>
+                <h:outputText rendered="#{!attribute.attributeType.name().equals('ATTACHEMENT')}"
+                              value="#{attribute.value}"/>
+                <p:commandButton value="View" ajax="false" immediate="true"
+                                 rendered="#{attribute.attributeType.name().equals('ATTACHEMENT')}"
+                                 onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-search">
+                    <p:fileDownload value="#{fileUploadView.downloadFile(attribute.value)}"/>
+                </p:commandButton>
             </p:column>
             <p:column headerText="Typ dat">
                 <h:outputText value="#{attribute.attributeType}"/>
@@ -36,6 +57,12 @@
                                  action="#{addCompoundAttributeDialog.removeAttribute(attribute)}"/>
             </p:column>
         </p:dataTable>
+
+        <p:dialog modal="true" widgetVar="downloadStatusDialog" header="Status" draggable="false" closable="false"
+                  resizable="false">
+            <p:graphicImage name="/demo/images/ajaxloadingbar.gif"/>
+        </p:dialog>
+
         <div class="label">Typ dat</div>
         <div class="input">
             <p:selectOneMenu id="datatype" update="form" immediate="true"
@@ -64,7 +91,7 @@
                           mode="advanced"
                           rendered="#{addCompoundAttributeDialog.selectedAttributeType.name.equalsIgnoreCase('PŘÍLOHA')}"
                           dragDropSupport="true"
-                          update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"
+                          update="messages table" sizeLimit="100000000"
             />
             <p:growl id="messages" showDetail="true"/>
         </div>

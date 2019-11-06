@@ -6,6 +6,7 @@ import cz.uhk.chemdb.model.chemdb.repositories.AttributeTypeRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
 import cz.uhk.chemdb.model.chemdb.table.*;
 import cz.uhk.chemdb.util.DialogUtils;
+import cz.uhk.chemdb.util.FileUploadUtils;
 import cz.uhk.chemdb.util.LogUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.ReorderEvent;
@@ -36,6 +37,8 @@ public class AddCompoundAttributeDialog implements Serializable {
     LogUtils logUtils;
     @Inject
     UserManager userManager;
+    @Inject
+    FileUploadUtils fileUploadUtils;
 
     List<AttributeType> attributeTypeList;
 
@@ -93,14 +96,17 @@ public class AddCompoundAttributeDialog implements Serializable {
     public void handleFileUpload(FileUploadEvent event) {
         if (event != null && event.getFile() != null) {
             file = event.getFile();
-            attribute = new Attribute(AttributeType.ATTACHEMENT, attributeName, file.getFileName(), ++maxIndex);
+            String fileHash = fileUploadUtils.saveUploadedFile(file);
+            attribute = new Attribute(AttributeType.ATTACHEMENT, file.getFileName(), fileHash, ++maxIndex);
             attributes.add(attribute);
             attribute = new Attribute();
+            logUtils.createAndSaveLog(EventType.UPLOAD_DOCUMENT, userManager.getCurrentUser(), LogSection.DATA_IMPORT, fileHash);
 
         }
         FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+
 
     public void addToAtributes() {
         attribute = new Attribute(selectedAttributeType, attributeName, attributeValue, ++maxIndex);

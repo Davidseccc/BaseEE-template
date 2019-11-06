@@ -37,7 +37,6 @@ public class IdValidator extends BaseValidator implements Validator {
     public boolean exist(String id) {
         if (id.matches(K_DATA_VALID_ID)) {
             int k = Integer.parseInt(id.substring(1));
-            System.out.println(k);
             return compoundRepository.findOptionalByK(k) != null;
         }
         return false;

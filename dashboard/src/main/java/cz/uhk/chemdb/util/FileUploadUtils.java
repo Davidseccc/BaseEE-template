@@ -2,8 +2,6 @@ package cz.uhk.chemdb.util;
 
 import cz.uhk.chemdb.bean.UserManager;
 import cz.uhk.chemdb.model.chemdb.repositories.UploadedFileRepository;
-import cz.uhk.chemdb.model.chemdb.table.EventType;
-import cz.uhk.chemdb.model.chemdb.table.LogSection;
 import cz.uhk.chemdb.utils.DateFormats;
 import org.primefaces.model.UploadedFile;
 
@@ -51,11 +49,11 @@ public class FileUploadUtils {
         uploadedFile.setFileName(file.getFileName());
         uploadedFile.setFileSize(file.getSize());
         uploadedFile.setTimestamp(LocalDateTime.now());
-        String dir = FILE_UPLOAD_PATH + uploadedFile.getTimestamp().format(dateFormats.getDateTimeSecFormat());
+        String dir = FILE_UPLOAD_PATH + uploadedFile.getTimestamp().format(dateFormats.getFitbitDateFormat());
         uploadedFile.setPath(dir);
         uploadedFile.setUser(userManager.getCurrentUser());
+        uploadedFile.setContentType(file.getContentType());
         uploadedFileRepository.save(uploadedFile);
-        logUtils.createAndSaveLog(EventType.UPLOAD_DOCUMENT, userManager.getCurrentUser(), LogSection.DATA_IMPORT, uploadedFile.getUuid());
         return uploadedFile;
     }
 
