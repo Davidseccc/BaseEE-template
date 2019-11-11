@@ -12,13 +12,15 @@
         <title>Compounds</title>
     </ui:define>
     <ui:define name="refreshButton">
-        <p:commandButton value="Zobrazit" action="#{compoundView.search()}" style="float: right ;"/>
+        <p:commandButton value="Zobrazit" action="#{compoundView.search()}" update="form:compsTable"
+                         style="float: right ;"/>
     </ui:define>
 
     <ui:define name="filterableContent">
         <div class="card filterable" style="width: 75%">
-            <h:form>
-                <p:dataTable id="tbl" var="comp" value="#{compoundView.compounds}" widgetVar="compsTable"
+            <h:form id="form">
+                <p:dataTable id="compsTable" name="compsTable" var="comp" value="#{compoundView.compounds}"
+                             widgetVar="compsTable"
                              emptyMessage="No compounds found with given criteria"
                              filteredValue="#{compoundView.filteredCompounds}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"

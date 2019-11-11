@@ -4,8 +4,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,10 +39,9 @@ public class Compound extends BaseModel implements Serializable {
 
     @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
     @OrderBy("ord ASC")
-    private Set<Attribute> attributes = new LinkedHashSet<>();
+    private List<Attribute> attributes = new ArrayList<>();
 
     private LocalDateTime deletedAt;
-
 
     public Compound() {
     }
@@ -118,11 +118,11 @@ public class Compound extends BaseModel implements Serializable {
         this.invitro = invitro;
     }
 
-    public Set<Attribute> getAttributes() {
+    public List<Attribute> getAttributes() {
         if (attributes == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
-        return attributes.stream().filter(attribute -> attribute.getDeletedAt() == null).collect(Collectors.toSet());
+        return attributes.stream().filter(attribute -> attribute.getDeletedAt() == null).collect(Collectors.toList());
     }
 
     public Owner getOwner() {
@@ -157,7 +157,7 @@ public class Compound extends BaseModel implements Serializable {
         this.deletedAt = deletedAt;
     }
 
-    public void setAttributes(Set<Attribute> attributes) {
+    public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
 

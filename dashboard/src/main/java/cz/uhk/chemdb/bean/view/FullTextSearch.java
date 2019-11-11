@@ -2,6 +2,7 @@ package cz.uhk.chemdb.bean.view;
 
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
 import cz.uhk.chemdb.model.chemdb.table.Compound;
+import cz.uhk.chemdb.utils.StringUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -24,6 +25,13 @@ public class FullTextSearch {
             results.add(c.toString());
         }
         return results;
+    }
+
+    public List<String> startSearch() {
+        if (!StringUtils.isEmpty(searchString)) {
+            return startSearch(searchString);
+        }
+        return null;
     }
 
     public String getSearchString() {

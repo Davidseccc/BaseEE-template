@@ -5,7 +5,7 @@
                 template="template.xhtml">
 
     <ui:define name="content">
-        <h:form>
+        <h:form id="searchForm">
             <div id="container" class="card-container">
 
                 <p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg">
@@ -19,7 +19,7 @@
                     <div class="input-container-1 max-width">
                         <div class="label">Name</div>
                         <span class="ui-float-label">
-                            <p:inputText id="float-input" style="width: 100%;"/>
+                            <p:inputText id="float-input" value="#{fullTextSearch.searchString}" style="width: 100%;"/>
                         </span>
 
                     </div>

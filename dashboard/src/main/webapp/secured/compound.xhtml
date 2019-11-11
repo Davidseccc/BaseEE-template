@@ -1,9 +1,22 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
                 template="template.xhtml">
 
     <ui:define name="scripts">
+        <script type="text/javascript">
+            //<![CDATA[
+            function start() {
+                PF('downloadStatusDialog').show();
+            }
+
+            function stop() {
+                PF('downloadStatusDialog').hide();
+            }
+
+            //]]>
+        </script>
     </ui:define>
 
     <ui:define name="title">
@@ -17,8 +30,20 @@
                     <h2>#{compoundDetail.compound.smiles}</h2>
                     <img src="#{request.contextPath}/core/rest/smile/#{compoundDetail.compound.smiles}"></img>
                     <p:dataList value="#{compoundDetail.compound.attributes}" var="atr" type="definition">
-                        <h3> #{atr.key}</h3>
-                        <p>#{atr.value}</p>
+                        <h3><h:outputText value="#{atr.key}"/></h3>
+                        <p><h:outputText rendered="#{!atr.attributeType.name().equals('ATTACHEMENT')}"
+                                         value="#{atr.value}"/></p>
+                        <p>
+                            <h:form id="form">
+                                <p:commandLink rendered="#{atr.attributeType.name().equals('ATTACHEMENT')}"
+                                               value="#{fileUploadView.getUploadedFileStringInfo(atr.value)}"
+                                               ajax="false" immediate="true"
+                                               onclick="PrimeFaces.monitorDownload(start, stop);"
+                                               styleClass="download-link" icon="fa fa-download">>
+                                    <p:fileDownload value="#{fileUploadView.downloadFile(atr.value)}"/>
+                                </p:commandLink>
+                            </h:form>
+                        </p>
                     </p:dataList>
 
                     <div style="display: block;">
@@ -29,8 +54,15 @@
 
                         <p:commandButton value="Přidat Atribut" icon="fa fa-plus-circle"
                                          action="#{addCompoundAttributeDialog.openDialog(compoundDetail.compound.id)}"/>
+
                     </div>
                 </p:outputPanel>
+
+
+                <p:dialog modal="true" widgetVar="downloadStatusDialog" header="Status" draggable="false"
+                          closable="false" resizable="false">
+                    <p:graphicImage name="/demo/images/ajaxloadingbar.gif"/>
+                </p:dialog>
             </div>
         </div>
     </ui:define>

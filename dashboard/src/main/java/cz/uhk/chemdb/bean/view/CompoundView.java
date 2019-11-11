@@ -17,11 +17,13 @@ import java.util.Locale;
 @RequestScoped
 public class CompoundView {
     @Inject
-    CompoundRepository compoundRepository;
-    List<Compound> compounds;
-    List<Compound> filteredCompounds;
+    private CompoundRepository compoundRepository;
+    private List<Compound> compounds;
+    private List<Compound> filteredCompounds;
     @Inject
-    CompoundSelector compoundSelector;
+    private CompoundSelector compoundSelector;
+    @Inject
+    private FullTextSearch fullTextSearch;
 
     @PostConstruct
     public void init() {
@@ -29,7 +31,8 @@ public class CompoundView {
     }
 
     public void search() {
-        System.out.println("Search");
+        compounds = compoundRepository.fullTextSearch("%" + fullTextSearch.getSearchString() + "%");
+        System.out.println("Search " + fullTextSearch.getSearchString());
     }
 
     public boolean filterByMw(Object value, Object filter, Locale locale) {

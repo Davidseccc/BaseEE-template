@@ -1,6 +1,7 @@
 package cz.uhk.chemdb.bean.view.dialog;
 
 import cz.uhk.chemdb.bean.UserManager;
+import cz.uhk.chemdb.bean.view.FileUploadView;
 import cz.uhk.chemdb.model.chemdb.repositories.AttributeRepositiry;
 import cz.uhk.chemdb.model.chemdb.repositories.AttributeTypeRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
@@ -21,7 +22,10 @@ import javax.inject.Named;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 @Named
 @ApplicationScoped
@@ -39,6 +43,8 @@ public class AddCompoundAttributeDialog implements Serializable {
     UserManager userManager;
     @Inject
     FileUploadUtils fileUploadUtils;
+    @Inject
+    FileUploadView fileUploadView;
 
     List<AttributeType> attributeTypeList;
 
@@ -47,7 +53,7 @@ public class AddCompoundAttributeDialog implements Serializable {
     private UploadedFile file;
 
     private Compound compound;
-    private Set<Attribute> attributes;
+    private List<Attribute> attributes;
     private Attribute attribute;
     private String attributeName;
     private String attributeValue;
@@ -56,14 +62,14 @@ public class AddCompoundAttributeDialog implements Serializable {
     @PostConstruct
     public void init() {
         attributeTypeList = attributeTypeRepository.findAllAttributeTypes();
-        attributes = new HashSet<>();
+        attributes = new LinkedList<>();
         attributesToDelete = new ArrayList<>();
     }
 
     public void openDialog(long compoundId) {
         compound = compoundRepository.findBy(compoundId);
         if (compound != null) {
-            attributes = new HashSet<>(compound.getAttributes());
+            attributes = new ArrayList<>(compound.getAttributes());
             maxIndex = getMaxIndex(attributes);
             attribute = new Attribute();
         }
@@ -79,12 +85,26 @@ public class AddCompoundAttributeDialog implements Serializable {
     @Transactional
     private void updateAndSaveAttributes() {
         for (Attribute attribute : attributes) {
-            attribute.setCompound(compound);
-            compound.getAttributes().add(attribute);
-            attributeRepositiry.save(attribute);
+            if (compound.getAttributes().contains(attribute)) {
+                upadteAttribute(attribute);
+            } else {
+                createNewAttribute(attribute);
+            }
         }
         compoundRepository.save(compound);
         logUtils.createAndSaveLog(EventType.EDIT, userManager.getCurrentUser(), LogSection.ATTRIBUTE, Arrays.toString(attributes.toArray()));
+    }
+
+    @Transactional
+    private void upadteAttribute(Attribute attribute) {
+        attributeRepositiry.save(attribute);
+    }
+
+    @Transactional
+    private void createNewAttribute(Attribute attribute) {
+        attribute.setCompound(compound);
+        compound.getAttributes().add(attribute);
+        attributeRepositiry.save(attribute);
     }
 
     public void onRowReorder(ReorderEvent event) {
@@ -97,10 +117,11 @@ public class AddCompoundAttributeDialog implements Serializable {
         if (event != null && event.getFile() != null) {
             file = event.getFile();
             String fileHash = fileUploadUtils.saveUploadedFile(file);
-            attribute = new Attribute(AttributeType.ATTACHEMENT, file.getFileName(), fileHash, ++maxIndex);
+            attributeName = (attributeName == null || attributeName.isEmpty()) ? file.getFileName() : attributeName;
+            attribute = new Attribute(AttributeType.ATTACHEMENT, attributeName, fileHash, ++maxIndex);
             attributes.add(attribute);
             attribute = new Attribute();
-            logUtils.createAndSaveLog(EventType.UPLOAD_DOCUMENT, userManager.getCurrentUser(), LogSection.DATA_IMPORT, fileHash);
+            logUtils.createAndSaveLog(EventType.UPLOAD_DOCUMENT, userManager.getCurrentUser(), LogSection.ATTRIBUTE, fileHash);
 
         }
         FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
@@ -114,7 +135,7 @@ public class AddCompoundAttributeDialog implements Serializable {
         attribute = new Attribute();
     }
 
-    private int getMaxIndex(Set<Attribute> attributes) {
+    private int getMaxIndex(List<Attribute> attributes) {
         int max = 0;
         for (Attribute attribute : attributes) {
             max = (max < attribute.getOrd()) ? attribute.getOrd() : max;
@@ -122,15 +143,15 @@ public class AddCompoundAttributeDialog implements Serializable {
         return max;
     }
 
+    @Transactional
     private void switchIndexes(int fromIndex, int toIndex) {
-        List<Attribute> attributes = new ArrayList<>(this.attributes);
         Attribute from = attributes.get(fromIndex);
         Attribute to = attributes.get(toIndex);
         int pom = to.getOrd();
-        from.setOrd(to.getOrd());
-        to.setOrd(pom);
-        this.attributes.clear();
-        this.attributes.addAll(attributes);
+        to.setOrd(from.getOrd());
+        from.setOrd(pom);
+        attributeRepositiry.save(from);
+        attributeRepositiry.save(to);
     }
 
     public void removeAttribute(Attribute attribute) {
@@ -150,11 +171,11 @@ public class AddCompoundAttributeDialog implements Serializable {
         this.compound = compound;
     }
 
-    public Set<Attribute> getAttributes() {
+    public List<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Set<Attribute> attributes) {
+    public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
 
