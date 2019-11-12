@@ -29,17 +29,15 @@ import java.util.List;
 public class ImportKDataDialogView implements Serializable {
 
     @Inject
-    OwnerRepositiry ownerRepositiry;
+    private OwnerRepositiry ownerRepositiry;
     @Inject
-    LogUtils logUtils;
+    private LogUtils logUtils;
     @Inject
-    UserManager userManager;
-
+    private UserManager userManager;
     @Inject
-    ObprpService obprpService;
-
+    private ObprpService obprpService;
     @Inject
-    CompoundRepository compoundRepository;
+    private CompoundRepository compoundRepository;
     @Inject
     private UploadedFileRepository uploadedFileRepository;
 
@@ -106,37 +104,42 @@ public class ImportKDataDialogView implements Serializable {
 
     public void close() {
         DialogUtils.closeDialog();
+        FacesContext.getCurrentInstance().getPartialViewContext().getEvalScripts().add("stop()");
     }
 
     @Transactional
     private void saveDTOToCompound(KDataExcelParser.KDatabaseDTO kDatabaseDTO) {
-        Compound compound = new Compound();
-        compound.setK(Integer.parseInt(
-                kDatabaseDTO.getId().substring(kDatabaseDTO.getId().indexOf("K") + 1)));
-        compound.setSmiles(kDatabaseDTO.getSmiles());
-        ObprpService.ObPropResult result = obprpService.call(compound.getSmiles());
-        compound.setMw((float) result.getMol_weight());
-        compound.setOriginalCodename(kDatabaseDTO.getOriginalCodename());
-        compound.setOwner(ownerRepositiry.findByName(kDatabaseDTO.getOwner()));
-        compound.setMeltingPoint(new MeltingPoint(kDatabaseDTO.getMeltingPoint()));
-        Descriptor descriptor = new Descriptor();
-        descriptor.setHRMS(kDatabaseDTO.getHRMS());
-        descriptor.setAtoms(result.getNum_atoms());
-        descriptor.setNMR(kDatabaseDTO.getNMR());
-        descriptor.setHRMS(kDatabaseDTO.getHRMS());
-        descriptor.setCompound(compound);
-        if (!StringUtils.isEmpty(kDatabaseDTO.getPurity())) {
-            if (kDatabaseDTO.getPurity().startsWith(">") || (kDatabaseDTO.getPurity().startsWith("<"))) {
-                descriptor.setPurityOperator(kDatabaseDTO.getPurity().charAt(0));
-                descriptor.setPurity(Integer.parseInt(kDatabaseDTO.getPurity().substring(1)));
-            } else {
-                descriptor.setPurity(Integer.parseInt(kDatabaseDTO.getPurity()));
+        Owner owner = ownerRepositiry.findOptionalByName(kDatabaseDTO.getOwner());
+        if (owner != null) {
+            Compound compound = new Compound();
+            compound.setK(Integer.parseInt(
+                    kDatabaseDTO.getId().substring(kDatabaseDTO.getId().indexOf("K") + 1)));
+            compound.setSmiles(kDatabaseDTO.getSmiles());
+            ObprpService.ObPropResult result = obprpService.call(compound.getSmiles());
+            Descriptor descriptor = new Descriptor();
+            compound.setMw(result != null ? ((float) result.getMol_weight()) : Float.NaN);
+            compound.setOriginalCodename(kDatabaseDTO.getOriginalCodename());
+            compound.setOwner(owner);
+            compound.setMeltingPoint(new MeltingPoint(kDatabaseDTO.getMeltingPoint(), compound));
+            descriptor.setHRMS(kDatabaseDTO.getHRMS());
+            descriptor.setNMR(kDatabaseDTO.getNMR());
+            descriptor.setHRMS(kDatabaseDTO.getHRMS());
+            descriptor.setAtoms(result != null ? result.getNum_atoms() : Integer.MIN_VALUE);
+            descriptor.setCompound(compound);
+
+            if (!StringUtils.isEmpty(kDatabaseDTO.getPurity())) {
+                if (kDatabaseDTO.getPurity().startsWith(">") || (kDatabaseDTO.getPurity().startsWith("<"))) {
+                    descriptor.setPurityOperator(kDatabaseDTO.getPurity().charAt(0));
+                    descriptor.setPurity(Float.parseFloat(kDatabaseDTO.getPurity().substring(1).replaceAll(",", ".")));
+                } else {
+                    descriptor.setPurity(Integer.parseInt(kDatabaseDTO.getPurity()));
+                }
             }
+            descriptor.setSolubility(kDatabaseDTO.getSolubility());
+            compound.setDescriptor(descriptor);
+            compoundRepository.save(compound);
+            logUtils.createAndSaveLog(EventType.CREATE, userManager.getCurrentUser(), LogSection.COMPOUND, compound.toString());
         }
-        descriptor.setSolubility(kDatabaseDTO.getSolubility());
-        compound.setDescriptor(descriptor);
-        compoundRepository.save(compound);
-        logUtils.createAndSaveLog(EventType.CREATE, userManager.getCurrentUser(), LogSection.COMPOUND, compound.toString());
     }
 
     public List<KDataExcelParser.KDatabaseDTO> getkDatabaseDTOS() {

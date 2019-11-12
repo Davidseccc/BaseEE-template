@@ -47,12 +47,12 @@
                     </p:dataList>
 
                     <div style="display: block;">
-                        <p:commandButton value="Tisk" type="button" icon="fa fa-print"
+                        <p:commandButton value="Print" type="button" icon="fa fa-print"
                                          style="display:block;margin-bottom: 20px">
                             <p:printer target="main"/>
                         </p:commandButton>
 
-                        <p:commandButton value="Přidat Atribut" icon="fa fa-plus-circle"
+                        <p:commandButton value="Add attributes" icon="fa fa-plus-circle"
                                          action="#{addCompoundAttributeDialog.openDialog(compoundDetail.compound.id)}"/>
 
                     </div>
@@ -61,7 +61,7 @@
 
                 <p:dialog modal="true" widgetVar="downloadStatusDialog" header="Status" draggable="false"
                           closable="false" resizable="false">
-                    <p:graphicImage name="/demo/images/ajaxloadingbar.gif"/>
+                    <img src="${request.contextPath}/resources/img/ajaxloadingbar.gif"/>
                 </p:dialog>
             </div>
         </div>

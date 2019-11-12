@@ -19,7 +19,7 @@ public class Descriptor implements Serializable {
     private float clogp;
     private String NMR;
     private String HRMS;
-    private Integer purity;
+    private float purity;
     private Character purityOperator;
     private String solubility;
 
@@ -129,11 +129,11 @@ public class Descriptor implements Serializable {
         this.HRMS = HRMS;
     }
 
-    public Integer getPurity() {
+    public float getPurity() {
         return purity;
     }
 
-    public void setPurity(Integer purity) {
+    public void setPurity(float purity) {
         this.purity = purity;
     }
 

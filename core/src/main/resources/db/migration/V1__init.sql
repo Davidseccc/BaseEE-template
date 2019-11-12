@@ -77,7 +77,9 @@ CREATE TABLE IF NOT EXISTS invitro
   conditions       VARCHAR(255),
   citation         VARCHAR(2048),
   doi              VARCHAR(1024),
-  note             VARCHAR(1024)
+  note             VARCHAR(1024),
+  valueoperator    CHAR
+
 );
 CREATE INDEX ON invitro (compound_id);
 CREATE INDEX ON invitro (quantity_id);

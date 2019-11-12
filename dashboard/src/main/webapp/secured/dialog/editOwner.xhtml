@@ -1,0 +1,36 @@
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<h:head>
+    <title>
+        <h:outputText value="#{editOwnerDialog.isNewOwner() ? 'New owner' : 'Edit owner'}"/>
+    </title>
+    <link rel="stylesheet" href="../../resources/css/style.css"/>
+</h:head>
+
+<h:form id="form">
+    <div class="input-container-2">
+        <div class="label">Name</div>
+        <div class="input">
+            <p:inputText id="name"
+                         required="true"
+                         requiredMessage="Name field is requiered"
+                         value="#{editOwnerDialog.owner.name}">
+            </p:inputText>
+            <p:message for="name"/>
+        </div>
+    </div>
+
+    <p:commandButton value="Uložit a zavřít"
+                     action="#{editOwnerDialog.saveOwnerAndClose()}"
+                     styleClass="topmargin-20"
+                     validateClient="true"
+                     icon="fa fa-save"
+                     update="form"/>
+
+    <p:commandButton value="Zavřít"
+                     immediate="true"
+                     action="#{editOwnerDialog.close()}"/>
+</h:form>
+</html>

@@ -58,6 +58,7 @@ public class CompoundView {
     }
 
     public void redirect(long id) {
+        System.out.println(id);
         Compound compound = compoundRepository.findBy(id);
         compoundSelector.setSelectedCompound(compound);
         try {

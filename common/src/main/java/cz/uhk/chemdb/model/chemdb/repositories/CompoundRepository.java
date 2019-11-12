@@ -9,13 +9,14 @@ import java.util.List;
 
 @Repository
 public interface CompoundRepository extends EntityRepository<Compound, Long> {
-    @Query(value = "SELECT c.*" +
-            " from public.compound as c left outer join public.attribute as a on c.id = a.compound_id" +
-            "            where UPPER(c.smiles) LIKE UPPER(?1)" +
-            "            or UPPER(c.ion) like UPPER(?1)" +
-            "            or UPPER(c.notes) like UPPER(?1)" +
-            "            or UPPER(a.key) like UPPER(?1)" +
-            "            or UPPER(a.value) like UPPER(?1)", isNative = true)
+    @Query(value = "SELECT DISTINCT c.*" +
+            "from public.compound as c " +
+            "left outer join public.attribute as a on c.id = a.compound_id" +
+            "where UPPER(c.smiles) like UPPER(?1)" +
+            "or UPPER(c.ion) like UPPER(?1)" +
+            "or UPPER(c.notes) like UPPER(?1)" +
+            "or UPPER(a.key) like UPPER(?1)" +
+            "or UPPER(a.value) like UPPER(?1)", isNative = true)
     List<Compound> fullTextSearch(String search);
 
     @Query("SELECT c from Compound c where c.k =?1")

@@ -102,9 +102,15 @@ public class ImportInvitroDialogView implements Serializable {
             invitro.setOrganism(organismRepository.findOptionalByName(this.invitro.getOrganism()));
             Target target = targetRepository.findOptionalByName(this.invitro.getTargetEnum());
             invitro.setTarget(target);
-            invitro.setValue_text(data.getValue());
+
+            if (data.getValue().startsWith(">") || data.getValue().startsWith("<")) {
+                invitro.setValueoperator(data.getValue().charAt(0));
+                invitro.setValue(Double.parseDouble(data.getValue().substring(1)));
+            } else {
+                invitro.setValue(Double.parseDouble(data.getValue().replaceAll(",", ".")));
+            }
             invitro.setErrorType(ErrorType.findByName(data.getError()));
-            //invitro.setValue(Double.parseDouble(data.getValueError())); //todo: dodělat rozpětí u SEM
+            invitro.setValue_text(data.getValueError());
             invitroRepository.save(invitro);
         }
     }

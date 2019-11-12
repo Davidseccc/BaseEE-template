@@ -16,8 +16,11 @@ public class MeltingPoint implements Serializable {
     @OneToOne
     private Compound compound;
 
+    public MeltingPoint() {
 
-    public MeltingPoint(String meltingPoint) {
+    }
+
+    public MeltingPoint(String meltingPoint, Compound compound) {
         if (meltingPoint.equalsIgnoreCase("oil")) {
             oil = true;
         } else if (meltingPoint.startsWith(">")) {
@@ -26,8 +29,10 @@ public class MeltingPoint implements Serializable {
             this.temperatureTo = Float.parseFloat(meltingPoint.substring(meltingPoint.indexOf("<") + 1));
         } else if (meltingPoint.matches("\\d{1,4}(?>\\.|\\,)?\\d?(?>-{1}\\d{1,4}(?>\\.|\\,)?\\d?)?")) {
             this.temperatureFrom = Float.parseFloat(meltingPoint.substring(0, meltingPoint.indexOf("-") - 1));
-            this.temperatureTo = Float.parseFloat(meltingPoint.substring(meltingPoint.indexOf("-") + 1));
+            this.temperatureTo = Float.parseFloat(meltingPoint
+                    .substring(meltingPoint.indexOf("-") + 1).replaceAll(",", "."));
         }
+        this.compound = compound;
     }
 
     public long getId() {

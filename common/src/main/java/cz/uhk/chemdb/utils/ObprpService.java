@@ -3,6 +3,7 @@ package cz.uhk.chemdb.utils;
 import javax.ejb.Singleton;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.UnknownFormatConversionException;
 
 @Singleton
 public class ObprpService {
@@ -10,31 +11,36 @@ public class ObprpService {
 
     public ObPropResult call(String smile) {
         int hash = smile.hashCode();
-        String cmd = String.format(String.format("echo \"%s\" > out.smi && obprop out.smi && rm out.smi", smile));
-        ProcessBuilder builder = new ProcessBuilder(
-                "bash", "-c", cmd);
-        builder.redirectErrorStream(true);
-        Process p = null;
 
         try {
-            p = builder.start();
-            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            StringBuilder sb = new StringBuilder();
-            while (true) {
-                line = r.readLine();
-                if (line == null) {
-                    break;
+            String cmd = String.format("echo \"" + smile + "\" > out.smi && obprop out.smi && rm out.smi");
+            ProcessBuilder builder = new ProcessBuilder(
+                    "bash", "-c", cmd);
+            builder.redirectErrorStream(true);
+            Process p = null;
+
+            try {
+                p = builder.start();
+                BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                StringBuilder sb = new StringBuilder();
+                while (true) {
+                    line = r.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    sb.append(line + '\n');
                 }
-                sb.append(line + '\n');
+                p.destroy();
+                return new ObPropResult(sb.toString());
+            } catch (Exception e) {
+                e.getStackTrace();
+                e.printStackTrace();
+            } finally {
+                if (p != null) p.destroy();
             }
-            p.destroy();
-            return new ObPropResult(sb.toString());
-        } catch (Exception e) {
-            e.getStackTrace();
-            e.printStackTrace();
-        } finally {
-            if (p != null) p.destroy();
+        } catch (UnknownFormatConversionException e) {
+            System.out.println(smile + "could not be parsed");
         }
         return null;
     }

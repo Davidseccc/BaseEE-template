@@ -6,6 +6,19 @@
                 template="template.xhtml">
 
     <ui:define name="scripts">
+        <script type="text/javascript">
+            //<![CDATA[
+            function start() {
+                rc();
+                PF('downloadStatusDialog').show();
+            }
+
+            function stop() {
+                PF('downloadStatusDialog').hide();
+            }
+
+            //]]>
+        </script>
     </ui:define>
 
     <ui:define name="title">
@@ -17,14 +30,14 @@
 
             <div class="ui-g-4">
                 <h:form>
-                    <p:dataTable id="leftTable" var="selectedCompound" value="#{leftMenuView.compounds}"
+                    <p:dataTable id="leftTable" var="compound" value="#{leftMenuView.compounds}"
                                  widgetVar="leftTable"
                                  emptyMessage="No compounds found with given criteria"
                                  filteredValue="#{leftMenuView.filteredCompounds}" rowStyleClass="row-white">>
-                        <p:column filterBy="#{selectedCompound.k}" headerText="Search"
+                        <p:column filterBy="#{compound.k}" headerText="Search"
                                   filterMatchMode="contains">
-                            <p:commandLink styleClass="btn-link" value="K #{selectedCompound.k}"
-                                           action="#{compoundView.redirect(selectedCompound.id)}"
+                            <p:commandLink styleClass="btn-link" value="K #{compound.k}"
+                                           action="#{compoundView.redirect(compound.id)}"
                                            style="margin-right:20px;"/>
                         </p:column>
                     </p:dataTable>
@@ -54,8 +67,8 @@
                     </p:selectOneMenu>
                     <p:fileUpload id="upload" immediate="true" fileUploadListener="#{fileUploadView.handleFileUpload}"
                                   mode="advanced"
-                                  dragDropSupport="true" oncomplete="rc()"
-                                  update="messages detail" sizeLimit="100000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"/>
+                                  dragDropSupport="true" oncomplete="rc()" onclick="PrimeFaces.uploa(start, stop);"
+                                  update="messages detail" sizeLimit="10000000" allowTypes="/(\.|\/)(xlsx|csv|xls)$/"/>
                     <p:growl id="messages" showDetail="true"/>
                     <p:remoteCommand name="rc" immediate="false"
                                      action="#{importDataDialogView.openDialog(fileUploadView.fileHash, fileUploadView.selectedUploadType)}"
@@ -75,6 +88,12 @@
             </h:form>
 
         </p:dialog>
+
+        <p:dialog modal="true" widgetVar="downloadStatusDialog" header="Processing" draggable="false"
+                  closable="false" resizable="false">
+            <img src="${request.contextPath}/resources/img/ajaxloadingbar.gif"/>
+        </p:dialog>
+
 
     </ui:define>
 </ui:composition>

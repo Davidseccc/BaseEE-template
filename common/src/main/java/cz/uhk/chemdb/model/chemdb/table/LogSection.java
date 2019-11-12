@@ -9,5 +9,7 @@ public enum LogSection {
     QUANTITY,
     SYNONYM,
     TARGET,
-    DATA_IMPORT
+    DATA_IMPORT,
+    ORGANISM,
+    OWNER
 }

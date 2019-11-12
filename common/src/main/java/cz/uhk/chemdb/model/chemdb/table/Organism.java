@@ -14,6 +14,7 @@ public class Organism implements Serializable {
     @OneToMany(mappedBy = "organism", cascade = CascadeType.MERGE)
     private Set<Invitro> invitros;
 
+
     public Organism() {
     }
 

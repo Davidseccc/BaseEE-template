@@ -9,7 +9,18 @@
         <h:outputText value="Importovat soubor"/>
     </title>
     <link rel="stylesheet" href="../../resources/css/style.css"/>
+    <script>
+        function start() {
+            PF('downloadStatusDialog').show();
+        }
+
+        function stop() {
+            PF('downloadStatusDialog').hide();
+        }
+    </script>
+
 </h:head>
+
 
 <h:form id="submitForm">
 
@@ -31,7 +42,7 @@
                 </p:cellEditor>
             </p:column>
 
-            <p:column headerText="Smile">
+            <p:column headerText="Smile" style="max-width: 250px;">
                 <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{kDatabseDAO.smiles}"
                                                          styleClass="#{smileValidator.isValid(kDatabseDAO.smiles)? '' : 'notValid'}"/></f:facet>
