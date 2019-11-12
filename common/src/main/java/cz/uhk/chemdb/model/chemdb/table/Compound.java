@@ -21,7 +21,7 @@ public class Compound extends BaseModel implements Serializable {
     private String smiles;
     private String originalCodename;
     private String ion;
-    private float mw;
+    private double mw;
     private String notes;
     @ManyToOne
     private Owner owner;
@@ -78,11 +78,11 @@ public class Compound extends BaseModel implements Serializable {
         this.ion = ion;
     }
 
-    public float getMw() {
+    public double getMw() {
         return mw;
     }
 
-    public void setMw(float mw) {
+    public void setMw(double mw) {
         this.mw = mw;
     }
 

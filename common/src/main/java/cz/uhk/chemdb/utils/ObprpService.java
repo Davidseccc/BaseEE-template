@@ -4,6 +4,8 @@ import javax.ejb.Singleton;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.UnknownFormatConversionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Singleton
 public class ObprpService {
@@ -13,7 +15,7 @@ public class ObprpService {
         int hash = smile.hashCode();
 
         try {
-            String cmd = String.format("echo \"" + smile + "\" > out.smi && obprop out.smi && rm out.smi");
+            String cmd = String.format("echo \"%s\" > out.smi && obprop out.smi && rm out.smi", smile);
             ProcessBuilder builder = new ProcessBuilder(
                     "bash", "-c", cmd);
             builder.redirectErrorStream(true);
@@ -40,7 +42,7 @@ public class ObprpService {
                 if (p != null) p.destroy();
             }
         } catch (UnknownFormatConversionException e) {
-            System.out.println(smile + "could not be parsed");
+            Logger.getGlobal().log(Level.SEVERE, smile + "could not be parsed");
         }
         return null;
     }

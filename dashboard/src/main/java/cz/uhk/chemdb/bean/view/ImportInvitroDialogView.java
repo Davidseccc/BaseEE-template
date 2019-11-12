@@ -102,7 +102,6 @@ public class ImportInvitroDialogView implements Serializable {
             invitro.setOrganism(organismRepository.findOptionalByName(this.invitro.getOrganism()));
             Target target = targetRepository.findOptionalByName(this.invitro.getTargetEnum());
             invitro.setTarget(target);
-
             if (data.getValue().startsWith(">") || data.getValue().startsWith("<")) {
                 invitro.setValueoperator(data.getValue().charAt(0));
                 invitro.setValue(Double.parseDouble(data.getValue().substring(1)));

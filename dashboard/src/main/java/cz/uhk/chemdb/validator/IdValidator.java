@@ -24,13 +24,14 @@ public class IdValidator extends BaseValidator implements Validator {
         String id = (String) value;
 
         if (StringUtils.isEmpty(id)) {
-            throw new ValidatorException(new FacesMessage("Atribut Id je povinný"));
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Atribut Id je povinný", null));
         }
         if (!id.matches(K_DATA_VALID_ID)) {
-            throw new ValidatorException(new FacesMessage("Id musí mít formát K###"));
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Id musí mít formát K###", null));
         }
         if (id.matches(K_DATA_VALID_ID) && !exist(id)) {
-            throw new ValidatorException(new FacesMessage("Id " + id + " neexistuje"));
+            throw new ValidatorException(new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, String.format("ID %s neexistuje", id), null));
         }
     }
 
@@ -44,7 +45,11 @@ public class IdValidator extends BaseValidator implements Validator {
 
     @Override
     public boolean isValid(String id) {
-        return id.matches("K\\d{1,4}");
+        return id.matches("K\\d{1,4}") && !exist(id);
+    }
+
+    public boolean isValidAndExist(String id) {
+        return id.matches("K\\d{1,4}") && exist(id);
     }
 
 

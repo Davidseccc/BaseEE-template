@@ -25,7 +25,7 @@
             <p:column headerText="Id">
                 <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{invitro.id}"
-                                                         styleClass="#{idValidator.isValid(invitro.id)? '' : 'notValid'}"/></f:facet>
+                                                         styleClass="#{idValidator.isValidAndExist(invitro.id)? '' : 'notValid'}"/></f:facet>
                     <f:facet name="input"><p:inputText id="modelInput" value="#{invitro.id}"
                                                        validator="#{idValidator.validate}"
                                                        style="width:96%"/></f:facet>

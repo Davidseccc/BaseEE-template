@@ -117,7 +117,7 @@ public class ImportKDataDialogView implements Serializable {
             compound.setSmiles(kDatabaseDTO.getSmiles());
             ObprpService.ObPropResult result = obprpService.call(compound.getSmiles());
             Descriptor descriptor = new Descriptor();
-            compound.setMw(result != null ? ((float) result.getMol_weight()) : Float.NaN);
+            compound.setMw(result != null ? (result.getMol_weight()) : Float.NaN);
             compound.setOriginalCodename(kDatabaseDTO.getOriginalCodename());
             compound.setOwner(owner);
             compound.setMeltingPoint(new MeltingPoint(kDatabaseDTO.getMeltingPoint(), compound));
