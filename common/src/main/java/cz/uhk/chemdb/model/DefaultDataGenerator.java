@@ -1,9 +1,11 @@
 package cz.uhk.chemdb.model;
 
 import cz.uhk.chemdb.model.chemdb.builder.UserBuilder;
+import cz.uhk.chemdb.model.chemdb.repositories.OrganismRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
 import cz.uhk.chemdb.model.chemdb.repositories.TargetRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.UserRepository;
+import cz.uhk.chemdb.model.chemdb.table.Organism;
 import cz.uhk.chemdb.model.chemdb.table.Owner;
 import cz.uhk.chemdb.model.chemdb.table.Target;
 import cz.uhk.chemdb.model.chemdb.table.User;
@@ -24,6 +26,8 @@ public class DefaultDataGenerator {
     TargetRepository targetRepository;
     @Inject
     PasswordHash passwordHash;
+    @Inject
+    OrganismRepository organismRepository;
 
 
     public void generateDummyData() {
@@ -31,6 +35,7 @@ public class DefaultDataGenerator {
         generateTestUsers();
         generateOwners();
         saveTargets();
+        saveOrganisms();
     }
 
     @Transactional
@@ -52,117 +57,54 @@ public class DefaultDataGenerator {
 
     @Transactional
     public void saveTargets() {
-        String[] names = new String[]{"2,7 DCDHDF",
-                "Abeta 1-40 agggregation ThT",
-                "Abeta 1-42 agggregation ThT",
-                "AChE inhibition",
-                "BACE1 inhibition",
-                "BChE inhibition",
-                "CMC",
-                "CypD inhibition",
-                "cytotoxicity",
-                "DHE",
-                "DPPH",
-                "GLU2ND",
-                "GLU3NA",
-                "GLU3NB",
-                "GLUN2A",
-                "GLUN2B",
-                "GLUN2C",
-                "HSD-1 inhibition",
-                "HSD-10 inhibition",
-                "HSD-7 inhibition",
-                "kinetics reAChE cyclosarin",
-                "kinetics reAChE dichlorvos",
-                "kinetics reAChE ethyl-paraoxon",
-                "kinetics reAChE methyl-paraoxon",
-                "kinetics reAChE sarin",
-                "kinetics reAChE soman",
-                "kinetics reAChE tabun",
-                "kinetics reAChE VX",
-                "kinetics reBuChE cyclosarin",
-                "kinetics reBuChE dichlorvos",
-                "kinetics reBuChE ethyl-paraoxon",
-                "kinetics reBuChE methyl-paraoxon",
-                "kinetics reBuChE sarin",
-                "kinetics reBuChE soman",
-                "kinetics reBuChE tabun",
-                "kinetics reBuChE VX",
-                "M1 mChR CHO-M1",
-                "MAO-A inhibition",
-                "MAO-B inhibition",
-                "MBC",
-                "MBEC",
-                "MIC 24h",
-                "MIC 48h",
-                "MIC50",
-                "MIC99",
-                "NAChR muscular TE671",
-                "NAChR neuronal",
-                "NMDA",
-                "ORX2",
-                "POP inhibition",
-                "reAChE cyclosarin (10 µM)",
-                "reAChE cyclosarin (100 µM)",
-                "reAChE dichlorvos (10 µM)",
-                "reAChE dichlorvos (100 µM)",
-                "reAChE ethyl-paraoxon (10 µM)",
-                "reAChE ethyl-paraoxon (100 µM)",
-                "reAChE methyl-paraoxon (10 µM)",
-                "reAChE methyl-paraoxon (100 µM)",
-                "reAChE sarin (10 µM)",
-                "reAChE sarin (100 µM)",
-                "reAChE soman (10 µM)",
-                "reAChE soman (100 µM)",
-                "reAChE tabun (10 µM)",
-                "reAChE tabun (100 µM)",
-                "reAChE VX (10 µM)",
-                "reAChE VX (100 µM)",
-                "reBChE cyclosarin (10 µM)",
-                "reBChE cyclosarin (100 µM)",
-                "reBChE dichlorvos (10 µM)",
-                "reBChE dichlorvos (100 µM)",
-                "reBChE ethyl-paraoxon (10 µM)",
-                "reBChE ethyl-paraoxon (100 µM)",
-                "reBChE methyl-paraoxon (10 µM)",
-                "reBChE methyl-paraoxon (100 µM)",
-                "reBChE sarin (10 µM)",
-                "reBChE sarin (100 µM)",
-                "reBChE soman (10 µM)",
-                "reBChE soman (100 µM)",
-                "reBChE tabun (10 µM)",
-                "reBChE tabun (100 µM)",
-                "reBChE VX (10 µM)",
-                "reBChE VX (100 µM)",
-                "solubitily DMSO 1%/PBS",
-                "solubitily DMSO 1%/water",
-                "solubitily DMSO 10%/PBS",
-                "solubitily DMSO 10%/water",
-                "solubitily DMSO 5%/PBS",
-                "solubitily DMSO 5%/PBS",
-                "solubitily DMSO 5%/water",
-                "solubitily DMSO 5%/water",
-                "solubitily MeOH 1%/PBS",
-                "solubitily MeOH 1%/water",
-                "solubitily MeOH 10%/PBS",
-                "solubitily MeOH 10%/water",
-                "solubitily MeOH 5%/PBS",
-                "solubitily MeOH 5%/PBS",
-                "solubitily PBS",
-                "solubitily water",
-                "tau aggregation ThT",
-                "TBARS",
-                "TDIC50",
-                "TLR-4",
-                "transport monolayer",
-                "transport PAMPA",
-                "toxicity",
-                "pharmacokinetics"};
+        String[] names = new String[]{"2,7 DCDHDF", "Abeta 1-40 agggregation ThT", "Abeta 1-42 agggregation ThT",
+                "AChE inhibition", "BACE1 inhibition", "BChE inhibition", "CMC", "CypD inhibition", "cytotoxicity", "DHE",
+                "DPPH", "GLU2ND", "GLU3NA", "GLU3NB", "GLUN2A", "GLUN2B", "GLUN2C", "HSD-1 inhibition", "HSD-10 inhibition",
+                "HSD-7 inhibition", "kinetics reAChE cyclosarin", "kinetics reAChE dichlorvos", "kinetics reAChE ethyl-paraoxon",
+                "kinetics reAChE methyl-paraoxon", "kinetics reAChE sarin", "kinetics reAChE soman", "kinetics reAChE tabun",
+                "kinetics reAChE VX", "kinetics reBuChE cyclosarin", "kinetics reBuChE dichlorvos", "kinetics reBuChE ethyl-paraoxon",
+                "kinetics reBuChE methyl-paraoxon", "kinetics reBuChE sarin", "kinetics reBuChE soman", "kinetics reBuChE tabun",
+                "kinetics reBuChE VX", "M1 mChR CHO-M1", "MAO-A inhibition", "MAO-B inhibition", "MBC", "MBEC", "MIC 24h",
+                "MIC 48h", "MIC50", "MIC99", "NAChR muscular TE671", "NAChR neuronal", "NMDA", "ORX2", "POP inhibition",
+                "reAChE cyclosarin (10 µM)", "reAChE cyclosarin (100 µM)", "reAChE dichlorvos (10 µM)", "reAChE dichlorvos (100 µM)",
+                "reAChE ethyl-paraoxon (10 µM)", "reAChE ethyl-paraoxon (100 µM)", "reAChE methyl-paraoxon (10 µM)",
+                "reAChE methyl-paraoxon (100 µM)", "reAChE sarin (10 µM)", "reAChE sarin (100 µM)", "reAChE soman (10 µM)",
+                "reAChE soman (100 µM)", "reAChE tabun (10 µM)", "reAChE tabun (100 µM)", "reAChE VX (10 µM)", "reAChE VX (100 µM)",
+                "reBChE cyclosarin (10 µM)", "reBChE cyclosarin (100 µM)", "reBChE dichlorvos (10 µM)", "reBChE dichlorvos (100 µM)",
+                "reBChE ethyl-paraoxon (10 µM)", "reBChE ethyl-paraoxon (100 µM)", "reBChE methyl-paraoxon (10 µM)",
+                "reBChE methyl-paraoxon (100 µM)", "reBChE sarin (10 µM)", "reBChE sarin (100 µM)", "reBChE soman (10 µM)",
+                "reBChE soman (100 µM)", "reBChE tabun (10 µM)", "reBChE tabun (100 µM)", "reBChE VX (10 µM)", "reBChE VX (100 µM)",
+                "solubitily DMSO 1%/PBS", "solubitily DMSO 1%/water", "solubitily DMSO 10%/PBS", "solubitily DMSO 10%/water",
+                "solubitily DMSO 5%/PBS", "solubitily DMSO 5%/PBS", "solubitily DMSO 5%/water", "solubitily DMSO 5%/water",
+                "solubitily MeOH 1%/PBS", "solubitily MeOH 1%/water", "solubitily MeOH 10%/PBS", "solubitily MeOH 10%/water",
+                "solubitily MeOH 5%/PBS", "solubitily MeOH 5%/PBS", "solubitily PBS", "solubitily water", "tau aggregation ThT",
+                "TBARS", "TDIC50", "TLR-4", "transport monolayer", "transport PAMPA", "toxicity", "pharmacokinetics"};
 
         for (String name : names) {
             Target t = new Target();
             t.setName(name);
             targetRepository.save(t);
+        }
+    }
+
+    @Transactional
+    public void saveOrganisms() {
+        String[] names = new String[]{"Acinobacter baumani ", "Aedes aegypti recombinant", "ACHN",
+                "Anopheles gambiae recombinant", "Aspergilus niger", "Aspergilus versicolor", "Aureobasidium melanogenum",
+                "Bifusaria dimerum", "Bos taurus", "CaCo-2", "Candida parapsilosis sensu stricto",
+                "Enterococcus vankomycin resistant", "Equus caballus", "Escherichia coli ", "Exophiala dermatitis", "hCMEC/D3",
+                "hepatic sections", "hepatocyte primary", "HEPG2", "Homo sapiens", "Homo sapiens purified", "Homo sapiens recombinant",
+                "chicken cerebelum", "chicken cortex", "CHO-K1", "Klebsiella Ext. Spectrum B-lactamase negative",
+                "Klebsiella Ext. Spectrum B-lactamase positive", "MKDCK II", "Mus musculus", "Mycobacterium avium",
+                "Mycobacterium kansasii", "Mycobacterium tuberculosis", "Penicilium chrysogenum", "Pseudomonas aeruginosa multiresistant",
+                "Ratus ratus", "Rhodotorula mucilaginosa", "SH-SY5Y diff", "SH-SY5Y undiff", "Staphylococus aureus ",
+                "Staphylococus aureus meticilin resistant", "Stenotrophomonas maltophilia", "Sus scrofa", "Torpedo californica",
+                "Varicela zooster virus", "Yersinia bercovieri"};
+
+        for (String name : names) {
+            Organism organism = new Organism();
+            organism.setName(name);
+            organismRepository.save(organism);
         }
     }
 

@@ -31,15 +31,16 @@
                             <h:commandLink>
                                 <h:outputText value="CSV "/>
                                 <!--img src="../resources/img/csv.png"/>-->
-                                <p:dataExporter type="csv" target="tbl" fileName="orgsanisms" pageOnly="false"/>
+                                <p:dataExporter type="csv" target="organismsTable" fileName="orgsanisms"
+                                                pageOnly="false"/>
                             </h:commandLink>
                             <h:commandLink ajax="false">
                                 <h:outputText value="PDF "/>
-                                <p:dataExporter type="pdf" target="tbl" fileName="organisms"/>
+                                <p:dataExporter type="pdf" target="organismsTable" fileName="organisms"/>
                             </h:commandLink>
                             <p:commandLink ajax="false" immediate="true">
                                 <h:outputText value="XLS"/>
-                                <p:dataExporter type="xls" target="tbl" fileName="organisms"/>
+                                <p:dataExporter type="xls" target="organismsTable" fileName="organisms"/>
                             </p:commandLink>
                         </div>
                     </f:facet>
@@ -61,11 +62,9 @@
                         <p:commandButton value="Delete" rendered="#{userManager.currentUser.isAdmin()}"
                                          action="#{organismView.delete(org)}"/>
                     </p:column>
-
                 </p:dataTable>
 
                 <p:outputPanel>
-                    <h:outputText value="Add new field"/>
                     <p:commandButton value="Add new organism" icon="fa fa-plus-circle"
                                      action="#{editOrganismDialog.openDialog()}"/>
                 </p:outputPanel>

@@ -12,33 +12,32 @@
         <title>Targets</title>
     </ui:define>
     <ui:define name="refreshButton">
-        <p:commandButton value="Zobrazit" update="form:ownersTable"
+        <p:commandButton value="Zobrazit" update="form:targetsTable"
                          style="float: right ;"/>
     </ui:define>
 
     <ui:define name="filterableContent">
         <div class="card filterable" style="width: 75%">
             <h:form id="form">
-                <p:dataTable id="ownersTable" name="ownersTable" var="target" value="#{targetsView.targets}"
+                <p:dataTable id="targetsTable" name="ownersTable" var="target" value="#{targetsView.targets}"
                              widgetVar="organismsTable"
                              emptyMessage="No organisms found with given criteria"
                              filteredValue="#{targetsView.filteredTargets}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                              paginator="true" rows="20" rowsPerPageTemplate="10,15,20,50" style="margin-bottom:20px">
-
                     <f:facet name="{Exporters}">
                         <div style="float:right;padding-top: 5px;">
                             <h:commandLink>
                                 <h:outputText value="CSV "/>
-                                <p:dataExporter type="csv" target="ownersTable" fileName="targets" pageOnly="false"/>
+                                <p:dataExporter type="csv" target="targetsTable" fileName="targets" pageOnly="false"/>
                             </h:commandLink>
                             <h:commandLink ajax="false">
                                 <h:outputText value="PDF "/>
-                                <p:dataExporter type="pdf" target="ownersTable" fileName="targets"/>
+                                <p:dataExporter type="pdf" target="targetsTable" fileName="targets"/>
                             </h:commandLink>
                             <p:commandLink ajax="false" immediate="true">
                                 <h:outputText value="XLS"/>
-                                <p:dataExporter type="xls" target="ownersTable" fileName="targets"/>
+                                <p:dataExporter type="xls" target="targetsTable" fileName="targets"/>
                             </p:commandLink>
                         </div>
                     </f:facet>
@@ -46,7 +45,7 @@
                     <f:facet name="header">
                         <p:outputPanel>
                             <h:outputText value="Search all fields"/>
-                            <p:inputText id="globalFilter" onkeyup="PF('ownersTable').filter()" style="width:150px"
+                            <p:inputText id="globalFilter" onkeyup="PF('targetsTable').filter()" style="width:150px"
                                          placeholder="Enter keyword"/>
                         </p:outputPanel>
                     </f:facet>

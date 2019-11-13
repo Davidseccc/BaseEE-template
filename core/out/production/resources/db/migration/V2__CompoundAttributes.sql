@@ -1,0 +1,2 @@
+ALTER TABLE attribute
+	ADD attributeType INTEGER DEFAULT NULL ;

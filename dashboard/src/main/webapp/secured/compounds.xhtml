@@ -31,15 +31,15 @@
                             <h:commandLink>
                                 <h:outputText value="CSV "/>
                                 <!--img src="../resources/img/csv.png"/>-->
-                                <p:dataExporter type="csv" target="tbl" fileName="compounds" pageOnly="false"/>
+                                <p:dataExporter type="csv" target="compsTable" fileName="compounds" pageOnly="false"/>
                             </h:commandLink>
                             <h:commandLink ajax="false">
                                 <h:outputText value="PDF "/>
-                                <p:dataExporter type="pdf" target="tbl" fileName="compounds"/>
+                                <p:dataExporter type="pdf" target="compsTable" fileName="compounds"/>
                             </h:commandLink>
                             <p:commandLink ajax="false" immediate="true">
                                 <h:outputText value="XLS"/>
-                                <p:dataExporter type="xls" target="tbl" fileName="compounds"/>
+                                <p:dataExporter type="xls" target="compsTable" fileName="compounds"/>
                             </p:commandLink>
                         </div>
                     </f:facet>
@@ -53,7 +53,7 @@
                     </f:facet>
 
                     <p:column filterBy="#{comp.smiles}" headerText="Smiles" footerText="contains"
-                              filterMatchMode="contains">
+                              filterMatchMode="contains" style="max-width: 450px;">
                         <h:outputText value="#{comp.smiles}"/>
                     </p:column>
 

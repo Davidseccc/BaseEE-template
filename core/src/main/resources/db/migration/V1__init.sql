@@ -70,15 +70,15 @@ CREATE TABLE IF NOT EXISTS invitro
 (
   id               SERIAL PRIMARY KEY,
   compound_id      INTEGER REFERENCES compound NOT NULL,
+  valueoperator    CHAR
   value            DOUBLE PRECISION,
   value_text       VARCHAR(1024),
-  quantity_id      INTEGER REFERENCES quantity NOT NULL,
+  quantity_id      INTEGER REFERENCES quantity NULLABLE,
   target_id        INTEGER REFERENCES target NOT NULL,
   conditions       VARCHAR(255),
   citation         VARCHAR(2048),
   doi              VARCHAR(1024),
   note             VARCHAR(1024),
-  valueoperator    CHAR
 
 );
 CREATE INDEX ON invitro (compound_id);
