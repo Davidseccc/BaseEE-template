@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS invitro
   valueoperator    CHAR,
   value            DOUBLE PRECISION,
   value_text       VARCHAR(1024),
-  quantity_id      INTEGER REFERENCES quantity NULLABLE,
+  quantity_id      INTEGER REFERENCES quantity,
   target_id        INTEGER REFERENCES target NOT NULL,
   conditions       VARCHAR(255),
   citation         VARCHAR(2048),

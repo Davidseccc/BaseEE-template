@@ -10,6 +10,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,6 +68,10 @@ public class CompoundView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String encode(String smile, String charset) throws UnsupportedEncodingException {
+        return URLEncoder.encode(smile, charset);
     }
 
     public List<Compound> getCompounds() {

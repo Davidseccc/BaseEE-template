@@ -28,7 +28,7 @@
             <div class="card filterable" style="">
                 <p:outputPanel deferred="true" id="main" name="main">
                     <h2>#{compoundDetail.compound.smiles}</h2>
-                    <img src="#{request.contextPath}/core/rest/smile/#{compoundDetail.compound.smiles}"></img>
+                    <img src="#{request.contextPath}/core/rest/smile/#{compoundView.encode(compoundDetail.compound.smiles,'UTF-8')}"></img>
                     <p:dataList value="#{compoundDetail.compound.attributes}" var="atr" type="definition">
                         <h3><h:outputText value="#{atr.key}"/></h3>
                         <p><h:outputText rendered="#{!atr.attributeType.name().equals('ATTACHEMENT')}"

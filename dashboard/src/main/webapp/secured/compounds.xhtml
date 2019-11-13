@@ -59,7 +59,8 @@
 
                     <p:column headerText="molecule">
                         <!--<p:graphicImage name="/core/rest/smile/#{comp.smiles}"/>-->
-                        <img src="#{request.contextPath}/core/rest/smile/#{comp.smiles}" width="50%"
+                        <img src="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
+                             width="50%"
                              height="auto"></img>
                     </p:column>
 
