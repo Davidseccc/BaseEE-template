@@ -132,6 +132,7 @@ public class ImportKDataDialogView implements Serializable {
                     descriptor.setPurityOperator(kDatabaseDTO.getPurity().charAt(0));
                     descriptor.setPurity(Float.parseFloat(kDatabaseDTO.getPurity().substring(1).replaceAll(",", ".")));
                 } else {
+                    descriptor.setPurityOperator(' ');
                     descriptor.setPurity(Integer.parseInt(kDatabaseDTO.getPurity()));
                 }
             }

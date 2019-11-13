@@ -103,9 +103,10 @@ public class ImportInvitroDialogView implements Serializable {
             Target target = targetRepository.findOptionalByName(this.invitro.getTargetEnum());
             invitro.setTarget(target);
             if (data.getValue().startsWith(">") || data.getValue().startsWith("<")) {
-                invitro.setValueoperator(data.getValue().substring(0, 1));
+                invitro.setValueoperator(data.getValue().charAt(0));
                 invitro.setValue(Double.parseDouble(data.getValue().substring(1).replaceAll(",", ".")));
             } else {
+                invitro.setValueoperator(' ');
                 invitro.setValue(Double.parseDouble(data.getValue().replaceAll(",", ".")));
             }
             invitro.setErrorType(ErrorType.findByName(data.getError()));

@@ -16,7 +16,7 @@ public class Invitro implements Serializable {
 
     private double value;
 
-    private String valueoperator = "";
+    private char valueoperator;
 
     private String value_text;
     @OneToMany(mappedBy = "invitro", cascade = CascadeType.ALL)
@@ -69,11 +69,11 @@ public class Invitro implements Serializable {
         this.value = value;
     }
 
-    public String getValueoperator() {
+    public char getValueoperator() {
         return valueoperator;
     }
 
-    public void setValueoperator(String valueOperator) {
+    public void setValueoperator(char valueOperator) {
         this.valueoperator = valueOperator;
     }
 
