@@ -29,6 +29,79 @@
                 <p:outputPanel deferred="true" id="main" name="main">
                     <h2>#{compoundDetail.compound.smiles}</h2>
                     <img src="#{request.contextPath}/core/rest/smile/#{compoundView.encode(compoundDetail.compound.smiles,'UTF-8')}"></img>
+
+                    <p:panelGrid columns="4">
+                        <h:outputText value="formula:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.formula}"/>
+
+                        <h:outputText value="atoms:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.atoms}"/>
+
+                        <h:outputText value="mol_weight:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.mol_weight}"/>
+
+                        <h:outputText value="exact_mass:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.exact_mass}"/>
+
+
+                        <h:outputText value="canonical_SMILES:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.canonical_SMILES}"/>
+
+                        <h:outputText value="inChI:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.inChI}"/>
+
+
+                        <h:outputText value="num_atoms:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.num_atoms}"/>
+
+                        <h:outputText value="num_bonds:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.num_bonds}"/>
+
+                        <h:outputText value="num_residues:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.num_residues}"/>
+
+                        <h:outputText value="num_rotors:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.num_rotors}"/>
+
+                        <h:outputText value="sequence:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.sequence}"/>
+
+                        <h:outputText value="num_rings:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.num_rings}"/>
+
+                        <h:outputText value="logP:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.logP}"/>
+
+                        <h:outputText value="PSA:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.PSA}"/>
+
+                        <h:outputText value="MR:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.MR}"/>
+
+                        <h:outputText value="hba:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.hba}"/>
+
+                        <h:outputText value="purity:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.purityOperator!=' '?
+                                compoundDetail.compound.descriptor.purityOperator:''} #{compoundDetail.compound.descriptor.purity}"/>
+
+                        <h:outputText value="solubility:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.solubility}"/>
+
+                        <h:outputText value="HRMS:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.HRMS}"/>
+
+                        <h:outputText value="NMR:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.NMR}"/>
+
+                        <h:outputText value="clogp:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.clogp}"/>
+
+                        <h:outputText value="tpsa:"/>
+                        <h:outputText value="#{compoundDetail.compound.descriptor.tpsa}"/>
+                    </p:panelGrid>
+
+
                     <p:dataList value="#{compoundDetail.compound.attributes}" var="atr" type="definition">
                         <h3><h:outputText value="#{atr.key}"/></h3>
                         <p><h:outputText rendered="#{!atr.attributeType.name().equals('ATTACHEMENT')}"

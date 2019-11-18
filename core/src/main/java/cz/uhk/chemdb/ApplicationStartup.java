@@ -39,11 +39,6 @@ public class ApplicationStartup {
     @Inject
     private UserRepository userRepository;
 
-    public static boolean isProduction() {
-        String debug = System.getProperty("debug");
-        return debug == null || !debug.equals("true");
-    }
-
     @PostConstruct
     @TransactionAttribute(TransactionAttributeType.NEVER)
     private void onStartup() {

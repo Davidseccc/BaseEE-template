@@ -39,7 +39,6 @@ public class SmileToImageResource {
                 if (line == null) {
                     break;
                 }
-                System.out.println(line);
             }
             p.destroy();
         } catch (Exception e) {

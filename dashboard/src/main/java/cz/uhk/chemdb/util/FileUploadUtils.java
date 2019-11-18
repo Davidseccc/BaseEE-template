@@ -3,6 +3,7 @@ package cz.uhk.chemdb.util;
 import cz.uhk.chemdb.bean.UserManager;
 import cz.uhk.chemdb.model.chemdb.repositories.UploadedFileRepository;
 import cz.uhk.chemdb.utils.DateFormats;
+import cz.uhk.chemdb.utils.SystemPropertyUtils;
 import org.primefaces.model.UploadedFile;
 
 import javax.ejb.Singleton;
@@ -22,8 +23,6 @@ public class FileUploadUtils {
     @Inject
     private LogUtils logUtils;
 
-    //public static final String FILE_UPLOAD_PATH = System.getProperty("FileUploadPath");
-    public static final String FILE_UPLOAD_PATH = "/Users/davidsec/Downloads/test/";
 
     private static void mkDirIfNotExist(String directory) {
         File dir = new File(directory);
@@ -49,7 +48,7 @@ public class FileUploadUtils {
         uploadedFile.setFileName(file.getFileName());
         uploadedFile.setFileSize(file.getSize());
         uploadedFile.setTimestamp(LocalDateTime.now());
-        String dir = FILE_UPLOAD_PATH + uploadedFile.getTimestamp().format(dateFormats.getFitbitDateFormat());
+        String dir = SystemPropertyUtils.getUploadsPath() + uploadedFile.getTimestamp().format(dateFormats.getFitbitDateFormat());
         uploadedFile.setPath(dir);
         uploadedFile.setUser(userManager.getCurrentUser());
         uploadedFile.setContentType(file.getContentType());

@@ -2,6 +2,7 @@ package cz.uhk.chemdb.filter;
 
 import cz.uhk.chemdb.bean.UserManager;
 
+import javax.faces.application.ViewExpiredException;
 import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -29,7 +30,11 @@ public class LoginFilter implements Filter {
 
         if (userManager != null) {
             if (userManager.isLoggedIn()) {
-                chain.doFilter(request, response);
+                try {
+                    chain.doFilter(request, response);
+                } catch (ViewExpiredException e) {
+                    return;
+                }
             } else {
                 httpServletResponse.sendRedirect(
                         httpServletRequest.getContextPath() + LOGIN_PAGE);

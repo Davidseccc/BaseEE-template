@@ -125,6 +125,7 @@ public class ImportKDataDialogView implements Serializable {
             descriptor.setNMR(kDatabaseDTO.getNMR());
             descriptor.setHRMS(kDatabaseDTO.getHRMS());
             descriptor.setAtoms(result != null ? result.getNum_atoms() : Integer.MIN_VALUE);
+            descriptor.addObrpData(result);
             descriptor.setCompound(compound);
 
             if (!StringUtils.isEmpty(kDatabaseDTO.getPurity())) {

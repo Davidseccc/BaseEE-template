@@ -1,30 +1,55 @@
 package cz.uhk.chemdb.bean.view;
 
+import cz.uhk.chemdb.bean.CompoundSelector;
+import cz.uhk.chemdb.bean.view.datamodel.FullTextSearchLazyModel;
+import cz.uhk.chemdb.bean.view.datamodel.GenericLazyModel;
+import cz.uhk.chemdb.enums.SearchField;
+import cz.uhk.chemdb.enums.SearchOperator;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
 import cz.uhk.chemdb.model.chemdb.table.Compound;
 import cz.uhk.chemdb.utils.StringUtils;
 
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Named
-@RequestScoped
-public class FullTextSearch {
+@ViewScoped
+public class FullTextSearch implements Serializable {
+
+    @Inject
+    CompoundSelector compoundSelector;
+
     @Inject
     CompoundRepository compoundRepository;
+    List<Compound> compounds;
+    @PersistenceContext
+    private EntityManager entityManager;
+    private List<Predicate> predicates;
+    private GenericLazyModel<Compound> compoundLazyModel;
+    private Predicate predicate;
 
-    String searchString;
+    private String searchString;
+    private boolean isNumber = false;
+    private int rowCount;
 
-    public List<String> startSearch(String query) {
-        List<Compound> compounds = compoundRepository.fullTextSearch("%" + query + "%");
-        List<String> results = new ArrayList<>();
-        for (Compound c : compounds) {
-            results.add(c.toString());
-        }
-        return results;
+    public static String getTagStyle(int i) {
+        String[] styles = new String[]{"label-red", "label-blue", "label-yellow", "label-green", "label-grey"};
+        return styles[i % 5];
+    }
+
+    @PostConstruct
+    public void init() {
+        predicates = new ArrayList<>();
+        predicate = new Predicate();
+        loadResults();
     }
 
     public List<String> startSearch() {
@@ -34,11 +59,167 @@ public class FullTextSearch {
         return null;
     }
 
+    public List<String> startSearch(String query) {
+        List<Compound> compounds = compoundRepository.fullTextSearch(query);
+        List<String> results = new ArrayList<>();
+        for (Compound c : compounds) {
+            results.add(c.toString());
+        }
+        return results;
+    }
+
+    public void startFullTextSearch() {
+        loadResults();
+    }
+
+    public void loadResults() {
+        rowCount = 0;
+        System.out.println("loadResults" + getPredicates().size());
+        compoundLazyModel = new FullTextSearchLazyModel(entityManager, this.predicates);
+        rowCount = compoundLazyModel.getRowCount();
+        compounds = compoundLazyModel.load(0, rowCount, null, new HashMap<>());
+        System.out.println(rowCount);
+    }
+
     public String getSearchString() {
         return searchString;
     }
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
+    }
+
+    private boolean search(Compound compound) {
+        isNumber = StringUtils.isNumeric(searchString);
+        Long l = Long.MIN_VALUE;
+        Double d = Double.MAX_VALUE;
+        Integer i = Integer.MIN_VALUE;
+        if (isNumber) {
+            l = StringUtils.getNumber(searchString, Long.class).longValue();
+            d = StringUtils.getNumber(searchString, Double.class).doubleValue();
+            i = StringUtils.getNumber(searchString, Integer.class).intValue();
+        }
+        if (!StringUtils.isEmpty(compound.getSmiles()) && compound.getSmiles().contains(searchString)) return true;
+        else if (isNumber && compound.getId().equals(l)) return true;
+        else if (isNumber && compound.getK() == i) return true;
+        else if (!StringUtils.isEmpty(compound.getOriginalCodename()) && compound.getOriginalCodename().contains(searchString))
+            return true;
+        else if (!StringUtils.isEmpty(compound.getIon()) && compound.getIon().contains(searchString)) return true;
+        else if (isNumber && compound.getMw() == d) return true;
+        else if (!StringUtils.isEmpty(compound.getNotes()) && compound.getNotes().contains(searchString)) return true;
+        else if (compound.getOwner().contains(searchString)) return true;
+        else if (compound.getMeltingPoint().contains(searchString)) return true;
+        else return compound.getDescriptor().contains(searchString);
+
+//        Set<Synonymum> synonyms = compound.getSynonyms();
+//        for(Synonymum synonymum: synonyms){
+//            if (synonymum.contains(searchString)) return true;
+//        }
+//        Set<Invitro> invitros = compound.getInvitro();
+//        for (Invitro invitro :invitros) {
+//            if (invitro.contains(searchString)) return true;
+//        }
+//        List<Attribute> attributes = compound.getAttributes();
+//        for (Attribute attribute: attributes){
+//            if (attribute.contains(searchString)) return true;
+//        }
+
+    }
+
+    public List<Compound> getCompounds() {
+        return compounds;
+    }
+
+    public void setCompounds(List<Compound> compounds) {
+        this.compounds = compounds;
+    }
+
+    public CompoundRepository getCompoundRepository() {
+        return compoundRepository;
+    }
+
+    public void setCompoundLazyModel(GenericLazyModel<Compound> compoundLazyModel) {
+        this.compoundLazyModel = compoundLazyModel;
+    }
+
+    public List<Predicate> getPredicates() {
+        return predicates;
+    }
+
+    public void setPredicates(List<Predicate> predicates) {
+        this.predicates = predicates;
+    }
+
+    public Predicate getPredicate() {
+        return predicate;
+    }
+
+    public void setPredicate(Predicate predicate) {
+        this.predicate = predicate;
+    }
+
+    public void addPredicate() {
+        predicates.add(predicate);
+        predicate = new Predicate();
+    }
+
+    public void remove(Predicate predicate) {
+        predicates.remove(predicate);
+        loadResults();
+    }
+
+    public class Predicate {
+        String name;
+        SearchField field;
+        SearchOperator operator;
+        String value;
+
+        @Override
+        public String toString() {
+            if (!StringUtils.isEmpty(name)) {
+                return name;
+            }
+            return String.format("%s %s %s", field, operator, value);
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public SearchOperator getOperator() {
+            return operator;
+        }
+
+        public void setOperator(SearchOperator operator) {
+            this.operator = operator;
+        }
+
+        public SearchOperator[] getOperators() {
+            return SearchOperator.values();
+        }
+
+        public SearchField getField() {
+            return field;
+        }
+
+        public void setField(SearchField field) {
+            this.field = field;
+        }
+
+        public SearchField[] getFields() {
+            return SearchField.values();
+        }
     }
 }

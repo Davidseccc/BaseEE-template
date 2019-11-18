@@ -416,3 +416,85 @@ a {
 .notValid {
     background-color: #fc5552 !important;
 }
+
+.white-button.ui-button.ui-state-default {
+    background-color: #ffffff;
+    color: #222222;
+    border-color: #d6d6d6;
+    /* with the exported variables from Nova and Luna Themes*/
+    border-color: var(--input-border-color, #d6d6d6);
+}
+
+.white-button.ui-button.ui-state-default:enabled:hover,
+.white-button.ui-button.ui-state-default:focus {
+    background-color: #f2f2f2;
+    border-color: #ccc;
+    color: #373a3c;
+    /* with the exported variables from Nova and Luna Themes*/
+    border-color: var(--input-hover-border-color, #ccc);
+}
+
+.green-button.ui-button.ui-state-default {
+    background-color: #5cb85c;
+    border-color: #5cb85c;
+    color: #fff;
+}
+
+.green-button.ui-button.ui-state-default:enabled:hover,
+.green-button.ui-button.ui-state-default:focus {
+    background-color: #4cae4c;
+    border-color: #5cb85c;
+}
+
+.red-button.ui-button.ui-state-default {
+    background-color: #d9534f;
+    border-color: #d9534f;
+    color: #fff;
+}
+
+.red-button.ui-button.ui-state-default:enabled:hover,
+.red-button.ui-button.ui-state-default:focus {
+    background-color: #d43f3a;
+    border-color: #d9534f;
+}
+
+.tags {
+    font-size: 16px;
+    display: block;
+    float: right;
+    margin-bottom: 25px;
+}
+
+
+.label-green {
+    background-color: #5cb85c;
+}
+
+.label-red {
+    background-color: #d9534f;
+}
+
+.label-blue {
+    background-color: #337ab7;
+}
+
+.label-yellow {
+    background-color: #f0ad4e;
+}
+
+.label-grey {
+    background-color: #777;
+}
+
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
