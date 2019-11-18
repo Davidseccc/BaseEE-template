@@ -88,4 +88,11 @@ public class Attribute extends BaseModel implements Serializable {
     public String toString() {
         return String.format("%s - %s (%s)", key, value, ord);
     }
+
+    public boolean contains(String searchString) {
+        if (attributeType.getName().contains(searchString)) return true;
+        if (attributeType.name().contains(searchString)) return true;
+        if (key.contains(searchString)) return true;
+        return value.contains(searchString);
+    }
 }

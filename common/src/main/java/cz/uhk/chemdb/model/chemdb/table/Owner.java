@@ -1,5 +1,7 @@
 package cz.uhk.chemdb.model.chemdb.table;
 
+import cz.uhk.chemdb.utils.StringUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -21,6 +23,7 @@ public class Owner implements Serializable {
     public Owner(String name) {
         this.name = name;
     }
+
     public long getId() {
         return id;
     }
@@ -43,5 +46,9 @@ public class Owner implements Serializable {
 
     public void setCompounds(List<Compound> compounds) {
         this.compounds = compounds;
+    }
+
+    public boolean contains(String searchString) {
+        return !StringUtils.isEmpty(name) && name.contains(searchString);
     }
 }

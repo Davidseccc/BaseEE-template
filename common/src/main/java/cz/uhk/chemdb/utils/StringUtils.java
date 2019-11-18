@@ -31,4 +31,21 @@ public class StringUtils {
             return string;
         }
     }
+
+    public static boolean isNumeric(String strNum) {
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    public static Number getNumber(String string, Object number) {
+        if (number instanceof Double) return Double.parseDouble(string);
+        else if (number instanceof Integer) return Integer.parseInt(string);
+        else if (number instanceof Float) return Float.parseFloat(string);
+        else if (number instanceof Long) return Long.parseLong(string);
+        else return Long.parseLong(string);
+    }
 }

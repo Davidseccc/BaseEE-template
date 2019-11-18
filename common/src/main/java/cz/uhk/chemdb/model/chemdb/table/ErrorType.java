@@ -9,13 +9,13 @@ public enum ErrorType implements Serializable {
     N_A(1, "(not available)", "\\d{1,3}(?>\\.|\\,)?\\d{1,2}"),
     CONF_95(2, "95% confidence interval", "\\d{1,2},\\d{1,2}-\\d{1,2},\\d{1,2}"),
     SD(3, "SD", "\\d{1,4}(?>\\.|\\,)?\\d{1,2}"),
-    SEM(3, "SEM", "\\d{1,4}(?>\\.|\\,)?\\d{1,2}");
+    SEM(4, "SEM", "\\d{1,4}(?>\\.|\\,)?\\d{1,2}");
 
     String name;
     int typeId;
     String regex;
 
-    ErrorType(int id, String name, String regex) {
+    ErrorType(int typeId, String name, String regex) {
         this.typeId = typeId;
         this.name = name;
         this.regex = regex;

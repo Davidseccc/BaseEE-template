@@ -14,4 +14,9 @@ public class Synonymum implements Serializable {
     private Long id;
     @ManyToOne
     private Compound compound;
+
+    public boolean contains(String searchString) {
+        if (name.contains(searchString)) return true;
+        else return note.contains(searchString);
+    }
 }

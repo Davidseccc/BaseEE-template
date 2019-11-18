@@ -1,5 +1,7 @@
 package cz.uhk.chemdb.model.chemdb.table;
 
+import cz.uhk.chemdb.utils.StringUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -151,5 +153,24 @@ public class Descriptor implements Serializable {
 
     public void setSolubility(String solubility) {
         this.solubility = solubility;
+    }
+
+    public boolean contains(String searchString) {
+        Float f = Float.NaN;
+        Integer i = Integer.MIN_VALUE;
+        if (StringUtils.isNumeric(searchString)) {
+            f = StringUtils.getNumber(searchString, Float.class).floatValue();
+            i = StringUtils.getNumber(searchString, Integer.class).intValue();
+        }
+        if (!StringUtils.isEmpty(formula) && formula.contains(searchString)) return true;
+        else if (mw == f) return true;
+        else if (hba == i || hbd == i || i == atoms) return true;
+        else if (!StringUtils.isEmpty(rb) && rb.contains(searchString)) return true;
+        else if (f == tpsa || f == clogp) return true;
+        else if (!StringUtils.isEmpty(NMR) && NMR.contains(searchString)) return true;
+        else if (!StringUtils.isEmpty(HRMS) && HRMS.contains(searchString)) return true;
+        else if (f == purity || (f < purity && purityOperator == '<') || (f > purity && purityOperator == '>'))
+            return true;
+        else return solubility.contains(searchString);
     }
 }

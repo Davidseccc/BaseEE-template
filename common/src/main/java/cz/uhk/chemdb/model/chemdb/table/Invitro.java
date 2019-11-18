@@ -1,5 +1,7 @@
 package cz.uhk.chemdb.model.chemdb.table;
 
+import cz.uhk.chemdb.utils.StringUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -147,5 +149,23 @@ public class Invitro implements Serializable {
 
     public void setErrorType(ErrorType errorTypeId) {
         this.errorType = errorTypeId;
+    }
+
+    public boolean contains(String searchString) {
+        Integer i = Integer.MIN_VALUE;
+        Float f = Float.NaN;
+        Double d = Double.NaN;
+        if (StringUtils.isNumeric(searchString)) {
+            f = (float) StringUtils.getNumber(searchString, Float.class);
+            i = (int) StringUtils.getNumber(searchString, Integer.class);
+            d = (double) StringUtils.getNumber(searchString, Double.class);
+        }
+        if (conditions.contains(searchString)) return true;
+        else if (citation.contains(searchString)) return true;
+        else if (doi.contains(searchString)) return true;
+        else if (note.contains(searchString)) return true;
+        else if (errorType.getName().contains(searchString)) return true;
+        else if (value_text.contains(searchString)) return true;
+        else return value == d || (d < value && valueoperator == '<') || (d > value && valueoperator == '>');
     }
 }

@@ -165,4 +165,5 @@ public class Compound extends BaseModel implements Serializable {
     public String toString() {
         return id + " - " + smiles;
     }
+
 }

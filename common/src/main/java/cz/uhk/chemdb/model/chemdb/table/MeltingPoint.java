@@ -1,6 +1,8 @@
 package cz.uhk.chemdb.model.chemdb.table;
 
 
+import cz.uhk.chemdb.utils.StringUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -73,5 +75,18 @@ public class MeltingPoint implements Serializable {
 
     public void setCompound(Compound compound) {
         this.compound = compound;
+    }
+
+    public boolean contains(String searchString) {
+        Float f = Float.NaN;
+        if (StringUtils.isNumeric(searchString)) {
+            f = StringUtils.getNumber(searchString, Float.class).floatValue();
+        }
+        if (temperatureFrom != null && temperatureFrom == f) ;
+        else if (temperatureFrom != null && temperatureFrom <= f) return true;
+        else if (temperatureTo != null && temperatureTo >= f) return true;
+        else if (searchString == "oil" && isOil()) return true;
+        else return (temperatureFrom != null && temperatureTo != null) && (f >= temperatureFrom && f <= temperatureTo);
+        return false;
     }
 }
