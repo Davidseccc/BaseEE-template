@@ -93,18 +93,6 @@
                                                     </p:outputPanel>
                                                 </f:facet>-->
 
-                        <p:column filterBy="#{comp.smiles}" headerText="Smiles" footerText="contains"
-                                  filterMatchMode="contains" style="max-width: 450px;">
-                            <h:outputText value="#{comp.smiles}"/>
-                        </p:column>
-
-                        <p:column headerText="molecule">
-                            <!--<p:graphicImage name="/core/rest/smile/#{comp.smiles}"/>-->
-                            <img src="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
-                                 width="50%"
-                                 height="auto"></img>
-                        </p:column>
-
                         <p:column filterBy="#{comp.k}" headerText="k" footerText="lte" filterMatchMode="lte">
                             <f:facet name="filter">
                                 <p:spinner onchange="PF('compsTable').filter()" styleClass="year-spinner custom-filter">
@@ -112,6 +100,17 @@
                                 </p:spinner>
                             </f:facet>
                             <h:outputText value="#{comp.k}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{comp.smiles}" headerText="Smiles" footerText="contains"
+                                  filterMatchMode="contains" style="max-width: 450px;">
+                            <h:outputText value="#{comp.smiles}"/>
+                        </p:column>
+
+                        <p:column headerText="molecule">
+                            <p:graphicImage
+                                    value="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
+                                    width="80%" height="auto"/>
                         </p:column>
 
                         <p:column filterBy="#{comp.descriptor.formula}" headerText="formula" footerText="custom (min)"

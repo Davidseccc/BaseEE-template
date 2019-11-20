@@ -155,12 +155,8 @@ public class Descriptor implements Serializable {
         this.purity = purity;
     }
 
-    public char getPurityOperator() {
+    public Character getPurityOperator() {
         return purityOperator;
-    }
-
-    public void setPurityOperator(char purityOperator) {
-        this.purityOperator = purityOperator;
     }
 
     public String getSolubility() {

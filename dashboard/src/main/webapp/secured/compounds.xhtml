@@ -49,20 +49,12 @@
                             <h:outputText value="Search all fields"/>
                             <p:inputText id="globalFilter" onkeyup="PF('compsTable').filter()" style="width:150px"
                                          placeholder="Enter keyword"/>
+
+                            <p:commandButton id="toggler" type="button" value="Columns" style="float:right"
+                                             icon="fa fa-align-justify"/>
+                            <p:columnToggler datasource="compsTable" trigger="toggler"/>
                         </p:outputPanel>
                     </f:facet>
-
-                    <p:column filterBy="#{comp.smiles}" headerText="Smiles" footerText="contains"
-                              filterMatchMode="contains" style="max-width: 450px;">
-                        <h:outputText value="#{comp.smiles}"/>
-                    </p:column>
-
-                    <p:column headerText="molecule">
-                        <!--<p:graphicImage name="/core/rest/smile/#{comp.smiles}"/>-->
-                        <img src="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
-                             width="50%"
-                             height="auto"></img>
-                    </p:column>
 
                     <p:column filterBy="#{comp.k}" headerText="k" footerText="lte" filterMatchMode="lte">
                         <f:facet name="filter">
@@ -73,22 +65,55 @@
                         <h:outputText value="#{comp.k}"/>
                     </p:column>
 
+                    <p:column filterBy="#{comp.smiles}" headerText="Smiles" footerText="contains"
+                              filterMatchMode="contains" style="max-width: 450px;">
+                        <h:outputText value="#{comp.smiles}"/>
+                    </p:column>
+
+                    <p:column headerText="molecule" exportable="false">
+                        <p:graphicImage
+                                value="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
+                                width="80%" height="auto"/>
+                    </p:column>
+
                     <p:column filterBy="#{comp.descriptor.formula}" headerText="formula" footerText="custom (min)"
                               filterMatchMode="contains">
                         <h:outputText value="#{comp.descriptor.formula}"/>
                     </p:column>
 
-                    <p:column filterBy="#{comp.descriptor.mw}" headerText="mw" footerText="custom (min)"
-                              filterFunction="#{compoundView.filterByMw}">
-                        <h:outputText value="#{comp.descriptor.mw}">
-                            <f:convertNumber currencySymbol="=" type="currency"/>
-                        </h:outputText>
+                    <p:column filterBy="#{comp.descriptor.mol_weight}" headerText="mw" footerText="custom (min)"
+                              filterFunction="#{compoundView.gtOrEqual}">
+                        <h:outputText value="#{comp.descriptor.mol_weight}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{comp.owner}" headerText="Owner" footerText="exact" filterMatchMode="exact">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('compsTable').filter()" styleClass="custom-filter">
+                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{ownersView.owners}"/>
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{comp.owner}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{comp.descriptor.num_atoms}" headerText="Atoms" footerText="custom (min)"
+                              filterMatchMode="exact">
+                        <h:outputText value="#{comp.descriptor.num_atoms}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{comp.descriptor.purity}" headerText="Purity" footerText="custom (min)"
+                              filterFunction="#{compoundView.gtOrEqual}">
+                        <h:outputText value="#{comp.descriptor.purityOperator}#{comp.descriptor.purity}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{comp.meltingPoint}" headerText="MeltingPoint" footerText="custom (min)"
+                              filterFunction="#{compoundView.filter}">
+                        <h:outputText value="#{comp.meltingPoint.stringValue}"/>
                     </p:column>
 
                     <p:column headerText="Show" exportable="false" filterMatchMode="lte">
                         <p:commandButton value="Detail" action="#{compoundView.redirect(comp)}"/>
                     </p:column>
-
                 </p:dataTable>
             </h:form>
         </div>

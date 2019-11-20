@@ -498,3 +498,22 @@ a {
     vertical-align: baseline;
     border-radius: .25em;
 }
+
+.no-border {
+    border: none !important;
+}
+
+.ui-panelgrid tr, .ui-panelgrid td {
+    border: 0px solid black !important;
+}
+
+.ui-panelgrid td {
+    border-width: 0px;
+    border-style: solid;
+    border-color: black;
+    padding: 4px 10px;
+}
+
+.ui-widget-content {
+    border: none;
+}

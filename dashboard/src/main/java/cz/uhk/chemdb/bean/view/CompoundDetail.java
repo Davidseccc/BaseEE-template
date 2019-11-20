@@ -2,9 +2,7 @@ package cz.uhk.chemdb.bean.view;
 
 import cz.uhk.chemdb.bean.CompoundSelector;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
-import cz.uhk.chemdb.model.chemdb.repositories.DescriptorRepository;
 import cz.uhk.chemdb.model.chemdb.table.Compound;
-import cz.uhk.chemdb.utils.ObprpService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -21,16 +19,14 @@ public class CompoundDetail {
     CompoundSelector compoundSelector;
     @Inject
     CompoundRepository compoundRepository;
-    @Inject
-    DescriptorRepository descriptorRepository;
-    @Inject
-    ObprpService obPropService;
+
     private Compound compound;
 
     @PostConstruct
     public void init() {
         if (compoundSelector != null && compoundSelector.getSelectedCompound() != null) {
             compound = compoundRepository.findBy(compoundSelector.getSelectedCompound().getId());
+            System.out.println(compound);
         } else {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(CompoundSelector.NO_COMP_SELECTED);

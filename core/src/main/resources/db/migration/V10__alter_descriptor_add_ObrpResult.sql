@@ -9,6 +9,6 @@ alter table descriptor
 	add num_rotors INTEGER,
 	add sequence INTEGER,
 	add num_rings INTEGER,
-	add logP DOUBLE PRECISION ,
-	add PSA DOUBLE PRECISION ,
+	add logP DOUBLE PRECISION,
+	add PSA DOUBLE PRECISION,
 	add MR DOUBLE PRECISION

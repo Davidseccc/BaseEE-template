@@ -45,19 +45,19 @@ public class MeltingPoint implements Serializable {
         this.id = id;
     }
 
-    public float getTemperatureFrom() {
+    public Float getTemperatureFrom() {
         return temperatureFrom;
     }
 
-    public void setTemperatureFrom(float temperatureFrom) {
+    public void setTemperatureFrom(Float temperatureFrom) {
         this.temperatureFrom = temperatureFrom;
     }
 
-    public float getTemperatureTo() {
+    public Float getTemperatureTo() {
         return temperatureTo;
     }
 
-    public void setTemperatureTo(float temperatureTo) {
+    public void setTemperatureTo(Float temperatureTo) {
         this.temperatureTo = temperatureTo;
     }
 
@@ -67,6 +67,19 @@ public class MeltingPoint implements Serializable {
 
     public void setOil(boolean oil) {
         this.oil = oil;
+    }
+
+    public String getStringValue() {
+        if (isOil()) {
+            return "oil";
+        } else if (temperatureFrom != null && temperatureTo != null) {
+            return String.format("%s-%s", temperatureFrom, temperatureTo);
+        } else if (temperatureFrom != null) {
+            return String.format(">%s", temperatureFrom);
+        } else if (temperatureTo != null) {
+            return String.format("<%s", temperatureTo);
+        }
+        return null;
     }
 
     public Compound getCompound() {
@@ -88,5 +101,10 @@ public class MeltingPoint implements Serializable {
         else if (searchString == "oil" && isOil()) return true;
         else return (temperatureFrom != null && temperatureTo != null) && (f >= temperatureFrom && f <= temperatureTo);
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s - %s", id, getStringValue());
     }
 }

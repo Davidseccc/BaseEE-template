@@ -4,6 +4,7 @@ import cz.uhk.chemdb.utils.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Set;
 
 @Entity
@@ -65,6 +66,11 @@ public class Invitro implements Serializable {
 
     public double getValue() {
         return value;
+    }
+
+    public String getformatedValue() {
+        DecimalFormat decimalFormat = new DecimalFormat("##0.######");
+        return decimalFormat.format(value);
     }
 
     public void setValue(double value) {

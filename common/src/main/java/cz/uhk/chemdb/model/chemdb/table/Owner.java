@@ -51,4 +51,9 @@ public class Owner implements Serializable {
     public boolean contains(String searchString) {
         return !StringUtils.isEmpty(name) && name.contains(searchString);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
