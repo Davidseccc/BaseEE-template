@@ -3,6 +3,8 @@ package cz.uhk.chemdb.bean.view;
 import cz.uhk.chemdb.bean.CompoundSelector;
 import cz.uhk.chemdb.bean.view.datamodel.FullTextSearchLazyModel;
 import cz.uhk.chemdb.bean.view.datamodel.GenericLazyModel;
+import cz.uhk.chemdb.bean.view.datamodel.JoinType;
+import cz.uhk.chemdb.bean.view.datamodel.SelectType;
 import cz.uhk.chemdb.enums.SearchField;
 import cz.uhk.chemdb.enums.SearchOperator;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
@@ -35,10 +37,13 @@ public class FullTextSearch implements Serializable {
     private List<Predicate> predicates;
     private GenericLazyModel<Compound> compoundLazyModel;
     private Predicate predicate;
+    private SelectType selectType;
+    private JoinType joinType;
 
     private String searchString;
     private boolean isNumber = false;
     private int rowCount;
+    private boolean or = false;
 
     public static String getTagStyle(int i) {
         String[] styles = new String[]{"label-red", "label-blue", "label-yellow", "label-green", "label-grey"};
@@ -69,13 +74,30 @@ public class FullTextSearch implements Serializable {
     }
 
     public void startFullTextSearch() {
+        if (StringUtils.isNotEmpty(searchString)) {
+            loadPredicates();
+        }
         loadResults();
+    }
+
+    public void loadPredicates() {
+        for (SearchField searchField : SearchField.values()) {
+            if (searchField.getDataType() == SearchField.DataType.STRING) {
+                Predicate p = new Predicate();
+                p.setField(searchField);
+                p.setOperator(SearchOperator.like);
+                p.setValue(searchString);
+                predicates.add(p);
+            }
+            this.selectType = SelectType.ALL;
+            this.joinType = JoinType.OR;
+        }
     }
 
     public void loadResults() {
         rowCount = 0;
         System.out.println("loadResults" + getPredicates().size());
-        compoundLazyModel = new FullTextSearchLazyModel(entityManager, this.predicates);
+        compoundLazyModel = new FullTextSearchLazyModel(entityManager, predicates, selectType, joinType);
         rowCount = compoundLazyModel.getRowCount();
         compounds = compoundLazyModel.load(0, rowCount, null, new HashMap<>());
         System.out.println(rowCount);
@@ -87,43 +109,6 @@ public class FullTextSearch implements Serializable {
 
     public void setSearchString(String searchString) {
         this.searchString = searchString;
-    }
-
-    private boolean search(Compound compound) {
-        isNumber = StringUtils.isNumeric(searchString);
-        Long l = Long.MIN_VALUE;
-        Double d = Double.MAX_VALUE;
-        Integer i = Integer.MIN_VALUE;
-        if (isNumber) {
-            l = StringUtils.getNumber(searchString, Long.class).longValue();
-            d = StringUtils.getNumber(searchString, Double.class).doubleValue();
-            i = StringUtils.getNumber(searchString, Integer.class).intValue();
-        }
-        if (!StringUtils.isEmpty(compound.getSmiles()) && compound.getSmiles().contains(searchString)) return true;
-        else if (isNumber && compound.getId().equals(l)) return true;
-        else if (isNumber && compound.getK() == i) return true;
-        else if (!StringUtils.isEmpty(compound.getOriginalCodename()) && compound.getOriginalCodename().contains(searchString))
-            return true;
-        else if (!StringUtils.isEmpty(compound.getIon()) && compound.getIon().contains(searchString)) return true;
-        else if (isNumber && compound.getMw() == d) return true;
-        else if (!StringUtils.isEmpty(compound.getNotes()) && compound.getNotes().contains(searchString)) return true;
-        else if (compound.getOwner().contains(searchString)) return true;
-        else if (compound.getMeltingPoint().contains(searchString)) return true;
-        else return compound.getDescriptor().contains(searchString);
-
-//        Set<Synonymum> synonyms = compound.getSynonyms();
-//        for(Synonymum synonymum: synonyms){
-//            if (synonymum.contains(searchString)) return true;
-//        }
-//        Set<Invitro> invitros = compound.getInvitro();
-//        for (Invitro invitro :invitros) {
-//            if (invitro.contains(searchString)) return true;
-//        }
-//        List<Attribute> attributes = compound.getAttributes();
-//        for (Attribute attribute: attributes){
-//            if (attribute.contains(searchString)) return true;
-//        }
-
     }
 
     public List<Compound> getCompounds() {
@@ -221,5 +206,13 @@ public class FullTextSearch implements Serializable {
         public SearchField[] getFields() {
             return SearchField.values();
         }
+    }
+
+    public SelectType getSelectType() {
+        return selectType;
+    }
+
+    public JoinType getJoinType() {
+        return joinType;
     }
 }

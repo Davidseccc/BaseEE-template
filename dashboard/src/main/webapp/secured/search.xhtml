@@ -25,10 +25,11 @@
                     <p:messages id="messages"/>
 
                     <h:panelGrid columns="4" cellpadding="5">
-                        <!--                        <h:outputLabel for="txt1" value="Text 1: *"/>
-                                                <p:inputText id="txt1" value="#{fullTextSearch.searchString}" required="false" label="Search">
-                                                    <f:validateLength minimum="2"/>
-                                                </p:inputText>-->
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <p:inputText id="float-input" value="#{fullTextSearch.searchString}"/>
+                            </div>
+                        </div>
                     </h:panelGrid>
                     <p:commandLink onclick="PF('filters').show();"><p>Add filters <i class="fa fa-plus-circle"></i></p>
                     </p:commandLink>
@@ -51,7 +52,7 @@
                     </p:dataGrid>
                     <p:commandButton value="Search" action="#{fullTextSearch.startFullTextSearch()}"
                                      style="float: right;"
-                                     update="form:compsTable"/>
+                                     update="search-form:chips form:compsTable"/>
                 </p:panel>
             </h:form>
             <h:form id="form">

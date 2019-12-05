@@ -24,11 +24,23 @@ public abstract class GenericLazyModel<T> extends LazyDataModel<T> {
     private List<Pair<String, List<Object>>> transformedFilters;
     private int cachedCount = -1;
     private int cachedFiltersHashcode;
+    private SelectType selectType;
+    private JoinType joinType;
+
+    GenericLazyModel(EntityManager em, Class<T> clazz, SelectType selectType, JoinType joinType) {
+        this.em = em;
+        this.clazz = clazz;
+        this.primaryKey = getPrimaryKeyFromClass(clazz);
+        this.selectType = selectType;
+        this.joinType = joinType;
+    }
 
     GenericLazyModel(EntityManager em, Class<T> clazz) {
         this.em = em;
         this.clazz = clazz;
         this.primaryKey = getPrimaryKeyFromClass(clazz);
+        this.selectType = SelectType.ALL;
+        this.joinType = JoinType.AND;
     }
 
     /**
@@ -127,8 +139,10 @@ public abstract class GenericLazyModel<T> extends LazyDataModel<T> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        if (selectType == SelectType.DISTINCT) {
+            cq.distinct(true);
+        }
         Root<T> root = cq.from(clazz);
-
         Predicate initPredicate = getInitPredicate(cb, root);
         if (initPredicate != null) {
             cq.where(initPredicate, getFilterCondition(cb, root, filters));
@@ -145,6 +159,9 @@ public abstract class GenericLazyModel<T> extends LazyDataModel<T> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
         CriteriaQuery<T> cq = cb.createQuery(clazz);
+        if (selectType == SelectType.DISTINCT) {
+            cq = cq.distinct(true);
+        }
         Root<T> root = cq.from(clazz);
 
         Predicate initPredicate = getInitPredicate(cb, root);
@@ -189,7 +206,6 @@ public abstract class GenericLazyModel<T> extends LazyDataModel<T> {
                 } else {
                     innerPredicate = path.in(filter.getRight());
                 }
-
                 andPredicate = cb.and(andPredicate, innerPredicate);
             }
         }
@@ -224,5 +240,13 @@ public abstract class GenericLazyModel<T> extends LazyDataModel<T> {
         }
 
         return primaryKey;
+    }
+
+    public JoinType getJoinType() {
+        return joinType;
+    }
+
+    public SelectType getSelectType() {
+        return selectType;
     }
 }

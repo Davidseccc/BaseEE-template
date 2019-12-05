@@ -12,8 +12,9 @@ import java.util.List;
 public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
     private final List<FullTextSearch.Predicate> predicates;
 
-    public FullTextSearchLazyModel(EntityManager entityManager, List<FullTextSearch.Predicate> predicates) {
-        super(entityManager, Compound.class);
+
+    public FullTextSearchLazyModel(EntityManager entityManager, List<FullTextSearch.Predicate> predicates, SelectType selectType, JoinType joinType) {
+        super(entityManager, Compound.class, selectType, joinType);
         this.predicates = predicates;
     }
 
@@ -26,17 +27,18 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
                 FullTextSearch.Predicate first = predicates.get(index);
                 res = cb.not(cb.not(getPredicate(cb, root, first)));
             }
-            while (index > 0) {
+            while (index >= 0) {
                 FullTextSearch.Predicate last = predicates.get(index);
                 if (res == null) { //connect first two elements AND(LAST, LAST-1)
                     FullTextSearch.Predicate prew = predicates.get(index - 1);
                     Expression<Boolean> e1 = getPredicate(cb, root, last);
                     Expression<Boolean> e2 = getPredicate(cb, root, prew);
-                    res = cb.and(e1, e2);
+                    res = super.getJoinType() == JoinType.OR ? cb.or(e1, e2) : cb.and(e1, e2);
                     index = index - 2;
                 } else {        //just connect to the rest of results
                     Expression<Boolean> e1 = getPredicate(cb, root, last);
-                    res = cb.and(e1, res);
+                    res = super.getJoinType() == JoinType.OR ? cb.or(e1, res) : cb.and(e1, res);
+
                     index = index - 1;
                 }
             }
@@ -48,44 +50,43 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
         Predicate res = null;
         switch (predicate.getOperator()) {
             case is:
-                res = cb.equal(getAttribute(root, predicate.getField().getAttributeName()), validateValue(predicate));
+                res = cb.equal(getPredicateAttributes(root, predicate), validateValue(predicate));
                 break;
             case is_not:
-                res = cb.notEqual(getAttribute(root, predicate.getField().getAttributeName()), validateValue(predicate));
+                res = cb.notEqual(getPredicateAttributes(root, predicate), validateValue(predicate));
                 break;
             case is_one_of:
                 List<String> values = Arrays.asList(predicate.getValue().split(","));
-                res = cb.and(getAttribute(root, predicate.getField().getAttributeName()).in(values.isEmpty() ? Collections.singletonList(-1) : values));
+                res = cb.and(getPredicateAttributes(root, predicate).in(values.isEmpty() ? Collections.singletonList(-1) : values));
                 break;
             case is_not_one_of:
                 List<String> value = Arrays.asList(predicate.getValue().split(","));
-                res = cb.not(getAttribute(root, predicate.getField().getAttributeName()).in(value.isEmpty() ? Collections.singletonList(-1) : value));
+                res = cb.not(getPredicateAttributes(root, predicate).in(value.isEmpty() ? Collections.singletonList(-1) : value));
                 break;
             case gt:
-                res = cb.greaterThanOrEqualTo(!predicate.getField().getAttributeName().contains(".") ?
-                        root.get(predicate.getField().getAttributeName()) :
-                        root.get(predicate.getField().getAttributeName().substring(0, predicate.getField()
-                                .getAttributeName().indexOf('.'))).get(predicate.getField().getAttributeName()
-                                .substring(predicate.getField().getAttributeName().indexOf('.') + 1)), predicate.getValue());
+                res = cb.greaterThanOrEqualTo(getPredicateAttributes(root, predicate), predicate.getValue());
                 break;
             case lt:
-                res = cb.lessThanOrEqualTo(!predicate.getField().getAttributeName().contains(".") ?
-                        root.get(predicate.getField().getAttributeName()) :
-                        root.get(predicate.getField().getAttributeName().substring(0, predicate.getField()
-                                .getAttributeName().indexOf('.'))).get(predicate.getField().getAttributeName()
-                                .substring(predicate.getField().getAttributeName().indexOf('.') + 1)), predicate.getValue());
+                res = cb.lessThanOrEqualTo(getPredicateAttributes(root, predicate), predicate.getValue());
                 break;
             case like:
                 String val = "%" + predicate.getValue().toLowerCase() + "%";
-                res = cb.like(
-                        !predicate.getField().getAttributeName().contains(".") ?
-                                root.get(predicate.getField().getAttributeName()) :
-                                root.get(predicate.getField().getAttributeName().substring(0, predicate.getField()
-                                        .getAttributeName().indexOf('.'))).get(predicate.getField().getAttributeName()
-                                        .substring(predicate.getField().getAttributeName().indexOf('.') + 1)), val);
+                res = cb.like(getPredicateAttributes(root, predicate), val);
                 break;
         }
         return res;
+    }
+
+    private Path<String> getPredicateAttributes(Root<Compound> root, FullTextSearch.Predicate predicate) {
+        String[] params = predicate.getField().getAttributeName().split("\\.");
+        if (params.length == 1) return root.get(params[0]);
+        else {
+            if (root.get(params[0]) != null) {
+                Join<Object, Object> join = root.join(params[0], javax.persistence.criteria.JoinType.INNER);
+                return join.get(params[1]);
+            }
+        }
+        return null;
     }
 
     private Object validateValue(FullTextSearch.Predicate value) {
@@ -107,6 +108,7 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
     }
 
 
+    @Deprecated
     private Expression<?> getAttribute(Root<Compound> root, String attributeName) {
         String[] params = attributeName.split("\\.");
         Path<Compound> res = root;

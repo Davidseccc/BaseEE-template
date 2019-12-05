@@ -34,9 +34,8 @@
                         </c:forEach>
                     </p:panel>
 
-                    <p:graphicImage
-                            value="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
-                            width="80%" height="auto"/>
+                    <img src="#{request.contextPath}/core/rest/smile/#{compoundView.encode(compoundDetail.compound.smiles,'UTF-8')}"></img>
+
 
                     <p:panelGrid columns="4">
                         <h:outputText value="formula:"/>
