@@ -14,6 +14,8 @@ public class StringUtils {
 
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern VALID_DOI_REGEX =
+            Pattern.compile("\\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\\'<>])\\S)+)\\b", Pattern.CASE_INSENSITIVE);
 
     public static boolean validateEmail(String email) {
         if (email == null) {
@@ -23,8 +25,20 @@ public class StringUtils {
         return matcher.find();
     }
 
+    public static boolean validateDOI(String email) {
+        if (email == null) {
+            return false;
+        }
+        Matcher matcher = VALID_DOI_REGEX.matcher(email);
+        return matcher.find();
+    }
+
     public static boolean isEmpty(String string) {
         return string == null || string.isEmpty();
+    }
+
+    public static boolean isNotEmpty(String string) {
+        return !isEmpty(string);
     }
 
 

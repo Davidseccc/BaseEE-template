@@ -15,7 +15,6 @@
             function stop() {
                 PF('downloadStatusDialog').hide();
             }
-
             //]]>
         </script>
     </ui:define>
@@ -28,7 +27,7 @@
         <div class="ui-g-12">
             <div class="card filterable" style="">
                 <p:outputPanel deferred="true" id="main" name="main">
-                    <h2>#{compoundDetail.compound.smiles}</h2>
+                    <h2>K#{compoundDetail.compound.k}</h2>
                     <p:panel rendered="#{!compoundDetail.compound.synonyms.isEmpty()}" class="no-border">
                         <c:forEach items="#{compoundDetail.compound.synonyms}" var="synonym" varStatus="loop">
                             #{synonym.name} #{!loop.last ? ', ' : ''}
@@ -36,7 +35,8 @@
                     </p:panel>
 
                     <p:graphicImage
-                            value="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"/>
+                            value="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
+                            width="80%" height="auto"/>
 
                     <p:panelGrid columns="4">
                         <h:outputText value="formula:"/>

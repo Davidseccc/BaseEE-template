@@ -45,6 +45,11 @@ public class Invitro implements Serializable {
     @Enumerated(EnumType.STRING)
     private ErrorType errorType;
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
     public Invitro() {
     }
 

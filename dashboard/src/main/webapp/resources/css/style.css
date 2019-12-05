@@ -517,3 +517,8 @@ a {
 .ui-widget-content {
     border: none;
 }
+
+.ui-panelgrid .ui-panelgrid-cell {
+    max-width: 550px;
+!important;
+}
