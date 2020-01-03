@@ -55,7 +55,7 @@ public class DateFormats implements Serializable {
     }
 
     public DateTimeFormatter getFitbitDateTimeFormat() {
-        return DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        return DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     }
 
     public DateTimeFormatter getFitbitDateTimeformat() {

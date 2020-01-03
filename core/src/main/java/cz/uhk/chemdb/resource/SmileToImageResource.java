@@ -1,6 +1,9 @@
 package cz.uhk.chemdb.resource;
 
+import cz.uhk.chemdb.utils.OpenBabelUtils;
+
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -9,7 +12,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,42 +21,16 @@ import java.util.logging.Logger;
 @Path("/smile")
 public class SmileToImageResource {
 
+    @Inject
+    OpenBabelUtils openBabelUtils;
     @GET
     @Path("/{smile}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getAllUsers(@PathParam("smile") String smile,
                                 @Context SecurityContext securityContext) {
-
-        int hash = smile.hashCode();
-        String cmd = String.format("obabel -:\"%s\" -O ", smile) + String.format("/tmp/%s.png", hash) + " --genalias -xA";
-        ProcessBuilder builder = new ProcessBuilder(
-                "bash", "-c", cmd);
-        builder.redirectErrorStream(true);
-        Process p = null;
-
-        try {
-            p = builder.start();
-            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            while (true) {
-                line = r.readLine();
-                if (line == null) {
-                    break;
-                }
-            }
-            p.destroy();
-        } catch (Exception e) {
-            e.getStackTrace();
-            e.printStackTrace();
-        } finally {
-            if (p != null) p.destroy();
-        }
-
-        File file = new File(String.format("/tmp/%s.png", hash));
         InputStream targetStream = null;
-        String str = null;
         try {
-            targetStream = new FileInputStream(file);
+            targetStream = OpenBabelUtils.getFile(smile);
         } catch (
                 FileNotFoundException e) {
             Logger.getGlobal().log(Level.SEVERE, e.getMessage());
@@ -61,7 +39,8 @@ public class SmileToImageResource {
         }
         return Response
                 .ok(targetStream, MediaType.APPLICATION_OCTET_STREAM)
-                .header("content-disposition", "attachment; filename = " + hash + ".png")
+                .header("content-disposition", "attachment; " +
+                        "filename = " + smile.replaceAll("[:\\\\/*\"?|<>']", "_") + ".png")
                 .build();
     }
 

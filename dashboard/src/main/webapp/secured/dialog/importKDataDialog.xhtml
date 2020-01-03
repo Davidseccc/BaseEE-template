@@ -119,6 +119,24 @@
                                                        label="solubility"/></f:facet>
                 </p:cellEditor>
             </p:column>
+            <p:column headerText="DOI">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.DOI}"
+                                                         styleClass="#{dummyValidator.isValid(kDatabseDAO.DOI)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.DOI}" style="width:96%"
+                                                       label="solubility"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="alias">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{kDatabseDAO.alasesList}"
+                                                         styleClass="#{aliasValidator.isValid(kDatabseDAO.alasesList)? '' : 'notValid'}"/></f:facet>
+                    <f:facet name="input"><p:inputText value="#{kDatabseDAO.alasesList}" style="width:96%"
+                                                       label="solubility"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
             <p:column style="width:35px">
                 <p:commandButton value="Delete" styleClass="ui-priority-primary" process="@this"
                                  update="k-Data" icon="fa fa-trash"

@@ -4,6 +4,7 @@ import cz.uhk.chemdb.bean.UserManager;
 import cz.uhk.chemdb.model.chemdb.parser.KDataExcelParser;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
+import cz.uhk.chemdb.model.chemdb.repositories.SynonymumRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.UploadedFileRepository;
 import cz.uhk.chemdb.model.chemdb.table.*;
 import cz.uhk.chemdb.util.DialogUtils;
@@ -22,7 +23,9 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Named
 @ApplicationScoped
@@ -30,6 +33,8 @@ public class ImportKDataDialogView implements Serializable {
 
     @Inject
     private OwnerRepositiry ownerRepositiry;
+    @Inject
+    private SynonymumRepository synonymumRepository;
     @Inject
     private LogUtils logUtils;
     @Inject
@@ -139,6 +144,16 @@ public class ImportKDataDialogView implements Serializable {
             }
             descriptor.setSolubility(kDatabaseDTO.getSolubility());
             compound.setDescriptor(descriptor);
+            compound.setDoi(new DOI(kDatabaseDTO.getDOI(), compound));
+
+            Set<Synonymum> synonyms = new HashSet<>();
+            for (String s : kDatabaseDTO.getAlasesList().trim().split(",")) {
+                Synonymum synonymum = new Synonymum();
+                synonymum.setName(s);
+                synonymum.setCompound(compound);
+                synonyms.add(synonymum);
+            }
+            compound.setSynonyms(synonyms);
             compoundRepository.save(compound);
             logUtils.createAndSaveLog(EventType.CREATE, userManager.getCurrentUser(), LogSection.COMPOUND, compound.toString());
         }

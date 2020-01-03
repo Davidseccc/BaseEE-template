@@ -10,7 +10,10 @@ import java.util.logging.Logger;
 @Singleton
 public class ObprpService {
 
-
+    /**
+     * Openbabel library required
+     * ref: https://openbabel.org/docs/dev/Installation/install.html
+     **/
     public ObPropResult call(String smile) {
         int hash = smile.hashCode();
 

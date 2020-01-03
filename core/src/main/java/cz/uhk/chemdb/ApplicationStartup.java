@@ -4,11 +4,15 @@ import cz.uhk.chemdb.model.DefaultDataGenerator;
 import cz.uhk.chemdb.model.chemdb.repositories.OwnerRepositiry;
 import cz.uhk.chemdb.model.chemdb.repositories.TargetRepository;
 import cz.uhk.chemdb.model.chemdb.repositories.UserRepository;
+import cz.uhk.chemdb.model.chemdb.rest.CrossRefRestClient;
 import org.flywaydb.core.Flyway;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.*;
+import javax.ejb.EJBException;
+import javax.ejb.Startup;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.logging.ConsoleHandler;
@@ -20,7 +24,6 @@ import java.util.logging.Logger;
  * Application-startup tasks. Executed before the application itself is fully enabled.
  */
 @Startup
-@Singleton
 public class ApplicationStartup {
 
     @Resource(lookup = "java:/chemDB/db")
@@ -34,6 +37,9 @@ public class ApplicationStartup {
 
     @Inject
     TargetRepository targetRepository;
+
+    @Inject
+    CrossRefRestClient crossRefRestClient;
 
 
     @Inject

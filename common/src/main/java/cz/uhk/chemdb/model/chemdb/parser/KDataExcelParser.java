@@ -17,7 +17,7 @@ public class KDataExcelParser {
         DataFormatter dataFormatter = new DataFormatter();
         List<KDatabaseDTO> kDatabaseDTOList = new ArrayList<>();
         for (Row row : sheet) {
-            if (row.getLastCellNum() > 3 && row.getLastCellNum() <= 9) {
+            if (row.getLastCellNum() > 3 && row.getLastCellNum() <= 11) {
                 KDatabaseDTO kDatabaseDTO = new KDatabaseDTO();
                 kDatabaseDTO.id = dataFormatter.formatCellValue(row.getCell(0));
                 kDatabaseDTO.smiles = dataFormatter.formatCellValue(row.getCell(1));
@@ -28,6 +28,8 @@ public class KDataExcelParser {
                 kDatabaseDTO.HRMS = dataFormatter.formatCellValue(row.getCell(6));
                 kDatabaseDTO.purity = dataFormatter.formatCellValue(row.getCell(7));
                 kDatabaseDTO.solubility = dataFormatter.formatCellValue(row.getCell(8));
+                kDatabaseDTO.DOI = dataFormatter.formatCellValue(row.getCell(9));
+                kDatabaseDTO.alasesList = dataFormatter.formatCellValue(row.getCell(10));
                 kDatabaseDTOList.add(kDatabaseDTO);
             }
         }
@@ -45,6 +47,8 @@ public class KDataExcelParser {
         private String HRMS;
         private String purity;
         private String solubility;
+        private String DOI;
+        private String alasesList;
 
         public KDatabaseDTO() {
         }
@@ -119,6 +123,22 @@ public class KDataExcelParser {
 
         public void setSolubility(String solubility) {
             this.solubility = solubility;
+        }
+
+        public String getDOI() {
+            return DOI;
+        }
+
+        public void setDOI(String DOI) {
+            this.DOI = DOI;
+        }
+
+        public String getAlasesList() {
+            return alasesList;
+        }
+
+        public void setAlasesList(String alasesList) {
+            this.alasesList = alasesList;
         }
     }
 }

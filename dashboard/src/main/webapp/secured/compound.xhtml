@@ -15,6 +15,7 @@
             function stop() {
                 PF('downloadStatusDialog').hide();
             }
+
             //]]>
         </script>
     </ui:define>
@@ -29,9 +30,20 @@
                 <p:outputPanel deferred="true" id="main" name="main">
                     <h2>K#{compoundDetail.compound.k}</h2>
                     <p:panel rendered="#{!compoundDetail.compound.synonyms.isEmpty()}" class="no-border">
-                        <c:forEach items="#{compoundDetail.compound.synonyms}" var="synonym" varStatus="loop">
-                            #{synonym.name} #{!loop.last ? ', ' : ''}
-                        </c:forEach>
+                        <i>
+                            <c:forEach items="#{compoundDetail.compound.synonyms}" var="synonym" varStatus="loop">
+                                #{synonym.name} #{!loop.last ? ', ' : ''}
+                            </c:forEach>
+                        </i>
+                    </p:panel>
+
+                    <p:panel class="no-border">
+                        <p:commandLink rendered="#{stringUtils.isNotEmpty(compoundDetail.compound.doi.doi)}"
+                                       immediate="true"
+                                       action="#{doiServiceView.openDialog(compoundDetail.compound.doi.doi)}">
+                            <i class="fa fa-bookmark"
+                               style="color: red"></i>DOI: #{stringUtils.isEmpty(compoundDetail.compound.doi.doi)? 'not specified' : compoundDetail.compound.doi.doi }
+                        </p:commandLink>
                     </p:panel>
 
                     <img src="#{request.contextPath}/core/rest/smile/#{compoundView.encode(compoundDetail.compound.smiles,'UTF-8')}"></img>
@@ -141,9 +153,26 @@
 
                     <div style="display: block;">
                         <p:commandButton value="Print" type="button" icon="fa fa-print"
-                                         style="display:block;margin-bottom: 20px">
+                                         style="display:block;margin-bottom: 20px; float: right">
                             <p:printer target="main"/>
                         </p:commandButton>
+                        <h:form id="export">
+                            <p:commandLink value="CSV" ajax="false"
+                                           icon="ui-icon-arrowthick-1-s">
+                                <p:fileDownload value="#{compoundDetail.export()}"/>
+                            </p:commandLink>
+                            <p:splitButton id="basic" value="Export" icon="fa fa-save"
+                                           style="float: right">
+                                <p:menuitem value="Export to CSV" ajax="false" icon="fa fa-fw fa-file-o"
+                                            actionListener="#{compoundDetail.exportCSV()}">
+                                    <p:fileDownload value="#{compoundDetail.exportFile}"/>
+                                </p:menuitem>
+                                <p:menuitem value="Export to XLS" ajax="false" icon="fa fa-fw fa-file-excel-o"
+                                            actionListener="#{compoundDetail.exportXLS()}">
+                                    <p:fileDownload value="#{compoundDetail.exportFile}"/>
+                                </p:menuitem>
+                            </p:splitButton>
+                        </h:form>
 
                         <p:commandButton value="Add attributes" icon="fa fa-plus-circle"
                                          action="#{addCompoundAttributeDialog.openDialog(compoundDetail.compound.id)}"/>

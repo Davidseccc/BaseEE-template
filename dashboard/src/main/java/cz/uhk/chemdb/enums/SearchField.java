@@ -19,7 +19,7 @@ public enum SearchField implements Serializable {
     MELTING_POINT_temperatureTo(10, "meltingPoint.temperatureTo", DataType.FLOAT),
 
     DESCRIPTOR_formula(11, "descriptor.formula", DataType.STRING),
-    //DESCRIPTOR_mw(12, "descriptor.mw", DataType.FLOAT),
+    DESCRIPTOR_mw(12, "descriptor.mw", DataType.FLOAT),
     DESCRIPTOR_hdb(13, "descriptor.hdb", DataType.INTEGER),
     DESCRIPTOR_hba(14, "descriptor.hba", DataType.INTEGER),
     DESCRIPTOR_rb(15, "descriptor.rb", DataType.STRING),
@@ -50,7 +50,7 @@ public enum SearchField implements Serializable {
     INVITRO_value(35, "invitro.value", DataType.DOUBLE),
     INVITRO_value_text(36, "invitro.value_text", DataType.STRING),
     //INVITRO_target(37, "invitro.target.name", DataType.STRING), //TODO: zkusit
-    //INVITRO_organism(38, "invitro.organism.name", DataType.STRING), //TODO: zkusit
+    INVITRO_organism(38, "invitro.organism.name", DataType.STRING), //TODO: zkusit
     INVITRO_conditions(39, "invitro.conditions", DataType.STRING),
     INVITRO_citation(40, "invitro.citation", DataType.STRING),
     INVITRO_doi(41, "invitro.doi", DataType.STRING),

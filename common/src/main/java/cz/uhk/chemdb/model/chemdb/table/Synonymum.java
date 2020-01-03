@@ -35,4 +35,12 @@ public class Synonymum implements Serializable {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public Compound getCompound() {
+        return compound;
+    }
+
+    public void setCompound(Compound compound) {
+        this.compound = compound;
+    }
 }

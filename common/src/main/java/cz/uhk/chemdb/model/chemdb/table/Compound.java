@@ -33,6 +33,9 @@ public class Compound extends BaseModel implements Serializable {
     @OrderBy("name ASC")
     private Set<Synonymum> synonyms = new LinkedHashSet<>();
 
+    @OneToOne(mappedBy = "compound", cascade = CascadeType.ALL, orphanRemoval = true)
+    private DOI doi;
+
     @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
     @OrderBy("id ASC")
     Set<Invitro> invitro = new LinkedHashSet<>();
@@ -159,6 +162,14 @@ public class Compound extends BaseModel implements Serializable {
 
     public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
+    }
+
+    public DOI getDoi() {
+        return doi;
+    }
+
+    public void setDoi(DOI doi) {
+        this.doi = doi;
     }
 
     @Override

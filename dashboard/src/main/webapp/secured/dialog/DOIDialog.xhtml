@@ -1,0 +1,23 @@
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+
+<h:head>
+    <title>
+        <h:outputText value="#{doiServiceView.doi}"/>
+    </title>
+    <link rel="stylesheet" href="../../resources/css/style.css"/>
+</h:head>
+
+<div class="input-container-2">
+    <div class="label">Title</div>
+    <h:outputText id="title" value="#{doiServiceView.crossRefWorkMessage.message.titleString}"/>
+    <div class="label">URL</div>
+    <a id="url" href="#{doiServiceView.crossRefWorkMessage.message.URL}"
+       target="_blank">#{doiServiceView.crossRefWorkMessage.message.URL}</a>
+    <div class="label">Publisher</div>
+    <h:outputText id="publisher" value="#{doiServiceView.crossRefWorkMessage.message.publisher}"/>
+    <div class="label">Published</div>
+    <h:outputText id="abstract"
+                  value="#{doiServiceView.crossRefWorkMessage.message.deposited.datetime.format(dateFormats.dateFormat)}"/>
+</div>
+</html>

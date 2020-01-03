@@ -36,7 +36,7 @@
                     <p:dataGrid var="predicate" id="chips" value="#{fullTextSearch.predicates}"
                                 onclick="PF('filters').show();"
                                 columns="10" layout="grid" rowIndexVar="index"
-                                emptyMessage="No predicates. Press &lt;i class= &quot;fa fa-plus-circle &quot;&gt;&lt;/i&gt; to add a new one">
+                                emptyMessage="&lt;i&gt; No predicates. Press &lt;i class= &quot;fa fa-plus-circle &quot;&gt;&lt;/i&gt; to add a new one &lt;/i&gt;">
                         <div class="ui-inputgroup">
                             <span class="tag label #{fullTextSearch.getTagStyle(index+1)}">
                             <h:outputText class=""
