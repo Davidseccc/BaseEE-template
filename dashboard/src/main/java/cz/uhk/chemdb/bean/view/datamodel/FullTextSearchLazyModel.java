@@ -1,6 +1,7 @@
 package cz.uhk.chemdb.bean.view.datamodel;
 
 import cz.uhk.chemdb.bean.view.FullTextSearch;
+import cz.uhk.chemdb.model.chemdb.table.Attribute;
 import cz.uhk.chemdb.model.chemdb.table.Compound;
 
 import javax.persistence.EntityManager;
@@ -21,6 +22,9 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
     @Override
     Predicate getInitPredicate(CriteriaBuilder cb, Root<Compound> root) {
         Predicate res = null;
+        Join<Compound, Attribute> joinedRoot = root.join("descriptor", javax.persistence.criteria.JoinType.LEFT);
+        joinedRoot.join("synonyms", javax.persistence.criteria.JoinType.LEFT);
+
         int index = predicates.size() - 1;
         if (predicates.size() > 0) {
             if (index == 0) {
@@ -79,11 +83,17 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
 
     private Path<String> getPredicateAttributes(Root<Compound> root, FullTextSearch.Predicate predicate) {
         String[] params = predicate.getField().getAttributeName().split("\\.");
-        if (params.length == 1) return root.get(params[0]);
-        else {
-            if (root.get(params[0]) != null) {
-                Join<Object, Object> join = root.join(params[0], javax.persistence.criteria.JoinType.INNER);
-                return join.get(params[1]);
+        if (params.length == 1) {
+            return root.get(params[0]);
+        } else {
+            if (params.length == 2 && root.get(params[0]) != null) {
+                Join<Object, Object> join = root.join(params[0], javax.persistence.criteria.JoinType.LEFT);
+                return join.get(params[params.length - 1]);
+            }
+            if (params.length == 3) {
+                Join<Object, Object> join = root.join(params[0], javax.persistence.criteria.JoinType.LEFT)
+                        .join(params[1], javax.persistence.criteria.JoinType.LEFT);
+                return join.get(params[params.length - 1]);
             }
         }
         return null;
