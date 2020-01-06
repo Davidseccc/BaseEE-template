@@ -34,6 +34,24 @@ public enum SearchOperator implements Serializable {
         return null;
     }
 
+    public static SearchOperator[] getOperatorFor(SearchField.DataType dataType) {
+        System.out.println(dataType.name());
+        switch (dataType) {
+            case STRING:
+                return new SearchOperator[]{is, is_not, like, is_one_of, is_not_one_of};
+            case INTEGER:
+                return new SearchOperator[]{gt, lt};
+            case DOUBLE:
+                return new SearchOperator[]{gt, lt};
+            case FLOAT:
+                return new SearchOperator[]{gt, lt};
+            case BOOLEAN:
+                return new SearchOperator[]{is, is_not};
+            default:
+                return SearchOperator.values();
+        }
+    }
+
     public String getName() {
         return name;
     }

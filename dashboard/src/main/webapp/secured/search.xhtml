@@ -140,7 +140,8 @@
                 <h:outputLabel for="name" value="Name:"/>
                 <p:inputText id="name" value="#{fullTextSearch.predicate.name}" required="false"></p:inputText>
                 <h:outputLabel for="field" value="Field:"/>
-                <p:selectOneMenu id="field" immediate="true" value="#{fullTextSearch.predicate.field}">
+                <p:selectOneMenu id="field" value="#{fullTextSearch.predicate.field}">
+                    <p:ajax listener="#{fullTextSearch.onPredicateChange()}" update="datatype"/>
                     <f:selectItem itemLabel="Vyberte typ dat" itemValue="#{null}"
                                   noSelectionOption="true"/>
                     <f:selectItems value="#{fullTextSearch.predicate.fields}"/>

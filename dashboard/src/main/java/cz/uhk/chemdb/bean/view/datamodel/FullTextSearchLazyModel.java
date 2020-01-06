@@ -1,7 +1,6 @@
 package cz.uhk.chemdb.bean.view.datamodel;
 
 import cz.uhk.chemdb.bean.view.FullTextSearch;
-import cz.uhk.chemdb.model.chemdb.table.Attribute;
 import cz.uhk.chemdb.model.chemdb.table.Compound;
 
 import javax.persistence.EntityManager;
@@ -22,8 +21,6 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
     @Override
     Predicate getInitPredicate(CriteriaBuilder cb, Root<Compound> root) {
         Predicate res = null;
-        Join<Compound, Attribute> joinedRoot = root.join("descriptor", javax.persistence.criteria.JoinType.LEFT);
-        joinedRoot.join("synonyms", javax.persistence.criteria.JoinType.LEFT);
 
         int index = predicates.size() - 1;
         if (predicates.size() > 0) {
@@ -48,6 +45,7 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
             }
         }
         return res;
+
     }
 
     private Expression<Boolean> getPredicate(CriteriaBuilder cb, Root<Compound> root, FullTextSearch.Predicate predicate) {

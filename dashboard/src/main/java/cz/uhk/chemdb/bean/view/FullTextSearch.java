@@ -39,6 +39,7 @@ public class FullTextSearch implements Serializable {
     private Predicate predicate;
     private SelectType selectType;
     private JoinType joinType;
+    SearchOperator[] searchOperators;
 
     private String searchString;
     private boolean isNumber = false;
@@ -54,6 +55,7 @@ public class FullTextSearch implements Serializable {
     public void init() {
         predicates = new ArrayList<>();
         predicate = new Predicate();
+        searchOperators = SearchOperator.values();
         loadResults();
     }
 
@@ -92,6 +94,13 @@ public class FullTextSearch implements Serializable {
             this.selectType = SelectType.ALL;
             this.joinType = JoinType.OR;
         }
+    }
+
+    public void onPredicateChange() {
+        if (predicate != null && predicate.getField() != null)
+            searchOperators = SearchOperator.getOperatorFor(predicate.getField().getDataType());
+        else
+            searchOperators = SearchOperator.values();
     }
 
     public void loadResults() {
@@ -192,7 +201,7 @@ public class FullTextSearch implements Serializable {
         }
 
         public SearchOperator[] getOperators() {
-            return SearchOperator.values();
+            return searchOperators;
         }
 
         public SearchField getField() {
