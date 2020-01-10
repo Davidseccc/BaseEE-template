@@ -7,8 +7,8 @@ import java.io.Serializable;
 public enum FileUploadType implements Serializable {
 
     K_DATA(1, "K DATA"),
-    INVITRO_DATA(2, "INVITRO DATA"),
-    TYPE_3(3, "Typ 3");
+    INVITRO_DATA(2, "INVITRO DATA");
+    //TYPE_3(3, "Typ 3");
 
     String name;
     int typeId;

@@ -14,9 +14,9 @@ import cz.uhk.chemdb.utils.StringUtils;
 import org.primefaces.event.CellEditEvent;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 @Named
-@ApplicationScoped
+@ViewScoped
 public class ImportKDataDialogView implements Serializable {
 
     @Inject

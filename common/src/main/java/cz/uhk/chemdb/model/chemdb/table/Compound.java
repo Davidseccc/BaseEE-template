@@ -27,7 +27,7 @@ public class Compound extends BaseModel implements Serializable {
     private Owner owner;
     @OneToOne(mappedBy = "compound", cascade = CascadeType.ALL, orphanRemoval = true)
     private MeltingPoint meltingPoint;
-    @OneToOne(mappedBy = "compound", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "compound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Descriptor descriptor;
     @OneToMany(mappedBy = "compound", cascade = CascadeType.ALL)
     @OrderBy("name ASC")

@@ -3,7 +3,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="template-filter.xhtml">
+                template="template.xhtml">
 
     <ui:define name="scripts">
     </ui:define>
@@ -11,16 +11,12 @@
     <ui:define name="title">
         <title>Compounds</title>
     </ui:define>
-    <ui:define name="refreshButton">
-        <p:commandButton value="Zobrazit" action="#{fullTextSearch.startSearch()}" style="float: right ;"
-                         update="form:compsTable"/>
-    </ui:define>
 
 
-    <ui:define name="filterableContent">
+    <ui:define name="content">
 
-        <div class="card filterable" style="width: 75%">
-            <h:form id="search-form">
+        <div class="card filterable">
+            <h:form id="search-form" style=" margin-bottom: 2em;">
                 <p:panel id="panel" header="Search Form" style="margin-bottom:10px;">
                     <p:messages id="messages"/>
 
@@ -56,7 +52,7 @@
                 </p:panel>
             </h:form>
             <h:form id="form">
-                <p:panel id="table" header="results">
+                <p:panel id="table">
                     <p:dataTable id="compsTable" name="compsTable" var="comp" value="#{fullTextSearch.compounds}"
                                  widgetVar="compsTable"
                                  emptyMessage="No compounds found with given criteria"
@@ -66,6 +62,9 @@
                                  style="margin-bottom:20px">>
                         <f:facet name="header">
                             Found #{(fullTextSearch.compounds.size())} results.
+                            <p:commandButton id="toggler" type="button" value="Columns" style="float:right"
+                                             icon="fa fa-align-justify"/>
+                            <p:columnToggler datasource="compsTable" trigger="toggler"/>
                         </f:facet>
 
                         <f:facet name="{Exporters}">
@@ -94,7 +93,7 @@
                                                     </p:outputPanel>
                                                 </f:facet>-->
 
-                        <p:column filterBy="#{comp.k}" headerText="k" footerText="lte" filterMatchMode="lte">
+                        <p:column headerText="k" footerText="lte">
                             <f:facet name="filter">
                                 <p:spinner onchange="PF('compsTable').filter()" styleClass="year-spinner custom-filter">
                                     <f:converter converterId="javax.faces.Integer"/>
@@ -103,30 +102,55 @@
                             <h:outputText value="#{comp.k}"/>
                         </p:column>
 
-                        <p:column filterBy="#{comp.smiles}" headerText="Smiles" footerText="contains"
+                        <p:column headerText="Smiles"
                                   filterMatchMode="contains" style="max-width: 450px;">
                             <h:outputText value="#{comp.smiles}"/>
                         </p:column>
 
-                        <p:column headerText="molecule">
+                        <p:column headerText="molecule" exportable="false">
                             <p:graphicImage
                                     value="#{request.contextPath}/core/rest/smile/#{compoundView.encode(comp.smiles, 'UTF-8')}"
                                     width="80%" height="auto"/>
                         </p:column>
 
-                        <p:column filterBy="#{comp.descriptor.formula}" headerText="formula" footerText="custom (min)"
+                        <p:column headerText="formula"
                                   filterMatchMode="contains">
                             <h:outputText value="#{comp.descriptor.formula}"/>
                         </p:column>
 
-                        <p:column filterBy="#{comp.descriptor.mw}" headerText="mw" footerText="custom (min)"
+                        <p:column headerText="mw"
                                   filterFunction="#{compoundView.filterByMw}">
                             <h:outputText value="#{comp.descriptor.mw}">
                                 <f:convertNumber currencySymbol="=" type="currency"/>
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="Show" exportable="false" filterMatchMode="lte">
+                        <p:column headerText="Owner" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('compsTable').filter()" styleClass="custom-filter">
+                                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{ownersView.owners}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="#{comp.owner}"/>
+                        </p:column>
+
+                        <p:column headerText="Atoms"
+                                  filterMatchMode="exact">
+                            <h:outputText value="#{comp.descriptor.num_atoms}"/>
+                        </p:column>
+
+                        <p:column headerText="Purity"
+                                  filterFunction="#{compoundView.gtOrEqual}">
+                            <h:outputText value="#{comp.descriptor.purityOperator}#{comp.descriptor.purity}"/>
+                        </p:column>
+
+                        <p:column headerText="MeltingPoint"
+                                  filterFunction="#{compoundView.filter}">
+                            <h:outputText value="#{comp.meltingPoint.stringValue}"/>
+                        </p:column>
+
+                        <p:column headerText="Show" exportable="false">
                             <p:commandButton value="Detail" action="#{compoundView.redirect(comp)}"/>
                         </p:column>
                     </p:dataTable>

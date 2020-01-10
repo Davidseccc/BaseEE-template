@@ -47,7 +47,16 @@ public class Invitro implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString();
+        String sep = "; ";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getformatedValue());
+        stringBuilder.append(sep);
+        stringBuilder.append(errorType.name);
+        if (!StringUtils.isEmpty(value_text)) {
+            stringBuilder.append(sep);
+            stringBuilder.append(value_text);
+        }
+        return stringBuilder.toString();
     }
 
     public Invitro() {

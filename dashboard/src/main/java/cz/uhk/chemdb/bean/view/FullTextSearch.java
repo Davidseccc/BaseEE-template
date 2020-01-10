@@ -36,6 +36,7 @@ public class FullTextSearch implements Serializable {
     private EntityManager entityManager;
     private List<Predicate> predicates;
     private GenericLazyModel<Compound> compoundLazyModel;
+    private List<Compound> filteredCompounds;
     private Predicate predicate;
     private SelectType selectType;
     private JoinType joinType;
@@ -132,8 +133,20 @@ public class FullTextSearch implements Serializable {
         return compoundRepository;
     }
 
+    public GenericLazyModel<Compound> getCompoundLazyModel() {
+        return compoundLazyModel;
+    }
+
     public void setCompoundLazyModel(GenericLazyModel<Compound> compoundLazyModel) {
         this.compoundLazyModel = compoundLazyModel;
+    }
+
+    public List<Compound> getFilteredCompounds() {
+        return filteredCompounds;
+    }
+
+    public void setFilteredCompounds(List<Compound> filteredCompounds) {
+        this.filteredCompounds = filteredCompounds;
     }
 
     public List<Predicate> getPredicates() {

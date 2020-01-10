@@ -10,6 +10,7 @@ import cz.uhk.chemdb.model.chemdb.table.Owner;
 import cz.uhk.chemdb.model.chemdb.table.Target;
 import cz.uhk.chemdb.model.chemdb.table.User;
 import cz.uhk.chemdb.model.security.PasswordHash;
+import cz.uhk.chemdb.utils.UserPermission;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -28,6 +29,8 @@ public class DefaultDataGenerator {
     PasswordHash passwordHash;
     @Inject
     OrganismRepository organismRepository;
+    @Inject
+    UserPermission userPermission;
 
 
     public void generateDummyData() {

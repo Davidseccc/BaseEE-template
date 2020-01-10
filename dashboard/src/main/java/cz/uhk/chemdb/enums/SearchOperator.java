@@ -7,14 +7,13 @@ import java.io.Serializable;
 public enum SearchOperator implements Serializable {
 
     is(1, "is"),
-    is_not(2, "is_not"),
-    is_one_of(3, "is_one_of"),
-    is_not_one_of(4, "is_not_one_of"),
-    does_not_exists(6, "does_not_exists"),
-    gt(7, "gt"),
-    lt(8, "lt"),
+    is_not(2, "is not"),
+    is_one_of(3, "is one of"),
+    is_not_one_of(4, "is not one of"),
+    does_not_exists(6, "does not exists"),
+    gt(7, "greater than"),
+    lt(8, "lower than"),
     like(9, "like");
-
 
     String name;
     int id;

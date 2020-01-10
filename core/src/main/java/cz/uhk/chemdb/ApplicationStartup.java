@@ -48,8 +48,10 @@ public class ApplicationStartup {
     @PostConstruct
     @TransactionAttribute(TransactionAttributeType.NEVER)
     private void onStartup() {
+        System.out.println("START");
         migrateDatabase();
         insertDummyData();
+
 
         for (Handler handler : Logger.getGlobal().getHandlers()) {
             Logger.getGlobal().removeHandler(handler);
@@ -91,4 +93,5 @@ public class ApplicationStartup {
             defaultDataGenerator.generateDummyData();
         }
     }
+
 }

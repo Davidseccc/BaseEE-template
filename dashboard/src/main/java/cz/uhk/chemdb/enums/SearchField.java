@@ -20,7 +20,7 @@ public enum SearchField implements Serializable {
 
     DESCRIPTOR_formula(11, "descriptor.formula", DataType.STRING),
     DESCRIPTOR_mw(12, "descriptor.mw", DataType.FLOAT),
-    DESCRIPTOR_hdb(13, "descriptor.hdb", DataType.INTEGER),
+    DESCRIPTOR_hbd(13, "descriptor.hbd", DataType.INTEGER),
     DESCRIPTOR_hba(14, "descriptor.hba", DataType.INTEGER),
     DESCRIPTOR_rb(15, "descriptor.rb", DataType.STRING),
     DESCRIPTOR_tpsa(16, "descriptor.tpsa", DataType.FLOAT),
@@ -44,18 +44,18 @@ public enum SearchField implements Serializable {
     DESCRIPTOR_PSA(31, "descriptor.PSA", DataType.DOUBLE),
     DESCRIPTOR_MR(32, "descriptor.MR", DataType.DOUBLE),
 
-    //SYNONYMUM_name(33, "synonyms.name", DataType.STRING),
-    //SYNONYMUM_note(34, "synonyms.note", DataType.DOUBLE),
+    SYNONYMUM_name(33, "synonyms.name", DataType.STRING),
+    SYNONYMUM_note(34, "synonyms.note", DataType.DOUBLE),
 
     INVITRO_value(35, "invitro.value", DataType.DOUBLE),
     INVITRO_value_text(36, "invitro.value_text", DataType.STRING),
-    //INVITRO_target(37, "invitro.target.name", DataType.STRING), //TODO: zkusit
+    INVITRO_target(37, "invitro.target.name", DataType.STRING), //TODO: zkusit
     INVITRO_organism(38, "invitro.organism.name", DataType.STRING), //TODO: zkusit
     INVITRO_conditions(39, "invitro.conditions", DataType.STRING),
     INVITRO_citation(40, "invitro.citation", DataType.STRING),
     INVITRO_doi(41, "invitro.doi", DataType.STRING),
     INVITRO_note(42, "invitro.note", DataType.STRING),
-    //INVITRO_errorType(43, "invitro.errorType", DataType.STRING), //TODO: zkusit
+    INVITRO_errorType(43, "invitro.errorType", DataType.ErrorType), //TODO: zkusit
 
     ATTRIBUTES_name(43, "attributes.key", DataType.STRING),
     ATTRIBUTES_value(43, "attributes.value", DataType.STRING);
@@ -118,6 +118,7 @@ public enum SearchField implements Serializable {
         INTEGER(),
         BOOLEAN(),
         DOUBLE(),
-        FLOAT()
+        FLOAT(),
+        ErrorType()
     }
 }

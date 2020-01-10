@@ -2,6 +2,9 @@ package cz.uhk.chemdb.bean;
 
 import cz.uhk.chemdb.model.chemdb.repositories.UserRepository;
 import cz.uhk.chemdb.model.chemdb.table.User;
+import cz.uhk.chemdb.utils.PermissionAttribute;
+import cz.uhk.chemdb.utils.PermissionRole;
+import cz.uhk.chemdb.utils.UserPermission;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -10,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 
 @Named
 @SessionScoped
@@ -30,6 +34,7 @@ public class UserManager implements Serializable {
     private String userEmail;
     private String userPassword;
     private User currentUser;
+    private Set<PermissionAttribute> userPermissions;
 
     public String login() {
         // lookup the user based on user name and user password
@@ -37,6 +42,7 @@ public class UserManager implements Serializable {
 
         if (user.isPresent()) {
             currentUser = user.get();
+            userPermissions = UserPermission.setPermissions(currentUser);
             return HOME_PAGE_REDIRECT;
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -71,6 +77,22 @@ public class UserManager implements Serializable {
         }
 
         return null;
+    }
+
+    public boolean hasPermission(PermissionAttribute attribute) {
+        return attribute != null && userPermissions.contains(attribute);
+    }
+
+    public PermissionRole getUserRole() {
+        if (currentUser.isSuperAdmin()) {
+            return PermissionRole.SUPER_ADMIN;
+        } else if (currentUser.isAdmin()) {
+            return PermissionRole.ADMIN;
+        } else if (currentUser.isContributor()) {
+            return PermissionRole.CONTRIBUTOR;
+        } else {
+            return PermissionRole.USER;
+        }
     }
 
     private Optional<User> findUser(String userEmail, String password) {

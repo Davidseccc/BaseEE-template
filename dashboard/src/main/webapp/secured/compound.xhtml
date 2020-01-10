@@ -157,19 +157,15 @@
                             <p:printer target="main"/>
                         </p:commandButton>
                         <h:form id="export">
-                            <p:commandLink value="CSV" ajax="false"
-                                           icon="ui-icon-arrowthick-1-s">
-                                <p:fileDownload value="#{compoundDetail.export()}"/>
-                            </p:commandLink>
                             <p:splitButton id="basic" value="Export" icon="fa fa-save"
                                            style="float: right">
                                 <p:menuitem value="Export to CSV" ajax="false" icon="fa fa-fw fa-file-o"
-                                            actionListener="#{compoundDetail.exportCSV()}">
-                                    <p:fileDownload value="#{compoundDetail.exportFile}"/>
+                                            actionListener="#{compoundDetail.exportCSV()}"><p:fileDownload
+                                        value="#{compoundDetail.exportFile}"/>
                                 </p:menuitem>
                                 <p:menuitem value="Export to XLS" ajax="false" icon="fa fa-fw fa-file-excel-o"
-                                            actionListener="#{compoundDetail.exportXLS()}">
-                                    <p:fileDownload value="#{compoundDetail.exportFile}"/>
+                                            actionListener="#{compoundDetail.exportXLS()}"><p:fileDownload
+                                        value="#{compoundDetail.exportFile}"/>
                                 </p:menuitem>
                             </p:splitButton>
                         </h:form>

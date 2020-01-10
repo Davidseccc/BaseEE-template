@@ -1,6 +1,8 @@
 package cz.uhk.chemdb.bean.view;
 
+import cz.uhk.chemdb.bean.CompoundDTO;
 import cz.uhk.chemdb.bean.CompoundSelector;
+import cz.uhk.chemdb.bean.UserManager;
 import cz.uhk.chemdb.model.chemdb.repositories.CompoundRepository;
 import cz.uhk.chemdb.model.chemdb.table.Compound;
 import cz.uhk.chemdb.util.export.CSVExport;
@@ -23,7 +25,7 @@ public class CompoundDetail {
     @Inject
     CompoundRepository compoundRepository;
     @Inject
-    CSVExport csvExport;
+    UserManager userManager;
     @Inject
     ExcelExport excelExport;
 
@@ -47,12 +49,16 @@ public class CompoundDetail {
 
     public void exportCSV() {
         System.out.println("export()");
-        exportFile = CSVExport.startExport(compound);
+        CompoundDTO compoundDTO = new CompoundDTO();
+        compoundDTO.compoundToDTO(compound, userManager);
+        exportFile = CSVExport.startExport(compoundDTO);
     }
 
     public void exportXLS() {
         System.out.println("export()");
-        exportFile = excelExport.startExport(compound);
+        CompoundDTO compoundDTO = new CompoundDTO();
+        compoundDTO.compoundToDTO(compound, userManager);
+        exportFile = excelExport.startExport(compoundDTO);
     }
 
 

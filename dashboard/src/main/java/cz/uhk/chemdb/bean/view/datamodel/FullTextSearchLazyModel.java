@@ -20,6 +20,7 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
 
     @Override
     Predicate getInitPredicate(CriteriaBuilder cb, Root<Compound> root) {
+
         Predicate res = null;
 
         int index = predicates.size() - 1;
@@ -80,6 +81,7 @@ public class FullTextSearchLazyModel extends GenericLazyModel<Compound> {
     }
 
     private Path<String> getPredicateAttributes(Root<Compound> root, FullTextSearch.Predicate predicate) {
+
         String[] params = predicate.getField().getAttributeName().split("\\.");
         if (params.length == 1) {
             return root.get(params[0]);

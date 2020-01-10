@@ -50,6 +50,7 @@ public class StringUtils {
         }
     }
 
+
     public static boolean isNumeric(String strNum) {
         try {
             double d = Double.parseDouble(strNum);

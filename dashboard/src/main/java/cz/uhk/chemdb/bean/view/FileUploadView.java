@@ -8,20 +8,17 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Named
-@ApplicationScoped
-public class FileUploadView {
+@ViewScoped
+public class FileUploadView implements Serializable {
 
     private UploadedFile file;
     @Inject

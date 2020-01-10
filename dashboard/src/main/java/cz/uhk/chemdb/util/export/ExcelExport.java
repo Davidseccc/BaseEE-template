@@ -1,6 +1,6 @@
 package cz.uhk.chemdb.util.export;
 
-import cz.uhk.chemdb.model.chemdb.table.Compound;
+import cz.uhk.chemdb.bean.CompoundDTO;
 import cz.uhk.chemdb.utils.CSVExportFormats;
 import cz.uhk.chemdb.utils.OpenBabelUtils;
 import cz.uhk.chemdb.utils.StringUtils;
@@ -11,7 +11,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.ejb.Singleton;
-import javax.inject.Inject;
 import java.io.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,25 +18,57 @@ import java.util.Date;
 
 @Singleton
 public class ExcelExport {
-    @Inject
-    private OpenBabelUtils openBabelUtils;
 
-
-    private String servletContextPath;
-
-    public StreamedContent startExport(Compound compound) {
+    public StreamedContent startExport(CompoundDTO compound) {
         StreamedContent exportFile = null;
         try {
             Workbook wb = new XSSFWorkbook();
-            Sheet sheet = wb.createSheet(String.format("K_%s", compound.getK()));
-            //FileInputStream obtains input bytes from the image file
-            Writer writer = new Writer(sheet, 1, 1);
-            writer.write(String.format("%s", compound.getK())).incrementRow(19);
-            addSmile(compound, wb, sheet, 1, 2);
-            writer.write(String.format("%s", compound.getSmiles())).incrementRow()
-                    .write(String.format("%s", compound.getDoi().getDoi())).incrementRow()
-                    .write(String.format("%s", compound.getIon()));
+            Sheet sheet = wb.createSheet(String.format("K_%s", compound.getCompounds().get("k")));
+            Writer writer = new Writer(sheet, 1, 0);
+            if (compound.getCompounds().get("smiles") != null) {
+                addSmile(compound.getCompounds().get("smiles"), wb, sheet, 1, 1);
+                writer.incrementRow(19);
+            }
+            int rowcount = 16;
+            Row rr = sheet.createRow(++rowcount);
+            Cell k = rr.createCell(0);
+            k.setCellValue(String.format("K_%s", compound.getCompounds().get("k")));
+            for (String key : compound.getCompounds().keySet()) {
+                Row row = sheet.createRow(++rowcount);
+                Cell cellKey = row.createCell(0);
+                Cell cellValue = row.createCell(1);
+                cellKey.setCellValue(key);
+                cellValue.setCellValue(compound.compounds.get(key));
+            }
 
+            Row r = sheet.createRow(++rowcount);
+            Cell name2 = r.createCell(0);
+            name2.setCellValue("Targets:");
+            for (String key : compound.getTargets().keySet()) {
+                Row row = sheet.createRow(++rowcount);
+                int cell = 0;
+                Cell cellKey = row.createCell(++cell);
+                cellKey.setCellValue(key);
+                int columnCount = 2;
+                for (String targetName : compound.targets.get(key).keySet()) {
+                    Cell cellKey1 = row.createCell(++columnCount);
+                    cellKey1.setCellValue(targetName);
+                    Cell cellValue1 = row.createCell(++columnCount);
+                    cellValue1.setCellValue(compound.targets.get(key).get(targetName));
+                }
+
+            }
+
+            Row row2 = sheet.createRow(++rowcount);
+            Cell name3 = row2.createCell(0);
+            name3.setCellValue("Attributes:");
+            for (String key : compound.getAttributes().keySet()) {
+                Row row = sheet.createRow(++rowcount);
+                Cell cellKey = row.createCell(1);
+                Cell cellValue = row.createCell(2);
+                cellKey.setCellValue(key);
+                cellValue.setCellValue(compound.attributes.get(key));
+            }
 
             //Write the Excel file
             File file = File.createTempFile(CSVExportFormats.TEMP_FILE_PREFIX, Long.toString(System.currentTimeMillis()));
@@ -46,7 +77,7 @@ public class ExcelExport {
             fileOut.close();
             InputStream stream;
             stream = new FileInputStream(file);
-            exportFile = new DefaultStreamedContent(stream, "text/csv", "export.xlsx");
+            exportFile = new DefaultStreamedContent(stream, "text/csv", String.format("K_%s.xlsx", compound.getCompounds().get("k")));
 
         } catch (Exception e) {
             System.out.println(e);
@@ -54,8 +85,8 @@ public class ExcelExport {
         return exportFile;
     }
 
-    private void addSmile(Compound compound, Workbook wb, Sheet sheet, int col, int row) throws IOException {
-        InputStream inputStream = OpenBabelUtils.getFile(compound.getSmiles());
+    private void addSmile(String smiles, Workbook wb, Sheet sheet, int col, int row) throws IOException {
+        InputStream inputStream = OpenBabelUtils.getFile(smiles);
         byte[] bytes = IOUtils.toByteArray(inputStream);
         int pictureIdx = wb.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
         inputStream.close();
@@ -88,6 +119,12 @@ public class ExcelExport {
             this.cell += offset;
             return this;
         }
+
+        public Writer decrementCell(int offset) {
+            this.cell -= offset;
+            return this;
+        }
+
 
         public Writer incrementRow() {
             this.row++;

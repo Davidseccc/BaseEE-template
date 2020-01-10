@@ -25,20 +25,19 @@ public class Descriptor implements Serializable {
     private float purity;
     private Character purityOperator;
     private String solubility;
-
-    Double mol_weight;
-    Double exact_mass;
-    String canonical_SMILES;
-    String InChI;
-    Integer num_atoms;
-    Integer num_bonds;
-    Integer num_residues;
-    Integer num_rotors;
-    Integer sequence;
-    Integer num_rings;
-    Double logP;
-    Double PSA;
-    Double MR;
+    private Double mol_weight;
+    private Double exact_mass;
+    private String canonical_SMILES;
+    private String InChI;
+    private Integer num_atoms;
+    private Integer num_bonds;
+    private Integer num_residues;
+    private Integer num_rotors;
+    private Integer sequence;
+    private Integer num_rings;
+    private Double logP;
+    private Double PSA;
+    private Double MR;
 
 
     @OneToOne
