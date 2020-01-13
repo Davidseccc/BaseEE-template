@@ -9,10 +9,7 @@ import org.flywaydb.core.Flyway;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.EJBException;
-import javax.ejb.Startup;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.logging.ConsoleHandler;
@@ -24,6 +21,7 @@ import java.util.logging.Logger;
  * Application-startup tasks. Executed before the application itself is fully enabled.
  */
 @Startup
+@Singleton
 public class ApplicationStartup {
 
     @Resource(lookup = "java:/chemDB/db")
